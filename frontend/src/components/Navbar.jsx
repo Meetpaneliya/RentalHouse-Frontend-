@@ -97,7 +97,7 @@ const Navbar = ({ setShowLoginModal, setShowSignupModal }) => {
           <Link to="/about" className="block hover:text-gray-400">
             About
           </Link>
-          <Link to="/cities" className="block hover:text-gray-400">
+          <Link to="/filtered-listings" className="block hover:text-gray-400">
             Cities
           </Link>
           <Link to="/contact" className="block hover:text-gray-400">
