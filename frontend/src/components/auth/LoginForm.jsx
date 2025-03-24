@@ -9,6 +9,9 @@ import { Link } from "react-router-dom";
 
 export default function LoginPage({ onClose, setShowSignupModal }) {
 
+  const test = `${import.meta.env.VITE_SERVER}/api/v1/user/login`;
+  console.log(test);
+
   const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
   const [showPassword, setShowPassword] = useState(false);

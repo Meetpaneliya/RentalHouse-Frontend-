@@ -2,84 +2,127 @@ import { useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { CityCombobox } from "./combobox-demo";
-import { useSearchQuery } from "../redux/APi/listingApi"; // Correct import
+import { useSearchQuery } from "../redux/APi/listingApi";
 import { Link, useNavigate } from "react-router-dom";
+import { Calendar, Search } from "lucide-react";
 
 const Searchbar = () => {
-  const [startDate, setStartDate] = useState(null);
+  const [checkInDate, setCheckInDate] = useState(null);
+  const [checkOutDate, setCheckOutDate] = useState(null);
   const [selectedCity, setSelectedCity] = useState("");
-  const [searchParams, setSearchParams] = useState({}); // Keep it an object
+  const [searchParams, setSearchParams] = useState({});
   const navigate = useNavigate();
-  // Fetch data only when searchParams is valid
+
   const { isLoading } = useSearchQuery(searchParams, {
-    skip: !searchParams.city, // Skip API call if city is empty
+    skip: !searchParams.city,
   });
 
   const handleSearch = () => {
     if (!selectedCity) return;
 
-    setSearchParams({
+    const params = {
       city: selectedCity,
-      date: startDate ? startDate.toISOString().split("T")[0] : undefined,
-    });
-    navigate(
-      `/listings?city=${selectedCity}&startDate=${startDate?.toISOString().split("T")[0]
-      }`
-    );
+      checkIn: checkInDate ? checkInDate.toISOString().split("T")[0] : undefined,
+      checkOut: checkOutDate ? checkOutDate.toISOString().split("T")[0] : undefined,
+    };
+
+    setSearchParams(params);
+    
+    const queryString = new URLSearchParams({
+      city: params.city,
+      ...(params.checkIn && { checkIn: params.checkIn }),
+      ...(params.checkOut && { checkOut: params.checkOut })
+    }).toString();
+
+    navigate(`/filtered-listings?${queryString}`);
+  };
+
+  const handleCheckOutDateChange = (date) => {
+    if (checkInDate && date < checkInDate) {
+      return;
+    }
+    setCheckOutDate(date);
+  };
+
+  const handleCheckInDateChange = (date) => {
+    setCheckInDate(date);
+    if (checkOutDate && date > checkOutDate) {
+      setCheckOutDate(null);
+    }
   };
 
   return (
-    <div className="w-full md:w-3/4 lg:w-1/3 bg-gray-300 rounded-full shadow-lg p-3 flex flex-col sm:flex-row items-center justify-between space-y-3 sm:space-y-0">
-
-      {/* Left Section (City & Date) */}
-      <div className="flex flex-col sm:flex-row items-center sm:space-x-6 w-full">
-
+    <div className="w-full max-w-2xl mx-auto px-4">
+      <div className="bg-slate-300 rounded-2xl shadow-lg p-2.5 flex flex-col md:flex-row items-center">
         {/* City Selection */}
-        <div className="w-full sm:w-auto flex items-center">
-          <CityCombobox onSelect={(city) => setSelectedCity(city)} />
+        <div className="w-full md:w-1/3 min-w-[120px] md:mr-1">
+          <div className="relative">
+            <CityCombobox onSelect={(city) => setSelectedCity(city)} />
+          </div>
         </div>
 
-        {/* Date Picker */}
-        <div className="flex items-center space-x-2 w-full sm:w-auto">
-          <label className="text-gray-700 font-semibold text-sm">Date:</label>
-          <DatePicker
-            selected={startDate}
-            onChange={(date) => setStartDate(date)}
-            placeholderText="Select a date"
-            className="w-[120px] px-2 py-1 border border-gray-300  bg-gray-300 rounded-md text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-black"
-          />
+        {/* Date Selection */}
+        <div className="w-full md:w-2/5 grid grid-cols-2 gap-3 my-2 md:my-0 md:mx-1">
+          {/* Check-in Date */}
+          <div className="relative">
+            <div className="absolute left-2 top-1/2 -translate-y-1/2 text-gray-400">
+              <Calendar size={16} />
+            </div>
+            <DatePicker
+              selected={checkInDate}
+              onChange={handleCheckInDateChange}
+              selectsStart
+              startDate={checkInDate}
+              endDate={checkOutDate}
+              minDate={new Date()}
+              placeholderText="Check in"
+              className="w-full pl-8 pr-2 py-1.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-blue-500 bg-white"
+              dateFormat="MMM dd"
+            />
+          </div>
+
+          {/* Check-out Date */}
+          <div className="relative">
+            <div className="absolute left-2 top-1/2 -translate-y-1/2 text-gray-400">
+              <Calendar size={16} />
+            </div>
+            <DatePicker
+              selected={checkOutDate}
+              onChange={handleCheckOutDateChange}
+              selectsEnd
+              startDate={checkInDate}
+              endDate={checkOutDate}
+              minDate={checkInDate || new Date()}
+              placeholderText="Check out"
+              className="w-full pl-8 pr-2 py-1.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-blue-500 bg-white"
+              dateFormat="MMM dd"
+            />
+          </div>
         </div>
 
-      </div>
-
-      {/* Search Button */}
-      <Link to={"/filtered-listings"}>
+        {/* Search Button */}
         <button
           onClick={handleSearch}
-          className="relative group px-6 py-2 bg-black rounded-full flex items-center justify-center w-full sm:w-auto"
+          disabled={isLoading}
+          className="w-full md:w-auto px-6 py-1.5  bg-black hover:bg-black/85 text-white rounded-lg transition-colors duration-200 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed md:ml-1"
         >
-          <div className="absolute -inset-0.5 bg-black rounded-full blur opacity-75 group-hover:opacity-100 transition duration-200"></div>
-          <span className="relative flex items-center text-white font-semibold">
-            {isLoading ? "Searching..." : "Search"}
-            <svg
-              className="ml-2 w-4 h-4"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-              />
-            </svg>
-          </span>
+          {isLoading ? (
+            <>
+              <svg className="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+              <span className="text-sm">Searching...</span>
+            </>
+          ) : (
+            <>
+              <Search size={16} />
+              <span className="text-sm">Search</span>
+            </>
+          )}
         </button>
-      </Link>
-
+      </div>
     </div>
-
   );
 };
 
