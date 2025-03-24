@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import axios from '../../lib/axios';
 import Navbar from '../Navbar2';
 
 const MultiStepKYCForm2 = () => {
@@ -32,7 +32,7 @@ const MultiStepKYCForm2 = () => {
           return;
         }
         const body = { verificationType: 'ssn', ssn };
-        response = await axios.post(`${import.meta.env.VITE_SERVER}/api/v1/kyc/application`, body, { withCredentials: true });
+        response = await axios.post('/api/v1/kyc/application', body);
       } else if (verificationType === 'passport') {
         if (!passportNumber || !passportDoc || !visaDoc) {
           setMessage('Please fill all Passport fields and upload documents');
@@ -44,8 +44,7 @@ const MultiStepKYCForm2 = () => {
         formData.append('passportNumber', passportNumber);
         formData.append('passportDoc', passportDoc);
         formData.append('visaDoc', visaDoc);
-        response = await axios.post(`${import.meta.env.VITE_SERVER}/api/v1/kyc/application`, formData, {
-          withCredentials: true,
+        response = await axios.post('/api/v1/kyc/application', formData, {
           headers: { 'Content-Type': 'multipart/form-data' },
         });
       }
@@ -54,10 +53,11 @@ const MultiStepKYCForm2 = () => {
         setKYCExists(true);
       }
     } catch (err) {
+      console.error('KYC submission error:', err);
       if (err.response?.data?.message) {
         setMessage(err.response.data.message);
       } else {
-        setMessage('Submission failed');
+        setMessage('Submission failed. Please ensure you are logged in and try again.');
       }
     } finally {
       setLoading(false);
@@ -126,7 +126,7 @@ const MultiStepKYCForm2 = () => {
             </button>
             <div   onClick={() => setVerificationType('passport')}
                className="text-sm mt-3 text-center text-blue-600 cursor-pointer hover:underline">
-              Don’t have an S.S.N?
+              Don't have an S.S.N?
             </div>
           </>
         )}

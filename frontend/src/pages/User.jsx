@@ -4,8 +4,10 @@ import { useNavigate } from 'react-router-dom';
 import { Pencil, Upload } from 'lucide-react';
 import Navbar from '../components/Navbar2';
 import Footer from "../components/Footer";
+import { useSelector } from 'react-redux';
 
 const Profile = () => {
+  const { isAuthenticated } = useSelector((state) => state.auth);
   const [user, setUser] = useState(null);
   const [editMode, setEditMode] = useState(false);
   const [formData, setFormData] = useState({
@@ -20,8 +22,14 @@ const Profile = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    if (!isAuthenticated) {
+      navigate('/login');
+      return;
+    }
+
     const fetchUser = async () => {
       try {
+        setLoading(true);
         const response = await axios.get('/api/v1/user/me');
         const userData = response.data.user;
         setUser(userData);
@@ -33,10 +41,16 @@ const Profile = () => {
         });
       } catch (error) {
         console.error('Error fetching user:', error);
+        if (error.response?.status === 401) {
+          navigate('/login');
+        }
+      } finally {
+        setLoading(false);
       }
     };
+
     fetchUser();
-  }, []);
+  }, [isAuthenticated, navigate]);
 
   const handleChange = (e) => {
     setFormData((prev) => ({
@@ -57,7 +71,11 @@ const Profile = () => {
       navigate(0);
     } catch (error) {
       console.error('Error updating user:', error);
-      alert('Failed to update profile');
+      if (error.response?.status === 401) {
+        navigate('/login');
+      } else {
+        alert('Failed to update profile');
+      }
     } finally {
       setLoading(false);
     }
@@ -88,7 +106,11 @@ const Profile = () => {
   
     } catch (err) {
       console.error("Error uploading profile picture:", err);
-      alert("Failed to upload picture");
+      if (err.response?.status === 401) {
+        navigate('/login');
+      } else {
+        alert("Failed to upload picture");
+      }
     } finally {
       setUploading(false);
     }
@@ -96,7 +118,23 @@ const Profile = () => {
   
   
 
-  if (!user) return <div className="text-center p-8">Loading...</div>;
+  if (loading) return (
+    <>
+      <Navbar />
+      <div className="flex justify-center items-center min-h-screen bg-gray-100">
+        <div className="text-center p-8">Loading...</div>
+      </div>
+    </>
+  );
+
+  if (!user) return (
+    <>
+      <Navbar />
+      <div className="flex justify-center items-center min-h-screen bg-gray-100">
+        <div className="text-center p-8">No user data available</div>
+      </div>
+    </>
+  );
 
   return (
     <>
