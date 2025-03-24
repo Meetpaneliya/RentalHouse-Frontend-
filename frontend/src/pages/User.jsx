@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import axios from 'axios';
+import axios from '../lib/axios';
 import { useNavigate } from 'react-router-dom';
 import { Pencil, Upload } from 'lucide-react';
 import Navbar from '../components/Navbar2';
@@ -22,9 +22,7 @@ const Profile = () => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const response = await axios.get(`${import.meta.env.VITE_SERVER}/api/v1/user/me`, {
-          withCredentials: true,
-        });
+        const response = await axios.get('/api/v1/user/me');
         const userData = response.data.user;
         setUser(userData);
         setFormData({
@@ -50,16 +48,10 @@ const Profile = () => {
   const handleSave = async () => {
     try {
       setLoading(true);
-      await axios.put(
-        `${import.meta.env.VITE_SERVER}/api/v1/user/update`,
-        {
-          name: formData.name,
-          email: formData.email,
-        },
-        {
-          withCredentials: true,
-        }
-      );
+      await axios.put('/api/v1/user/update', {
+        name: formData.name,
+        email: formData.email,
+      });
       alert('Profile updated successfully!');
       // Redirect to same page to refresh
       navigate(0);
@@ -79,22 +71,16 @@ const Profile = () => {
   
     try {
       setUploading(true);
-      const res = await axios.put(
-        `${import.meta.env.VITE_SERVER}/api/v1/user/update-image`,
-        imageFormData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-          withCredentials: true,
+      const res = await axios.put('/api/v1/user/update-image', imageFormData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
         }
-      );
+      });
       console.log("Upload Success", res.data);
   
-      // ✅ Update user state immediately:
       setUser((prevUser) => ({
         ...prevUser,
-        profilePicture: res.data.profilePicture, // Make sure this matches backend response key
+        profilePicture: res.data.profilePicture,
       }));
   
       alert("Profile picture updated!");

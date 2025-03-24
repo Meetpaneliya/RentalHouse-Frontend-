@@ -1,9 +1,12 @@
 import axios from 'axios';
 
-// Set default base URL for all axios requests
-axios.defaults.baseURL = import.meta.env.VITE_SERVER;
+// Create axios instance with default config
+const axiosInstance = axios.create({
+  baseURL: import.meta.env.VITE_SERVER,
+  withCredentials: true,
+  headers: {
+    'Content-Type': 'application/json'
+  }
+});
 
-// Set default credentials option
-axios.defaults.withCredentials = true;
-
-export default axios; 
+export default axiosInstance; 

@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import axios from "axios";
+import axios from "../lib/axios";
 import Navbar from "../components/Navbar2";
 import { FaWifi, FaTv, FaSnowflake, FaShower, FaStar } from "react-icons/fa";
 import Footer from "../components/Footer";
@@ -41,10 +41,7 @@ const Rooms = () => {
     const fetchRoomDetails = async () => {
       try {
         console.log("Fetching room details for ID:", id);
-        const response = await axios.get(
-          `${import.meta.env.VITE_SERVER}/api/v1/listings/${id}`,
-          { headers: { "Cache-Control": "no-cache" } }
-        );
+        const response = await axios.get(`/api/v1/listings/${id}`);
 
         console.log("API Response:", response.data);
         if (!response.data.success) throw new Error("Listing not found");
@@ -64,9 +61,7 @@ const Rooms = () => {
 
   const fetchReviews = async () => {
     try {
-      const response = await axios.get(
-        `${import.meta.env.VITE_SERVER}/api/v1/reviews/${id}`
-      );
+      const response = await axios.get(`/api/v1/reviews/${id}`);
       setReviews(response.data.reviews);
     } catch (err) {
       console.error("Error fetching reviews:", err);
@@ -79,17 +74,15 @@ const Rooms = () => {
 
   const submitReview = async () => {
     try {
-      const response = await axios.post(
-        `${import.meta.env.VITE_SERVER}/api/v1/reviews/${id}`,
-        { listingId: id, rating, comment },
-        { withCredentials: true }
-      );
+      const response = await axios.post(`/api/v1/reviews/${id}`, {
+        listingId: id,
+        rating,
+        comment
+      });
 
       console.log("Review Added:", response.data);
-
       setSuccessMessage("Review submitted successfully!");
       setIsModalOpen(false);
-
       fetchReviews();
     } catch (err) {
       console.error("Error adding review:", err);
