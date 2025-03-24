@@ -1,7 +1,6 @@
 import { useStripe } from "@stripe/react-stripe-js";
 import { CreditCard, Lock, Shield, Clock } from "lucide-react";
 import { useState } from "react";
-import { server } from "../../lib/config";
 
 const PaymentForm = ({ amount, currency = "usd", room }) => {
   const stripe = useStripe();
@@ -20,17 +19,20 @@ const PaymentForm = ({ amount, currency = "usd", room }) => {
     }
 
     try {
-      const response = await fetch(`${server}/api/v1/payments/stripe`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          amount,
-          currency,
-          room: room._id,
-          gateway: "stripe",
-        }),
-        credentials: "include",
-      });
+      const response = await fetch(
+        `${import.meta.env.VITE_SERVER}/api/v1/payments/stripe`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            amount: room.price,
+            currency: "USD",
+            room: room._id,
+            gateway: "stripe",
+          }),
+          credentials: "include",
+        }
+      );
 
       const sessionData = await response.json();
 

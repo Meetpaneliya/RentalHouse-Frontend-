@@ -1,10 +1,9 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { server } from "../../lib/config";
 
 export const listingAPI = createApi({
   reducerPath: "listingApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: `${server}/api/v1`,
+    baseUrl: `${import.meta.env.VITE_SERVER}/api/v1`,
     credentials: "include",
   }),
   tagTypes: ["Listing", "KYC"],

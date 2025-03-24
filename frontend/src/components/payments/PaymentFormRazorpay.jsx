@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { CreditCard, Shield, CheckCircle, AlertCircle } from "lucide-react";
-import { server } from "../../lib/config";
 
 const PaymentFormRazorpay = ({
   amount,
@@ -29,17 +28,20 @@ const PaymentFormRazorpay = ({
     setMessage("");
 
     try {
-      const response = await fetch(`${server}/api/v1/payments/stripe`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          amount,
-          currency,
-          room: room._id,
-          gateway: "razorpay",
-        }),
-        credentials: "include",
-      });
+      const response = await fetch(
+        `${import.meta.env.VITE_SERVER}/api/v1/payments/stripe`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            amount,
+            currency,
+            room: room._id,
+            gateway: "razorpay",
+          }),
+          credentials: "include",
+        }
+      );
 
       const payment = await response.json();
       console.log(payment);

@@ -6,7 +6,9 @@ import toast from "react-hot-toast";
 import { login } from "../../redux/reducers/Auth";
 import { Link } from "react-router-dom";
 
+
 export default function LoginPage({ onClose, setShowSignupModal }) {
+
   const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
   const [showPassword, setShowPassword] = useState(false);

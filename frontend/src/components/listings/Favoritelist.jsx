@@ -7,7 +7,9 @@ const Favorites = () => {
   useEffect(() => {
     const fetchFavorites = async () => {
       try {
-        const response = await axios.get('/api/favorites/getfav'); // Adjust the API endpoint as needed
+        const response = await axios.get(`${import.meta.env.VITE_SERVER}/api/v1/favorites/getfav`, {
+          withCredentials: true
+        });
         setFavorites(response.data);
       } catch (error) {
         console.error('Error fetching favorites:', error);
@@ -19,7 +21,9 @@ const Favorites = () => {
 
   const handleRemoveFavorite = async (houseId) => {
     try {
-      await axios.delete(`/api/favorites/removefav/${houseId}`); // Adjust the API endpoint as needed
+      await axios.delete(`${import.meta.env.VITE_SERVER}/api/v1/favorites/removefav/${houseId}`, {
+        withCredentials: true
+      });
       // Update the favorites list after removing
       setFavorites(favorites.filter(fav => fav.houseId !== houseId));
     } catch (error) {
