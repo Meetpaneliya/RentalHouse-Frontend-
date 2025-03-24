@@ -120,6 +120,7 @@ const Searchbar = () => {
               <span className="text-sm">Search</span>
             </>
           )}
+          
         </button>
       </div>
     </div>
