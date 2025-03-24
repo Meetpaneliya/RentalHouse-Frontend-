@@ -30,17 +30,12 @@ function App() {
   const dispatch = useDispatch();
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [showSignupModal, setShowSignupModal] = useState(false);
-  const { data, error, isLoading } = useMyprofileQuery(undefined, {
-    skip: !isAuthenticated,
-  });
-
+  const { data, error } = useMyprofileQuery();
   const timeoutRef = useRef(null);
-
   useEffect(() => {
-    if (data?.success && data?.user) {
+    if (data && data.user) {
       dispatch(login(data.user));
     } else if (error) {
-      console.error('Profile fetch error:', error);
       dispatch(logout());
     }
   }, [data, error, dispatch]);
@@ -85,12 +80,13 @@ function App() {
           <Route path="/about" element={<AboutUs />} />
           <Route path="/contact" element={<ContactUs />} />
           <Route path="/faq" element={<FAQSection />} />
+          //payment wala abhi add kia
           <Route path="/payment" element={<PaymentPage />} />
           <Route path="/success" element={<PaymentSuccess />} />
           <Route path="/cancel" element={<PaymentCancel />} />
           <Route path="/forget-password" element={<ForgotPassword />} />
           <Route path="/reset-password/:token" element={<ResetPassword />} />
-          <Route path="/profile" element={<Profile />} />
+          <Route path="/profile" element={() => <Profile />} />
           <Route path="/KYC" element={<KYC />} />
           <Route path="/MultiStepKYCForm1" element={<MultiStepKYCForm1 />} />
           <Route path="/MultiStepKYCForm2" element={<MultiStepKYCForm2 />} />
