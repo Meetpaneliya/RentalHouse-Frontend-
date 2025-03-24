@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useLocation } from "react-router-dom";
+//import { useLocation } from "react-router-dom";
 import PaymentFormStripe from "./PaymentFormStripe";
 import PaymentFormRazorpay from "./PaymentFormRazorpay";
 import PaymentFormPaypal from "./PaymentFormPaypal";
@@ -17,7 +17,7 @@ import {
   Calendar,
 } from "lucide-react";
 import StripeProvider from "./StripeProvider";
-import { useMemo } from "react";
+//import { useMemo } from "react";
 import { useSelector } from "react-redux";
 
 const PaymentPage = () => {

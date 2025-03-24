@@ -42,7 +42,7 @@ const Rooms = () => {
       try {
         console.log("Fetching room details for ID:", id);
         const response = await axios.get(
-          `http://localhost:4000/api/v1/listings/${id}`,
+          `${import.meta.env.VITE_SERVER}/api/v1/listings/${id}`,
           { headers: { "Cache-Control": "no-cache" } }
         );
 
@@ -65,7 +65,7 @@ const Rooms = () => {
   const fetchReviews = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:4000/api/v1/reviews/${id}`
+        `${import.meta.env.VITE_SERVER}/api/v1/reviews/${id}`
       );
       setReviews(response.data.reviews);
     } catch (err) {
@@ -80,7 +80,7 @@ const Rooms = () => {
   const submitReview = async () => {
     try {
       const response = await axios.post(
-        "http://localhost:4000/api/v1/reviews/",
+        `${import.meta.env.VITE_SERVER}/api/v1/reviews/${id}`,
         { listingId: id, rating, comment },
         { withCredentials: true }
       );

@@ -32,7 +32,7 @@ const MultiStepKYCForm2 = () => {
           return;
         }
         const body = { verificationType: 'ssn', ssn };
-        response = await axios.post('http://localhost:4000/api/v1/kyc/application', body, { withCredentials: true });
+        response = await axios.post(`${import.meta.env.VITE_SERVER}/api/v1/kyc/application`, body, { withCredentials: true });
       } else if (verificationType === 'passport') {
         if (!passportNumber || !passportDoc || !visaDoc) {
           setMessage('Please fill all Passport fields and upload documents');
@@ -44,7 +44,7 @@ const MultiStepKYCForm2 = () => {
         formData.append('passportNumber', passportNumber);
         formData.append('passportDoc', passportDoc);
         formData.append('visaDoc', visaDoc);
-        response = await axios.post('http://localhost:4000/api/v1/kyc/application', formData, {
+        response = await axios.post(`${import.meta.env.VITE_SERVER}/api/v1/kyc/application`, formData, {
           withCredentials: true,
           headers: { 'Content-Type': 'multipart/form-data' },
         });

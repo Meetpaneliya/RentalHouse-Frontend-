@@ -22,7 +22,7 @@ const Profile = () => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const response = await axios.get('http://localhost:4000/api/v1/user/me', {
+        const response = await axios.get(`${import.meta.env.VITE_SERVER}/api/v1/user/me`, {
           withCredentials: true,
         });
         const userData = response.data.user;
@@ -51,7 +51,7 @@ const Profile = () => {
     try {
       setLoading(true);
       await axios.put(
-        'http://localhost:4000/api/v1/user/update',
+        `${import.meta.env.VITE_SERVER}/api/v1/user/update`,
         {
           name: formData.name,
           email: formData.email,
@@ -80,7 +80,7 @@ const Profile = () => {
     try {
       setUploading(true);
       const res = await axios.put(
-        "http://localhost:4000/api/v1/user/update-image",
+        `${import.meta.env.VITE_SERVER}/api/v1/user/update-image`,
         imageFormData,
         {
           headers: {

@@ -58,7 +58,7 @@ const ListingForm = () => {
       });
 
       const response = await axios.post(
-        "http://localhost:4000/api/v1/listings/create",
+        `${import.meta.env.VITE_SERVER}/api/v1/listings/create`,
         submitData,
         {
           headers: { "Content-Type": "multipart/form-data" },

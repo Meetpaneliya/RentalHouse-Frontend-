@@ -85,7 +85,7 @@ export default function SignupPage({ onClose, setShowLoginModal }) {
       };
       try {
         const { data } = await axios.post(
-          `http://localhost:4000/api/v1/user/register`,
+          `${import.meta.env.VITE_SERVER}/api/v1/user/register`,
           formData,
           config
         );
