@@ -13,7 +13,7 @@ const Navbar = ({ setShowLoginModal, setShowSignupModal }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { isAuthenticated, user } = useSelector((state) => state.auth);
+  const { isAuthenticated } = useSelector((state) => state.auth);
   
   const [logoutUser, { isLoading: isloggingOut }] = useLogoutuserMutation();
 
