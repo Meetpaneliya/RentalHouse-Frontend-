@@ -3,9 +3,10 @@ import axios from "axios";
 import Listings from "../pages/Listings";
 import { FaChevronDown } from "react-icons/fa";
 import { MdApartment, MdHotel } from "react-icons/md";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const FilterSection = () => {
+  const navigate = useNavigate();
 
   const amenitiesList = ["WiFi", "AC", "Geyser", "More"];
 
@@ -188,25 +189,97 @@ const handleResetFilters = () => {
   });
 };
 
+  // Update the filter handlers to include navigation
+  const handleFilterApply = () => {
+    navigate('/filtered-listings', { state: { filters } });
+  };
+
+  // Update price filter
+  const handlePriceApply = () => {
+    setShowPriceFilter(false);
+    handleFilterApply();
+  };
+
+  // Update nearby filter
+  const handleNearbyApply = () => {
+    setShowNearbyFilter(false);
+    handleFilterApply();
+  };
+
+  // Update property type filter
+  const handlePropertyTypeApply = () => {
+    setShowBedroomsFilter(false);
+    handleFilterApply();
+  };
+
+  // Update bed/bath filter
+  const handleBedBathApply = () => {
+    setShowBedBathFilter(false);
+    handleFilterApply();
+  };
+
+  // Update amenities filter
+  const handleAmenitiesApply = () => {
+    setShowAmenitiesFilter(false);
+    handleFilterApply();
+  };
+
+  // Update listing room filter
+  const handleListingRoomApply = () => {
+    setshowRoomNameFilter(false);
+    handleFilterApply();
+  };
+
+  // Update available filter
+  const handleAvailableApply = () => {
+    setShowAvailableFilter(false);
+    handleFilterApply();
+  };
+
   return (
     <div>
 
       {/* All Filter */}
-      <div className="w-full mx-auto p-4 bg-white shadow-md rounded-lg flex flex-wrap items-center justify-between overflow-visible relative">
-        <h1 className="text-slate-900 font-semibold text-3xl"> June </h1>
+      <div className="w-full mx-auto p-2 sm:p-4 bg-white shadow-md rounded-lg">
+        {/* Header and filters container */}
+        <div className="flex flex-col sm:flex-row items-center justify-between mb-6">
+          {/* Logo container */}
+          <div className="w-full sm:w-auto flex items-center justify-between mb-4 sm:mb-0">
+            <h1 className="text-slate-900 font-bold text-3xl sm:text-4xl tracking-tight"> June </h1>
+            {/* Add Listing btn - Mobile position */}
+            <div className="sm:hidden">
+              <Link to={"/ListingForm"}>
+                <button className="px-4 py-2 bg-slate-800 text-white rounded-full shadow-lg hover:bg-slate-900 transition-all text-sm">
+                  + Add Room
+                </button>
+              </Link>
+            </div>
+          </div>
 
-        <div className="flex gap-4">
+          {/* Add Listing btn - Desktop position */}
+          <div className="hidden sm:block">
+            <Link to={"/ListingForm"}>
+              <button className="px-6 py-2.5 bg-slate-800 text-white rounded-full shadow-lg hover:bg-slate-900 transition-all flex items-center gap-2">
+                <span className="text-lg font-medium">+</span>
+                <span>Add Room</span>
+              </button>
+            </Link>
+          </div>
+        </div>
+
+        {/* Filters grid */}
+        <div className=" w-10/12 mx-auto grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:flex gap-2 sm:gap-4">
           {/* Price Filter */}
-          <div className="relative" ref={priceFilterRef}>
+          <div className="relative w-full" ref={priceFilterRef}>
             <button
               onClick={() => setShowPriceFilter(!showPriceFilter)}
-              className="px-4 py-2 border rounded-full shadow text-black flex items-center space-x-2 cursor-pointer hover:bg-gray-100"
+              className="w-full px-3 sm:px-4 py-2 border rounded-full shadow text-black flex items-center justify-between cursor-pointer hover:bg-gray-100 text-sm sm:text-base"
             >
               <span>Price</span>
-              <FaChevronDown className="text-black" />
+              <FaChevronDown className="text-black ml-1" />
             </button>
             {showPriceFilter && (
-              <div className="absolute left-0 mt-3 w-80 bg-white shadow-xl rounded-lg p-6 z-50 border border-gray-300">
+              <div className="fixed sm:absolute inset-x-0 sm:inset-auto bottom-0 sm:bottom-auto left-0 right-0 sm:left-auto sm:right-auto mt-3 w-full sm:w-80 bg-white shadow-xl rounded-t-xl sm:rounded-xl p-4 sm:p-6 z-50 border border-gray-300 sm:translate-y-0 translate-y-0 transition-transform">
                 <h3 className="text-lg font-semibold mb-4 text-center">Price Range</h3>
                 <div className="flex justify-between items-center mb-4">
                   <input
@@ -258,7 +331,7 @@ const handleResetFilters = () => {
                 </p>
                 <button
                   className="w-full bg-indigo-800 text-white py-2 rounded-lg hover:bg-indigo-900"
-                  onClick={() => setShowPriceFilter(false)}
+                  onClick={handlePriceApply}
                 >
                   Apply
                 </button>
@@ -267,16 +340,16 @@ const handleResetFilters = () => {
           </div>
 
           {/* Nearby Filter */}
-          <div className="relative" ref={nearbyFilterRef}>
+          <div className="relative w-full" ref={nearbyFilterRef}>
             <button
               onClick={() => setShowNearbyFilter(!showNearbyFilter)}
-              className="px-4 py-2 border rounded-full shadow text-black flex items-center space-x-2 cursor-pointer hover:bg-gray-100"
+              className="w-full px-3 sm:px-4 py-2 border rounded-full shadow text-black flex items-center justify-between cursor-pointer hover:bg-gray-100 text-sm sm:text-base"
             >
               <span>Nearby</span>
-              <FaChevronDown className="text-black" />
+              <FaChevronDown className="text-black ml-1" />
             </button>
             {showNearbyFilter && (
-              <div className="absolute left-0 mt-3 w-80 bg-white shadow-xl rounded-lg p-6 z-50 border border-gray-300">
+              <div className="fixed sm:absolute inset-x-0 sm:inset-auto bottom-0 sm:bottom-auto left-0 right-0 sm:left-auto sm:right-auto mt-3 w-full sm:w-80 bg-white shadow-xl rounded-t-xl sm:rounded-xl p-4 sm:p-6 z-50 border border-gray-300 sm:translate-y-0 translate-y-0 transition-transform">
                 <h3 className="text-lg font-semibold mb-4">Search by Neighborhood</h3>
                 <input
                   type="text"
@@ -314,7 +387,7 @@ const handleResetFilters = () => {
                 </div>
                 <button
                   className="w-full mt-4 bg-indigo-800 text-white py-2 rounded-lg hover:bg-indigo-900"
-                  onClick={() => setShowNearbyFilter(false)}
+                  onClick={handleNearbyApply}
                 >
                   Apply
                 </button>
@@ -323,16 +396,16 @@ const handleResetFilters = () => {
           </div>
 
           {/* Property Type Filter */}
-          <div className="relative" ref={bedroomsFilterRef}>
+          <div className="relative w-full" ref={bedroomsFilterRef}>
             <button
               onClick={() => setShowBedroomsFilter(!showBedroomsFilter)}
-              className="px-4 py-2 border rounded-full shadow  text-black flex items-center space-x-2 cursor-pointer hover:bg-gray-100"
+              className="w-full px-3 sm:px-4 py-2 border rounded-full shadow text-black flex items-center justify-between cursor-pointer hover:bg-gray-100 text-sm sm:text-base"
             >
               <span>{filters.propertyType || "Property Type"}</span>
-              <FaChevronDown className="text-black" />
+              <FaChevronDown className="text-black ml-1" />
             </button>
             {showBedroomsFilter && (
-              <div className="absolute left-0 mt-3 w-80 bg-white shadow-xl rounded-lg p-6 z-50 border border-gray-300">
+              <div className="fixed sm:absolute inset-x-0 sm:inset-auto bottom-0 sm:bottom-auto left-0 right-0 sm:left-auto sm:right-auto mt-3 w-full sm:w-80 bg-white shadow-xl rounded-t-xl sm:rounded-xl p-4 sm:p-6 z-50 border border-gray-300 sm:translate-y-0 translate-y-0 transition-transform">
                 <div className="flex justify-between items-center mb-4">
                   <div
                     className={`w-1/2 p-4 border rounded-lg flex flex-col items-center cursor-pointer ${filters.propertyType === "Apartment" ? "bg-blue-100" : "hover:bg-gray-100"
@@ -356,7 +429,7 @@ const handleResetFilters = () => {
                 </p>
                 <button
                   className="w-full bg-indigo-800 text-white py-2 rounded-lg hover:bg-indigo-900"
-                  onClick={() => setShowBedroomsFilter(false)}
+                  onClick={handlePropertyTypeApply}
                 >
                   Apply
                 </button>
@@ -365,16 +438,16 @@ const handleResetFilters = () => {
           </div>
 
           {/* Bed/Bath Filter */}
-          <div className="relative" ref={bedBathFilterRef}>
+          <div className="relative w-full" ref={bedBathFilterRef}>
             <button
               onClick={() => setShowBedBathFilter(!showBedBathFilter)}
-              className="px-4 py-2 border rounded-full shadow  text-black flex items-center space-x-2 cursor-pointer hover:bg-gray-100"
+              className="w-full px-3 sm:px-4 py-2 border rounded-full shadow text-black flex items-center justify-between cursor-pointer hover:bg-gray-100 text-sm sm:text-base"
             >
               <span>Bed/Bath</span>
-              <FaChevronDown className="text-black" />
+              <FaChevronDown className="text-black ml-1" />
             </button>
             {showBedBathFilter && (
-              <div className="absolute left-0 mt-3 w-80 bg-white shadow-xl rounded-lg p-6 z-50 border border-gray-300">
+              <div className="fixed sm:absolute inset-x-0 sm:inset-auto bottom-0 sm:bottom-auto left-0 right-0 sm:left-auto sm:right-auto mt-3 w-full sm:w-80 bg-white shadow-xl rounded-t-xl sm:rounded-xl p-4 sm:p-6 z-50 border border-gray-300 sm:translate-y-0 translate-y-0 transition-transform">
                 <div className="grid grid-cols-2 divide-x">
                   <div className="flex flex-col items-center px-4">
                     <span className="text-indigo-700 font-semibold text-lg">Bed</span>
@@ -415,7 +488,7 @@ const handleResetFilters = () => {
                 </div>
                 <button
                   className="w-full mt-4 bg-indigo-800 text-white py-2 rounded-lg hover:bg-indigo-900"
-                  onClick={() => setShowBedBathFilter(false)}
+                  onClick={handleBedBathApply}
                 >
                   Apply
                 </button>
@@ -424,16 +497,16 @@ const handleResetFilters = () => {
           </div>
 
           {/* Amenities Filter */}
-          <div className="relative" ref={amenitiesFilterRef}>
+          <div className="relative w-full" ref={amenitiesFilterRef}>
             <button
               onClick={() => setShowAmenitiesFilter(!showAmenitiesFilter)}
-              className="px-4 py-2 border rounded-full shadow  text-black flex items-center space-x-2 cursor-pointer hover:bg-gray-100"
+              className="w-full px-3 sm:px-4 py-2 border rounded-full shadow text-black flex items-center justify-between cursor-pointer hover:bg-gray-100 text-sm sm:text-base"
             >
               <span>Amenities</span>
-              <FaChevronDown className="text-black" />
+              <FaChevronDown className="text-black ml-1" />
             </button>
             {showAmenitiesFilter && (
-              <div className="absolute left-0 mt-3 w-72 bg-white shadow-xl rounded-lg p-6 z-50 border border-gray-300">
+              <div className="fixed sm:absolute inset-x-0 sm:inset-auto bottom-0 sm:bottom-auto left-0 right-0 sm:left-auto sm:right-auto mt-3 w-full sm:w-72 bg-white shadow-xl rounded-t-xl sm:rounded-xl p-4 sm:p-6 z-50 border border-gray-300 sm:translate-y-0 translate-y-0 transition-transform">
                 <div className="space-y-3">
                   {amenitiesList.map((amenity, index) => (
                     <label key={index} className="flex items-center space-x-3 cursor-pointer">
@@ -449,7 +522,7 @@ const handleResetFilters = () => {
                 </div>
                 <button
                   className="w-full mt-4 bg-indigo-800 text-white py-2 rounded-lg hover:bg-indigo-900"
-                  onClick={() => setShowAmenitiesFilter(false)}
+                  onClick={handleAmenitiesApply}
                 >
                   Apply
                 </button>
@@ -457,17 +530,17 @@ const handleResetFilters = () => {
             )}
           </div>
 
-          {/* Listing ID Filter */}
-          <div className="relative" ref={RoomNameFilterRef}>
+          {/* Listing Room Filter */}
+          <div className="relative w-full" ref={RoomNameFilterRef}>
             <button
               onClick={() => setshowRoomNameFilter(!showRoomNameFilter)}
-              className="px-4 py-2 border rounded-full shadow  text-black flex items-center space-x-2 cursor-pointer hover:bg-gray-100"
+              className="w-full px-3 sm:px-4 py-2 border rounded-full shadow text-black flex items-center justify-between cursor-pointer hover:bg-gray-100 text-sm sm:text-base"
             >
               <span>Listing Room</span>
-              <FaChevronDown className="text-black" />
+              <FaChevronDown className="text-black ml-1" />
             </button>
             {showRoomNameFilter && (
-              <div className="absolute left-0 mt-3 w-80 bg-white shadow-xl rounded-lg p-6 z-50 border border-gray-300">
+              <div className="fixed sm:absolute inset-x-0 sm:inset-auto bottom-0 sm:bottom-auto left-0 right-0 sm:left-auto sm:right-auto mt-3 w-full sm:w-80 bg-white shadow-xl rounded-t-xl sm:rounded-xl p-4 sm:p-6 z-50 border border-gray-300 sm:translate-y-0 translate-y-0 transition-transform">
                 <h3 className="text-lg font-semibold mb-4 text-center">Listing Room</h3>
                 <input
                   type="text"
@@ -478,7 +551,7 @@ const handleResetFilters = () => {
                 />
                 <button
                   className="w-full mt-4 bg-indigo-800 text-white py-2 rounded-lg hover:bg-indigo-900"
-                  onClick={() => setshowRoomNameFilter(false)}
+                  onClick={handleListingRoomApply}
                 >
                   Apply
                 </button>
@@ -487,16 +560,16 @@ const handleResetFilters = () => {
           </div>
 
           {/* Available Filter */}
-          <div className="relative" ref={availableFilterRef}>
+          <div className="relative w-full" ref={availableFilterRef}>
             <button
               onClick={() => setShowAvailableFilter(!showAvailableFilter)}
-              className="px-4 py-2 border rounded-full shadow  text-black flex items-center space-x-2 cursor-pointer hover:bg-gray-100"
+              className="w-full px-3 sm:px-4 py-2 border rounded-full shadow text-black flex items-center justify-between cursor-pointer hover:bg-gray-100 text-sm sm:text-base"
             >
               <span>Available</span>
-              <FaChevronDown className="text-black" />
+              <FaChevronDown className="text-black ml-1" />
             </button>
             {showAvailableFilter && (
-              <div className="absolute left-0 mt-3 w-72 bg-white shadow-xl rounded-lg p-6 z-50 border border-gray-300">
+              <div className="fixed sm:absolute inset-x-0 sm:inset-auto bottom-0 sm:bottom-auto left-0 right-0 sm:left-auto sm:right-auto mt-3 w-full sm:w-72 bg-white shadow-xl rounded-t-xl sm:rounded-xl p-4 sm:p-6 z-50 border border-gray-300 sm:translate-y-0 translate-y-0 transition-transform">
                 <label className="flex items-center space-x-3 cursor-pointer">
                   <input
                     type="checkbox"
@@ -508,7 +581,7 @@ const handleResetFilters = () => {
                 </label>
                 <button
                   className="w-full mt-4 bg-indigo-800 text-white py-2 rounded-lg hover:bg-indigo-900"
-                  onClick={() => setShowAvailableFilter(false)}
+                  onClick={handleAvailableApply}
                 >
                   Apply
                 </button>
@@ -517,15 +590,15 @@ const handleResetFilters = () => {
           </div>
 
           {/* Reset Filter */}
-          <div className="relative" ref={resetFilterRef}>
+          <div className="relative w-full" ref={resetFilterRef}>
             <button
               onClick={() => setShowResetFilter(!showResetFilter)}
-              className="px-5 py-2 bg-red-600 text-white rounded-full shadow cursor-pointer hover:bg-red-700"
+              className="w-full px-3 sm:px-4 py-2 bg-red-600 text-white rounded-full shadow cursor-pointer hover:bg-red-700 text-sm sm:text-base"
             >
               Reset
             </button>
             {showResetFilter && (
-              <div className="absolute left-0 mt-3 w-80 bg-white shadow-xl rounded-lg p-6 z-50 border border-gray-300">
+              <div className="fixed sm:absolute inset-x-0 sm:inset-auto bottom-0 sm:bottom-auto left-0 right-0 sm:left-auto sm:right-auto mt-3 w-full sm:w-80 bg-white shadow-xl rounded-t-xl sm:rounded-xl p-4 sm:p-6 z-50 border border-gray-300 sm:translate-y-0 translate-y-0 transition-transform">
                 <label className="flex items-center space-x-3 cursor-pointer">
                   <input
                     type="checkbox"
@@ -549,11 +622,6 @@ const handleResetFilters = () => {
           </div>
 
         </div>
-
-        {/* Add Listing btn */}
-        <Link to={"/ListingForm"}>
-          <button className="px-5 py-2 ml-5 bg-slate-700 text-white rounded-full shadow cursor-pointer hover:bg-slate-900">Add Room</button>
-        </Link>
 
       </div>
 

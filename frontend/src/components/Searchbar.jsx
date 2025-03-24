@@ -2,39 +2,19 @@ import { useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { CityCombobox } from "./combobox-demo";
-import { useSearchQuery } from "../redux/APi/listingApi";
-import { Link, useNavigate } from "react-router-dom";
+//import { useSearchQuery } from "../redux/APi/listingApi";
+import { useNavigate } from "react-router-dom";
 import { Calendar, Search } from "lucide-react";
 
 const Searchbar = () => {
   const [checkInDate, setCheckInDate] = useState(null);
   const [checkOutDate, setCheckOutDate] = useState(null);
-  const [selectedCity, setSelectedCity] = useState("");
-  const [searchParams, setSearchParams] = useState({});
+  const [ setSelectedCity] = useState("");
   const navigate = useNavigate();
 
-  const { isLoading } = useSearchQuery(searchParams, {
-    skip: !searchParams.city,
-  });
 
   const handleSearch = () => {
-    if (!selectedCity) return;
-
-    const params = {
-      city: selectedCity,
-      checkIn: checkInDate ? checkInDate.toISOString().split("T")[0] : undefined,
-      checkOut: checkOutDate ? checkOutDate.toISOString().split("T")[0] : undefined,
-    };
-
-    setSearchParams(params);
-    
-    const queryString = new URLSearchParams({
-      city: params.city,
-      ...(params.checkIn && { checkIn: params.checkIn }),
-      ...(params.checkOut && { checkOut: params.checkOut })
-    }).toString();
-
-    navigate(`/filtered-listings?${queryString}`);
+    navigate("/filtered-listings");
   };
 
   const handleCheckOutDateChange = (date) => {
@@ -102,25 +82,12 @@ const Searchbar = () => {
 
         {/* Search Button */}
         <button
+          type="submit"
           onClick={handleSearch}
-          disabled={isLoading}
           className="w-full md:w-auto px-6 py-1.5  bg-black hover:bg-black/85 text-white rounded-lg transition-colors duration-200 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed md:ml-1"
         >
-          {isLoading ? (
-            <>
-              <svg className="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-              </svg>
-              <span className="text-sm">Searching...</span>
-            </>
-          ) : (
-            <>
               <Search size={16} />
               <span className="text-sm">Search</span>
-            </>
-          )}
-          
         </button>
       </div>
     </div>
