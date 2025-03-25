@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-//import { server } from "../../lib/config";
+import { logout } from '../slices/authSlice';
 
 export const api = createApi({
   reducerPath: "rentalApi",

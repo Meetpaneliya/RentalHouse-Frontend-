@@ -13,8 +13,8 @@ const Navbar = ({ setShowLoginModal, setShowSignupModal }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { isAuthenticated } = useSelector((state) => state.auth);
-  
+  const { isAuthenticated, user } = useSelector((state) => state.auth);
+
   const [logoutUser, { isLoading: isloggingOut }] = useLogoutuserMutation();
 
   const handleLogout = async () => {
@@ -29,13 +29,23 @@ const Navbar = ({ setShowLoginModal, setShowSignupModal }) => {
     }
   };
 
+  // Helper function to get user initials for avatar fallback
+  const getInitials = (name) => {
+    if (!name) return '?';
+    return name
+      .split(' ')
+      .map(word => word[0])
+      .join('')
+      .toUpperCase()
+      .slice(0, 2);
+  };
 
   return (
     <header className="bg-transparent text-white shadow-md">
       <div className="container mx-auto flex items-center justify-between px-6 py-4">
         {/* Logo */}
         <Link to="/" className="text-2xl font-semibold">
-        StaySafe
+          StaySafe
         </Link>
 
         {/* Desktop Navigation */}
@@ -56,22 +66,37 @@ const Navbar = ({ setShowLoginModal, setShowSignupModal }) => {
 
         {/* Right Section: Buttons & Profile */}
         {isAuthenticated ? (
-          <div className="relative group p-2">
-            
-                 <User className="p-2 h-10 w-10 shadow-md rounded-full cursor-pointer hover:text-gray-200" />
-           
+          <div className="relative group p-2 hidden md:block">
+            <User className="p-2 h-10 w-10 shadow-md rounded-full cursor-pointer hover:text-gray-200" />
+
 
             {/* Add dropdown menu for desktop */}
             <div className="hidden md:block absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-xl py-2 text-gray-700 invisible group-hover:visible border border-gray-100 z-50">
               {/* User Info Section */}
               <div className="px-4 py-3 border-b border-gray-100">
                 <div className="flex items-center space-x-3">
-                  <div className="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center">
-                    <User className="h-6 w-6 text-blue-600" />
+                  <div className="h-10 w-10 rounded-full overflow-hidden">
+                    {user?.profileImage ? (
+                      <img
+                        src={user.profileImage}
+                        alt={user.name}
+                        className="h-full w-full object-cover"
+                      />
+                    ) : (
+                      <div className="h-full w-full bg-blue-100 flex items-center justify-center">
+                        <span className="text-blue-600 font-medium">
+                          {getInitials(user?.name)}
+                        </span>
+                      </div>
+                    )}
                   </div>
                   <div>
-                    <p className="text-sm font-medium text-gray-800">John Doe</p>
-                    <p className="text-xs text-gray-500">john@example.com</p>
+                    <p className="text-sm font-medium text-gray-800">
+                      {user?.name || 'Guest User'}
+                    </p>
+                    <p className="text-xs text-gray-500">
+                      {user?.email || 'No email provided'}
+                    </p>
                   </div>
                 </div>
               </div>
@@ -82,12 +107,12 @@ const Navbar = ({ setShowLoginModal, setShowSignupModal }) => {
                   <i className="fas fa-user-circle w-5 text-gray-400"></i>
                   <span className="ml-3">My Profile</span>
                 </Link>
-                
+
               </div>
 
-              {/* Settings Section */}
+              {/* Help Center Section */}
               <div className="py-1 border-t border-gray-100">
-                
+
                 <Link to="/contact" className="flex items-center px-4 py-2 hover:bg-gray-50 transition-colors">
                   <i className="fas fa-question-circle w-5 text-gray-400"></i>
                   <span className="ml-3">Help Center</span>
@@ -108,7 +133,7 @@ const Navbar = ({ setShowLoginModal, setShowSignupModal }) => {
                 </button>
               </div>
             </div>
-         </div>
+          </div>
         ) : (
           <div className="hidden md:flex items-center space-x-4">
             <button
@@ -142,6 +167,9 @@ const Navbar = ({ setShowLoginModal, setShowSignupModal }) => {
       {/* Mobile Menu */}
       {isMenuOpen && (
         <nav className="md:hidden bg-transparent/40 text-white px-6 py-4 space-y-2">
+          <Link to="/user" className="block hover:text-gray-400">
+            My Profile
+          </Link>
           <Link to="/about" className="block hover:text-gray-400">
             About
           </Link>
@@ -171,64 +199,20 @@ const Navbar = ({ setShowLoginModal, setShowSignupModal }) => {
               </button>
             </div>
           ) : (
-            <button
-              onClick={handleLogout}
-              disabled={isloggingOut}
-              className="block w-full text-left rounded hover:text-gray-300/30 transition"
-            >
-              Logout
-            </button>
+            <div className="mt-6">
+              <button
+                onClick={handleLogout}
+                disabled={isloggingOut}
+                className="block w-full text-left rounded hover:text-gray-300/30 transition"
+              >
+                {isloggingOut ? "Logging out..." : "Logout"}
+              </button>
+            </div>
           )}
         </nav>
       )}
 
-      {/* Mobile Menu Profile Section */}
-      {isAuthenticated && isMenuOpen && (
-        <div className="md:hidden bg-white mx-4 mb-4 rounded-lg shadow-lg">
-          <div className="p-4 border-b border-gray-100">
-            <div className="flex items-center space-x-3">
-              <div className="h-12 w-12 rounded-full bg-blue-100 flex items-center justify-center">
-                <User className="h-6 w-6 text-blue-600" />
-              </div>
-              <div>
-                <p className="font-medium text-gray-800">John Doe</p>
-                <p className="text-sm text-gray-500">john@example.com</p>
-              </div>
-            </div>
-          </div>
 
-          <div className="py-2">
-            <Link to="/user" className="flex items-center px-4 py-3 text-gray-700 hover:bg-gray-50">
-              <i className="fas fa-user-circle w-5 text-gray-400"></i>
-              <span className="ml-3">My Profile</span>
-            </Link>
-            <Link to="/my-properties" className="flex items-center px-4 py-3 text-gray-700 hover:bg-gray-50">
-              <i className="fas fa-home w-5 text-gray-400"></i>
-              <span className="ml-3">My Properties</span>
-            </Link>
-            <Link to="/bookings" className="flex items-center px-4 py-3 text-gray-700 hover:bg-gray-50">
-              <i className="fas fa-calendar w-5 text-gray-400"></i>
-              <span className="ml-3">My Bookings</span>
-            </Link>
-            <Link to="/favorites" className="flex items-center px-4 py-3 text-gray-700 hover:bg-gray-50">
-              <i className="fas fa-heart w-5 text-gray-400"></i>
-              <span className="ml-3">Saved Properties</span>
-            </Link>
-            <Link to="/settings" className="flex items-center px-4 py-3 text-gray-700 hover:bg-gray-50">
-              <i className="fas fa-cog w-5 text-gray-400"></i>
-              <span className="ml-3">Settings</span>
-            </Link>
-            <button
-              onClick={handleLogout}
-              disabled={isloggingOut}
-              className="flex items-center w-full px-4 py-3 text-left text-red-600 hover:bg-gray-50"
-            >
-              <i className="fas fa-sign-out-alt w-5"></i>
-              <span className="ml-3">{isloggingOut ? "Logging out..." : "Logout"}</span>
-            </button>
-          </div>
-        </div>
-      )}
     </header>
   );
 };
