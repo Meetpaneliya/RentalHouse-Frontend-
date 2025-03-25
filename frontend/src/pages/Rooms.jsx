@@ -11,6 +11,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { roominfor } from "../redux/reducers/orderSlice";
 import { IoHomeOutline } from "react-icons/io5";
+
 import { format } from "date-fns";
 
 const Rooms = () => {
@@ -26,6 +27,8 @@ const Rooms = () => {
   const [successMessage, setSuccessMessage] = useState("");
   const [showFullDescription, setShowFullDescription] = useState(false);
   const MAX_DESCRIPTION_LENGTH = 150; // Maximum characters to show initially
+  const [checkInDate, setCheckInDate] = useState('');
+  const [checkOutDate, setCheckOutDate] = useState('');
 
   const navigate = useNavigate();
 
@@ -34,12 +37,26 @@ const Rooms = () => {
   };
 
   const handlepayment = async (room) => {
-    const totalprice =
-      room.price - Math.floor(room.price * 0.1) + Math.floor(room.price * 0.05);
+    if (!checkInDate || !checkOutDate) {
+      return;
+    }
+    
+    const totalprice = calculateTotal();
+    const bookingDetails = {
+      checkIn: checkInDate,
+      checkOut: checkOutDate,
+      nights: calculateNights(checkInDate, checkOutDate),
+      totalAmount: totalprice
+    };
+    
     navigate("/payment");
-    dispatch(roominfor(room));
+    dispatch(roominfor({ ...room, bookingDetails }));
     localStorage.setItem("amount", totalprice);
     localStorage.setItem("orderId", room._id);
+    localStorage.setItem("bookingDates", JSON.stringify({
+      checkIn: checkInDate,
+      checkOut: checkOutDate
+    }));
   };
 
   useEffect(() => {
@@ -112,6 +129,27 @@ const Rooms = () => {
     } else {
       alert("Web Share API is not supported in your browser.");
     }
+  };
+
+  const calculateNights = (checkIn, checkOut) => {
+    if (!checkIn || !checkOut) return 0;
+    const start = new Date(checkIn);
+    const end = new Date(checkOut);
+    const diffTime = Math.abs(end - start);
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    return diffDays;
+  };
+
+  const calculateTotalNights = () => {
+    const nights = calculateNights(checkInDate, checkOutDate);
+    return nights * room.price;
+  };
+
+  const calculateTotal = () => {
+    const basePrice = calculateTotalNights();
+    const discount = Math.floor(room.price * 0.1);
+    const serviceFee = Math.floor(room.price * 0.05);
+    return basePrice - discount + serviceFee;
   };
 
   if (loading) return <p className="text-center text-gray-600">Loading...</p>;
@@ -224,24 +262,39 @@ const Rooms = () => {
 
             {/* Reviews */}
             <div className="mt-6 border-t pt-4">
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="text-2xl font-semibold flex items-center gap-2">
-                  Reviews <span className="text-gray-500 text-lg">({reviews.length})</span>
-                </h2>
+              {/* Reviews Header - Single Row */}
+              <div className="flex justify-between items-center mb-6">
+                <div className="flex flex-col  items-center gap-2">
+                  <h2 className="text-2xl font-semibold">Guest Reviews</h2>
+                  <div className="flex items-center gap-3 text-gray-600">
+                    <div className="flex items-center">
+                      <FaStar className="text-yellow-400 mr-1" />
+                      <span className="font-semibold text-lg">{reviews.length > 0 ? '4.8' : '0'}</span>
+                    </div>
+                    <span className="text-gray-400">•</span>
+                    <span>{reviews.length} reviews</span>
+                  </div>
+                </div>
+                
                 <button
-                  className="px-4 py-2 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition-all flex items-center gap-2"
+                  className="px-4 py-2 bg-white text-blue-600 border-2 border-blue-600 rounded-lg hover:bg-blue-50 transition-all flex items-center gap-2"
                   onClick={() => setIsModalOpen(true)}
                 >
-                  <span> + Add Review</span>
+                  <span className="hidden sm:inline">Write a review</span>
+                  <span className="sm:hidden">Review</span>
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                    <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
+                  </svg>
                 </button>
               </div>
 
+              {/* Reviews Grid */}
               {reviews.length > 0 ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {reviews.map((review) => (
                     <div
                       key={review._id}
-                      className="bg-white p-4 rounded-xl shadow-[0_3px_10px_rgb(0,0,0,0.2)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.12)] transition-all duration-300 border border-gray-100 max-w-[280px]"
+                      className="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300 border border-gray-100"
                     >
                       <div className="flex items-start gap-3">
                         <div className="flex-shrink-0">
@@ -249,83 +302,182 @@ const Rooms = () => {
                             <img
                               src={review.user.avatar}
                               alt={review.user?.name}
-                              className="w-10 h-10 rounded-full object-cover ring-2 ring-gray-100"
+                              className="w-8 h-8 rounded-full object-cover ring-1 ring-gray-100"
                             />
                           ) : (
-                            <FaUserCircle className="w-10 h-10 text-gray-400" />
+                            <div className="w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center">
+                              <FaUserCircle className="w-5 h-5 text-blue-500" />
+                            </div>
                           )}
                         </div>
                         <div className="flex-grow">
-                          <div className="flex justify-between items-start">
-                            <div>
-                              <h3 className="font-semibold text-gray-800 text-base">
+                          <div className="flex flex-col">
+                            <div className="flex items-center justify-between">
+                              <h3 className="font-medium text-gray-800 text-sm">
                                 {review.user?.name || "Anonymous"}
                               </h3>
-                              <div className="flex items-center gap-2 mt-1">
-                                <div className="flex text-yellow-400">
-                                  {[...Array(5)].map((_, i) => (
-                                    <FaStar
-                                      key={i}
-                                      className={`${i < review.rating ? "text-yellow-400" : "text-gray-200"} text-sm`}
-                                    />
-                                  ))}
-                                </div>
-                                <span className="text-xs text-gray-500 border-l pl-2">
-                                  {review.createdAt ? format(new Date(review.createdAt), 'MMM dd, yyyy') : ''}
-                                </span>
+                              <span className="text-xs text-gray-500">
+                                {review.createdAt ? format(new Date(review.createdAt), 'MMM dd, yyyy') : ''}
+                              </span>
+                            </div>
+                            <div className="flex items-center gap-2 mt-1">
+                              <div className="flex text-yellow-400">
+                                {[...Array(5)].map((_, i) => (
+                                  <FaStar
+                                    key={i}
+                                    className={`${
+                                      i < review.rating ? "text-yellow-400" : "text-gray-200"
+                                    } w-3 h-3`}
+                                  />
+                                ))}
                               </div>
                             </div>
+                            <p className="text-gray-600 text-sm mt-2 leading-relaxed line-clamp-2">
+                              {review.comment}
+                            </p>
                           </div>
-                          <p className="mt-2 text-gray-600 text-sm leading-relaxed line-clamp-3">
-                            {review.comment}
-                          </p>
                         </div>
                       </div>
                     </div>
                   ))}
                 </div>
               ) : (
-                <div className="text-center py-8 bg-gray-50 rounded-lg">
-                  <FaStar className="mx-auto text-4xl text-gray-300 mb-2" />
-                  <p className="text-gray-500">No reviews yet. Be the first to review!</p>
+                <div className="text-center py-12 bg-gray-50 rounded-xl border border-gray-100">
+                  <div className="mb-4">
+                    <FaStar className="mx-auto text-5xl text-gray-300" />
+                  </div>
+                  <h3 className="text-xl font-semibold text-gray-800 mb-2">No Reviews Yet</h3>
+                  <p className="text-gray-500 mb-6">Be the first one to review this place!</p>
+                  <button
+                    onClick={() => setIsModalOpen(true)}
+                    className="px-6 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all"
+                  >
+                    Write a Review
+                  </button>
+                </div>
+              )}
+
+              {/* Show More Reviews Button (if you have pagination) */}
+              {reviews.length > 6 && (
+                <div className="text-center mt-8">
+                  <button className="px-6 py-2.5 bg-white text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 transition-all">
+                    Show More Reviews
+                  </button>
                 </div>
               )}
             </div>
           </div>
 
+          {/* Mobile Divider */}
+          <div className="sm:hidden col-span-1 w-full my-8">
+            <div className="border-t border-gray-200 relative">
+              <div className="absolute left-1/2 -top-3 transform -translate-x-1/2 bg-white px-4">
+                <span className="text-gray-400 text-sm">Payment Details</span>
+              </div>
+            </div>
+          </div>
+
           {/* Booking Section */}
-          <div className="col-span-1 p-6 bg-white shadow-md rounded-lg border border-gray-200">
-            <h3 className="text-lg font-semibold">Select bedroom and dates</h3>
-            <div className="flex flex-col gap-3 mt-3">
-              <input type="date" className="w-full p-2 border rounded-md" />
-              <input type="date" className="w-full p-2 border rounded-md" />
+          <div className="col-span-1">
+            <div className="bg-[#3F51B5] text-white rounded-t-xl">
+              <h3 className="text-lg font-medium p-4">Select bedroom and dates</h3>
             </div>
-            <div className="mt-3 text-gray-700">
-              <p>💲 {room.price} x nights</p>
-              <p>🔖 Discount: -${Math.floor(room.price * 0.1)}</p>
-              <p>🎉 Service Fee: ${Math.floor(room.price * 0.05)}</p>
+            
+            <div className="bg-white shadow-lg rounded-b-xl p-6">
+              {/* Date Selection */}
+              <div className="grid grid-cols-2 gap-4 mb-6">
+                <div>
+                  <label className="block text-sm text-gray-600 mb-1">Check In</label>
+                  <input 
+                    type="date" 
+                    value={checkInDate}
+                    onChange={(e) => setCheckInDate(e.target.value)}
+                    className="w-full p-2 border border-gray-300 rounded-md text-gray-700 focus:outline-none focus:border-blue-500"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm text-gray-600 mb-1">Check Out</label>
+                  <input 
+                    type="date"
+                    value={checkOutDate}
+                    onChange={(e) => setCheckOutDate(e.target.value)}
+                    className="w-full p-2 border border-gray-300 rounded-md text-gray-700 focus:outline-none focus:border-blue-500"
+                  />
+                </div>
+              </div>
+
+              {/* Price Breakdown */}
+              <div className="space-y-3 border-b border-gray-200 pb-4">
+                <div className="flex justify-between items-center">
+                  <span className="text-gray-600">${room.price} × {checkInDate && checkOutDate ? calculateNights(checkInDate, checkOutDate) : 'X'} nights</span>
+                  <span className="text-gray-800">${calculateTotalNights()}</span>
+                </div>
+                <div className="flex justify-between items-center text-gray-600">
+                  <span>New user discount</span>
+                  <span className="text-green-600">-${Math.floor(room.price * 0.1)}</span>
+                </div>
+                <div className="flex justify-between items-center text-gray-600">
+                  <span>Service fee</span>
+                  <span>${Math.floor(room.price * 0.05)}</span>
+                </div>
+              </div>
+
+              {/* Total */}
+              <div className="flex justify-between items-center py-4 font-medium">
+                <span>Total(USD)</span>
+                <span className="text-lg">
+                  ${calculateTotal()}/month
+                </span>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="space-y-3 mt-4">
+                <button
+                  onClick={handleNavigate}
+                  className="w-full bg-[#3F51B5] text-white py-3 rounded-lg hover:bg-[#2c3e99] transition-colors"
+                  disabled={!checkInDate || !checkOutDate}
+                >
+                  Reserve
+                </button>
+
+                <button
+                  onClick={() => handlepayment(room)}
+                  className="w-full bg-green-600 text-white py-3 rounded-lg hover:bg-green-700 transition-colors flex items-center justify-center gap-2"
+                  disabled={!checkInDate || !checkOutDate}
+                >
+                  <span>Proceed to Pay</span>
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                    <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
+                  </svg>
+                </button>
+
+                <p className="text-center text-gray-500 text-sm mt-1">
+                  You won't get charged yet
+                </p>
+
+                {/* Payment Methods */}
+                <div className="flex items-center justify-center gap-6 mt-4 pt-4 border-t border-gray-200">
+                  <img 
+                    src="/assets/Razorpay.png" 
+                    alt="Razorpay" 
+                    className="h-12 w-auto object-contain hover:scale-105 transition-transform duration-200"
+                  />
+                  <span className="text-gray-300 text-2xl">|</span>
+                  <img 
+                    src="/assets/Stripe.png" 
+                    alt="Stripe" 
+                    className="h-12 w-auto object-contain hover:scale-105 transition-transform duration-200"
+                  />
+                  <span className="text-gray-300 text-2xl">|</span>
+                  <img 
+                    src="/assets/Paypal.png" 
+                    alt="Paypal" 
+                    className="h-12 w-auto object-contain hover:scale-105 transition-transform duration-200"
+                  />
+                </div>
+                
+              </div>
             </div>
-            <div className="mt-2 text-lg font-bold text-blue-800">
-              Total: $
-              {room.price -
-                Math.floor(room.price * 0.1) +
-                Math.floor(room.price * 0.05)}
-            </div>
-            <button
-              onClick={handleNavigate}
-              className="mt-4 w-full px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-            >
-              Reserve
-            </button>
-            <p className="text-gray-500 text-sm text-center mt-2">
-              You won't get charged yet
-            </p>
-            <button
-              onClick={() => handlepayment(room)}
-              className="mt-4 w-full px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-            >
-              Proceed to Pay
-            </button>
           </div>
         </div>
 
