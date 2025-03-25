@@ -7,7 +7,7 @@ const Footer = () => {
                 {/* Left Section */}
                 <div className="w-full lg:w-4/12 mb-8 lg:mb-0 lg:ml-10 text-center lg:text-left">
                     <h2 className="text-xl sm:text-2xl font-semibold mb-2">
-                        June Homes provides apartments and rooms for rent in major US cities on flexible lease terms.
+                       StaySafe provides apartments and rooms for rent in major US cities on flexible lease terms.
                     </h2>
                     <img src="/assets/notpen.png" alt="Checklist" className="mx-auto lg:mx-0" />
                 </div>
@@ -112,9 +112,9 @@ const Footer = () => {
 
             {/* Contact Info */}
             <div className="text-center mt-14 text-sm">
-                Get in touch with us: +1 (888) 604-6697 | 7:30am to 8pm CT | email us: welcome@junehomes.com
+                Get in touch with us: +1 (888) 604-6697 | 7:30am to 8pm CT | email us: welcome@StaySafe.com
                 <br />
-                June Homes US, Inc. | California DRE # 02161034
+                StaySafe US, Inc. | California DRE # 02161034
             </div>
         </footer>
     );

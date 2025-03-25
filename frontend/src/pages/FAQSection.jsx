@@ -5,10 +5,10 @@ import Footer from "../components/Footer";
 
 const faqs = [
   {
-    question: "Why should I rent with June Homes?",
-    answer: `Ready, set, rent! June Homes is the simplest, fastest way to rent a home.
+    question: "Why should I rent with StaySafe?",
+    answer: `Ready, set, rent! StaySafe is the simplest, fastest way to rent a home.
 
-    Here’s why renters are choosing June Homes:
+    Here’s why renters are choosing StaySafe:
     • **Flexible leases:** Enjoy lease terms that range from 1 to 18 months, allowing you to extend your lease at any time without hassle.
     • **Furnished or unfurnished spaces:** You get the choice of renting a fully furnished home or bringing your own furniture.
     • **Shared or entire homes:** Choose between co-living with roommates or renting the entire space for yourself.
@@ -16,8 +16,8 @@ const faqs = [
     • **24/7 support & services:** Our Resident Portal provides seamless maintenance requests, support, and communication.`
   },
   {
-    question: "How do I Become a June Home resident?",
-    answer: `Becoming a June Home resident is easy and convenient! Here's how it works:
+    question: "How do I Become a StaySafe resident?",
+    answer: `Becoming a StaySafe resident is easy and convenient! Here's how it works:
     1. **Browse Listings:** Explore our available homes in your preferred city.
     2. **Apply Online:** Fill out our secure application form and upload necessary documents.
     3. **Verification & Approval:** Our team will review your application and verify details.
@@ -25,8 +25,8 @@ const faqs = [
     5. **Move-In Ready:** Get your keys and move in hassle-free!`
   },
   {
-    question: "What cities is June Homes available in?",
-    answer: `June Homes is expanding rapidly! We currently provide rental solutions in several major cities including:
+    question: "What cities is StaySafe available in?",
+    answer: `StaySafe is expanding rapidly! We currently provide rental solutions in several major cities including:
     - **New York City**
     - **San Francisco**
     - **Los Angeles**
@@ -37,7 +37,7 @@ const faqs = [
     And many more! Check our website for the latest city updates.`
   },
   {
-    question: "Does June Home offer co-living?",
+    question: "Does StaySafe offer co-living?",
     answer: `Yes, absolutely! Co-living is one of our most popular options. Here's why people love it:
     - **Affordability:** Rent a shared space at a lower price instead of paying full rent for an entire unit.
     - **Fully Furnished:** Co-living spaces come with all the necessary furniture and utilities included.
@@ -45,8 +45,8 @@ const faqs = [
     - **Flexible Leasing:** Whether you need a short-term or long-term stay, we have flexible options for you!`
   },
   {
-    question: "Is June Homes a hotel?",
-    answer: `No, June Homes is **not a hotel**. We provide **long-term and short-term rentals** that offer a home-like experience. 
+    question: "Is StaySafe a hotel?",
+    answer: `No, StaySafe is **not a hotel**. We provide **long-term and short-term rentals** that offer a home-like experience. 
     Unlike hotels:
     - Our properties are **fully equipped apartments** designed for comfortable everyday living.
     - You can **rent for months instead of nights**, making it ideal for professionals, students, and travelers.
