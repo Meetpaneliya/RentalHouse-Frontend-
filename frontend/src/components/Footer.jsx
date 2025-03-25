@@ -15,7 +15,7 @@ const Footer = () => {
                 {/* Right Section */}
                 <div className="w-full lg:w-6/12 space-y-8 lg:space-y-10">
                     {/* First Row */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+                    <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-6">
                         <div>
                             <h3 className="text-lg sm:text-xl font-semibold mb-2">New York, NY</h3>
                             <ul className="space-y-1 text-sm">
@@ -58,7 +58,7 @@ const Footer = () => {
                     </div>
 
                     {/* Second Row */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+                    <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-6">
                         <div>
                             <h3 className="text-lg sm:text-xl font-semibold mb-2">Other cities</h3>
                             <ul className="space-y-1 text-sm">

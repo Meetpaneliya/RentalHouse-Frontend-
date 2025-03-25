@@ -1,19 +1,19 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { HiMenu, HiX } from "react-icons/hi";
-import { useSelector } from "react-redux"; 
+import { useSelector } from "react-redux";
 
-const Navbar = ({ setShowLoginModal, setShowSignupModal }) => {
+const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
 
   const { user } = useSelector((state) => state.auth);
-  console.log(user?.role);
+
 
   return (
     <header className="w-full shadow-md bg-white">
       <div className="flex justify-between items-center px-6 md:px-10 py-4 ">
         {/* Brand Logo */}
-        <Link to="/" className="text-2xl font-bold text-indigo-800">June</Link>
+        <Link to="/" className="text-2xl font-bold text-indigo-800">StaySafe</Link>
 
         {/* Desktop Menu */}
         <nav className="hidden md:flex items-center space-x-8">
@@ -23,19 +23,19 @@ const Navbar = ({ setShowLoginModal, setShowSignupModal }) => {
           <Link to="/faq" className="text-indigo-800 font-semibold hover:text-indigo-600 transition">FAQ's</Link>
 
           {user && user.role === "landlord" && (
-    <Link 
-    to={"/ListingForm"}
-      className="bg-indigo-800 text-white px-4 py-2 rounded-lg hover:bg-indigo-900 transition"
-      onClick={() => setMenuOpen(false)}
-    >
-      Add Room
-    </Link>
-  )}
+            <Link
+              to={"/ListingForm"}
+              className="bg-indigo-800 text-white px-4 py-2 rounded-lg hover:bg-indigo-900 transition"
+              onClick={() => setMenuOpen(false)}
+            >
+              + Add Room
+            </Link>
+          )}
         </nav>
 
         {/* Mobile Menu Button */}
-        <button 
-          className="md:hidden text-indigo-800 text-3xl focus:outline-none" 
+        <button
+          className="md:hidden text-indigo-800 text-3xl focus:outline-none"
           onClick={() => setMenuOpen(!menuOpen)}
         >
           {menuOpen ? <HiX /> : <HiMenu />}
@@ -43,7 +43,7 @@ const Navbar = ({ setShowLoginModal, setShowSignupModal }) => {
       </div>
 
       {/* Mobile Menu (Appears on small screens) */}
-      <div 
+      <div
         className={`md:hidden flex flex-col items-center space-y-5 py-6 bg-white shadow-lg transition-all duration-300 ${menuOpen ? "block" : "hidden"}`}
       >
         <Link to="/about" className="text-indigo-800 font-semibold hover:text-indigo-600 transition" onClick={() => setMenuOpen(false)}>About</Link>
@@ -51,14 +51,14 @@ const Navbar = ({ setShowLoginModal, setShowSignupModal }) => {
         <Link to="/contact" className="text-indigo-800 font-semibold hover:text-indigo-600 transition" onClick={() => setMenuOpen(false)}>Contact</Link>
 
         {user && user.role === "landlord" && (
-    <Link 
-      to="/add-room" 
-      className="bg-indigo-800 text-white px-4 py-2 rounded-lg hover:bg-indigo-900 transition"
-      onClick={() => setMenuOpen(false)}
-    >
-      Add Room
-    </Link>
-  )}
+          <Link
+            to="/add-room"
+            className="bg-indigo-800 text-white px-4 py-2 rounded-lg hover:bg-indigo-900 transition"
+            onClick={() => setMenuOpen(false)}
+          >
+            Add Room
+          </Link>
+        )}
       </div>
     </header>
   );

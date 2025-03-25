@@ -70,8 +70,8 @@ const MultiStepKYCForm1 = () => {
                         </div>
 
                         {/* Name Fields */}
-                        <div className="flex gap-4">
-                            <div className="flex-1">
+                        <div className="flex flex-col md:flex-row gap-4">
+                            <div className="w-full md:flex-1">
                                 <label className="block font-medium text-gray-700">First Name</label>
                                 <input
                                     type="text"
@@ -82,7 +82,7 @@ const MultiStepKYCForm1 = () => {
                                     className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 />
                             </div>
-                            <div className="flex-1">
+                            <div className="w-full md:flex-1">
                                 <label className="block font-medium text-gray-700">Middle Name (Optional)</label>
                                 <input
                                     type="text"
@@ -137,8 +137,8 @@ const MultiStepKYCForm1 = () => {
                         </div>
 
                         {/* City and Zip Code */}
-                        <div className="flex gap-4">
-                            <div className="flex-1">
+                        <div className="flex flex-col md:flex-row gap-4">
+                            <div className="w-full md:flex-1">
                                 <label className="block font-medium text-gray-700">City</label>
                                 <input
                                     type="text"
@@ -149,7 +149,7 @@ const MultiStepKYCForm1 = () => {
                                     className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 />
                             </div>
-                            <div className="flex-1">
+                            <div className="w-full md:flex-1">
                                 <label className="block font-medium text-gray-700">Zip Code</label>
                                 <input
                                     type="text"

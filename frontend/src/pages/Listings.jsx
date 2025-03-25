@@ -1,8 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { FaBed, FaBath } from "react-icons/fa";
-import { MdLocationOn, MdOutlineSquareFoot } from "react-icons/md";
+import { MdLocationOn } from "react-icons/md";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import { IoHomeOutline } from "react-icons/io5";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 
@@ -17,16 +18,16 @@ const Listings = ({ listings = [] }) => {
   return (
     <div className="flex flex-col md:flex-row h-screen p-3">
       {/* Left Side: Listings */}
-      <div className="w-full md:w-[60%] p-4 overflow-y-auto">
+      <div className="w-full md:w-[70%] p-4 overflow-y-auto">
         <h2 className="text-2xl font-semibold mb-4">All Listings</h2>
         {listings.length === 0 ? (
           <p>No listings match your filters.</p>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="flex flex-col md:grid md:grid-cols-3 gap-4 overflow-y-auto pb-4">
             {listings.map((listing) => (
               <div
                 key={listing._id}
-                className="relative bg-white shadow-md rounded-xl overflow-hidden border border-gray-300 hover:shadow-xl transition-shadow duration-300"
+                className="relative bg-white shadow-md rounded-3xl overflow-hidden border border-gray-300 hover:shadow-xl transition-shadow duration-300 w-full"
               >
                 <Link to={`/Room/${listing._id}`} className="block group">
                   {/* Background Image */}
@@ -36,23 +37,19 @@ const Listings = ({ listings = [] }) => {
                       alt={listing.title}
                       className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-80"></div>
+                    <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-transparent to-black/70"></div>
 
-                    {/* Title & Status */}
+                    {/* Title */}
                     <div className="absolute top-3 left-3">
-                      <h3 className="text-slate-300 bg-black opacity-55 rounded-2xl p-2 text-sm font-semibold">{listing.title}</h3>
+                      <h3 className="text-slate-200/60 text-lg font-bold">{listing.title}</h3>
                     </div>
-                    <div className="absolute top-3 right-3">
-                      <span className="bg-green-600 text-white text-xs font-bold px-2 py-1 rounded-full">
-                        {listing.status || "Available"}
-                      </span>
-                    </div>
+                   
                   </div>
 
                   {/* Listing Details */}
-                  <div className="absolute bottom-0 w-full bg-black bg-opacity-50 p-3 flex justify-between text-gray-300 text-sm">
+                  <div className="absolute bottom-0 w-full bg-slate-200 text-black bg-opacity-50 p-3 flex justify-between text-sm">
                     <span className="flex items-center gap-1">
-                      <MdOutlineSquareFoot /> {listing.size} ft²
+                      <IoHomeOutline /> {listing.size} ft²
                     </span>
                     <span className="flex items-center gap-1">
                       <FaBed /> {listing.beds} Beds

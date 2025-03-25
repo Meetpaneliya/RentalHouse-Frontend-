@@ -1,14 +1,17 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import axios from "../lib/axios";
+import axios from "axios";
 import Navbar from "../components/Navbar2";
-import { FaWifi, FaTv, FaSnowflake, FaShower, FaStar } from "react-icons/fa";
+import { FaWifi, FaTv, FaSnowflake, FaShower, FaStar, FaUserCircle } from "react-icons/fa";
+import { MdPets } from "react-icons/md";
 import Footer from "../components/Footer";
 import { Dialog } from "@headlessui/react";
-import { FaShareSquare } from "react-icons/fa";
+import { CiShare2 } from "react-icons/ci";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { roominfor } from "../redux/reducers/orderSlice";
+import { IoHomeOutline } from "react-icons/io5";
+import { format } from "date-fns";
 
 const Rooms = () => {
   const { id } = useParams();
@@ -20,7 +23,9 @@ const Rooms = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [rating, setRating] = useState(5);
   const [comment, setComment] = useState("");
-  const [setSuccessMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
+  const [showFullDescription, setShowFullDescription] = useState(false);
+  const MAX_DESCRIPTION_LENGTH = 150; // Maximum characters to show initially
 
   const navigate = useNavigate();
 
@@ -41,7 +46,7 @@ const Rooms = () => {
     const fetchRoomDetails = async () => {
       try {
         console.log("Fetching room details for ID:", id);
-        const response = await axios.get(`/api/v1/listings/${id}`);
+        const response = await axios.get(`${import.meta.env.VITE_SERVER}/api/v1/listings/${id}`);
 
         console.log("API Response:", response.data);
         if (!response.data.success) throw new Error("Listing not found");
@@ -61,7 +66,7 @@ const Rooms = () => {
 
   const fetchReviews = async () => {
     try {
-      const response = await axios.get(`/api/v1/reviews/${id}`);
+      const response = await axios.get(`${import.meta.env.VITE_SERVER}/api/v1/reviews/${id}`);
       setReviews(response.data.reviews);
     } catch (err) {
       console.error("Error fetching reviews:", err);
@@ -74,15 +79,17 @@ const Rooms = () => {
 
   const submitReview = async () => {
     try {
-      const response = await axios.post(`/api/v1/reviews/${id}`, {
-        listingId: id,
-        rating,
-        comment
-      });
+      const response = await axios.post(
+        `${import.meta.env.VITE_SERVER}/api/v1/reviews/`,
+        { listingId: id, rating, comment },
+        { withCredentials: true }
+      );
 
       console.log("Review Added:", response.data);
+
       setSuccessMessage("Review submitted successfully!");
       setIsModalOpen(false);
+
       fetchReviews();
     } catch (err) {
       console.error("Error adding review:", err);
@@ -120,11 +127,11 @@ const Rooms = () => {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
-        <div className="flex flex-col sm:flex-row justify-between items-center mb-6">
+        <div className="flex  sm:flex justify-between items-center mb-6">
           <h1 className="text-2xl sm:text-3xl font-bold text-blue-800">
             {room.title} - #{room._id}
           </h1>
-          <FaShareSquare onClick={handleShare} className="text-2xl" />
+          <CiShare2 onClick={handleShare} className="text-3xl" />
         </div>
 
         {/* Image & Thumbnails */}
@@ -151,37 +158,62 @@ const Rooms = () => {
         {/* Overview & Booking Section */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mt-6">
           {/* Overview Section */}
-          <div className="col-span-1 sm:col-span-2">
+          <div className="col-span-1 sm:col-span-2 w-11/12">
             <h2 className="text-2xl font-semibold">Overview</h2>
-            <p className="text-gray-600">
-              📏 {room.size} ft² | 🏢 {room.floor} Floor | 🛏 {room.beds} Beds |
-              🛁 {room.bathrooms} Bath
-            </p>
-            <p className="text-green-600 font-medium mt-1">
+            <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 mt-2">
+              <p className="flex flex-wrap items-center gap-x-3 gap-y-2 text-gray-600 text-base sm:text-lg">
+                <span className="flex items-center"><IoHomeOutline className="mr-1" /> {room.size} ft²</span>
+                <span className="hidden sm:inline">|</span>
+                <span>🏢 {room.floor} Floor</span>
+                <span className="hidden sm:inline">|</span>
+                <span>🛏 {room.beds} Beds</span>
+                <span className="hidden sm:inline">|</span>
+                <span>🛁 {room.bathrooms} Bath</span>
+              </p>
+            </div>
+            <p className="text-green-600 font-medium mt-3 sm:mt-1 text-base sm:text-lg">
               📅 Available from {room.availableDate || "N/A"}
             </p>
-            <p className="text-gray-700 mt-2 leading-relaxed">
-              {room.description}
-            </p>
+            <div className="text-gray-700 mt-2 leading-relaxed ">
+              {room.description?.length > MAX_DESCRIPTION_LENGTH ? (
+                <>
+                  <p>
+                    {showFullDescription 
+                      ? room.description 
+                      : `${room.description.slice(0, MAX_DESCRIPTION_LENGTH)}...`}
+                  </p>
+                  <button 
+                    onClick={() => setShowFullDescription(!showFullDescription)}
+                    className="text-blue-600 hover:text-blue-800 text-sm font-medium mt-1"
+                  >
+                    {showFullDescription ? "Show less" : "Show more"}
+                  </button>
+                </>
+              ) : (
+                <p>{room.description}</p>
+              )}
+            </div>
 
             {/* Amenities */}
             <div className="mt-6 border-t pt-4">
               <h2 className="text-xl font-semibold">This place offers</h2>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-3">
+              <div className="grid grid-cols-3 sm:grid-cols-3 gap-4 mt-3">
                 {room.amenities?.map((amenity, index) => (
                   <div
                     key={index}
                     className="flex items-center space-x-2 text-gray-700"
                   >
                     <span className="text-blue-600">
-                      {amenity === "wifi" ? (
+                      {amenity === "WiFi" || amenity === "wifi" ? (
                         <FaWifi />
-                      ) : amenity === "tv" ? (
+                      ) : amenity === "TV" || amenity === "tv" ? (
                         <FaTv />
-                      ) : amenity === "ac" ? (
+                      ) : amenity === "AC" || amenity === "ac" ? (
                         <FaSnowflake />
-                      ) : amenity === "geyser" ? (
+                      ) : amenity === "geyser" || amenity === "Geyser" ? (
                         <FaShower />
+                      ) : amenity === "pets" || amenity === "Pets" ? (
+                        <MdPets />
                       ) : null}
                     </span>
                     <span>{amenity}</span>
@@ -192,38 +224,73 @@ const Rooms = () => {
 
             {/* Reviews */}
             <div className="mt-6 border-t pt-4">
-              <h2 className="text-xl font-semibold">Reviews</h2>
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-2xl font-semibold flex items-center gap-2">
+                  Reviews <span className="text-gray-500 text-lg">({reviews.length})</span>
+                </h2>
+                <button
+                  className="px-4 py-2 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition-all flex items-center gap-2"
+                  onClick={() => setIsModalOpen(true)}
+                >
+                  <span> + Add Review</span>
+                </button>
+              </div>
+
               {reviews.length > 0 ? (
-                <div className="mt-3 space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {reviews.map((review) => (
                     <div
                       key={review._id}
-                      className="p-4 bg-gray-100 rounded-lg"
+                      className="bg-white p-4 rounded-xl shadow-[0_3px_10px_rgb(0,0,0,0.2)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.12)] transition-all duration-300 border border-gray-100 max-w-[280px]"
                     >
-                      <div className="flex justify-between items-center">
-                        <span className="font-semibold">
-                          {review.user?.name || "Anonymous"}
-                        </span>
-                        <div className="flex text-yellow-500">
-                          {[...Array(review.rating)].map((_, i) => (
-                            <FaStar key={i} />
-                          ))}
+                      <div className="flex items-start gap-3">
+                        <div className="flex-shrink-0">
+                          {review.user?.avatar ? (
+                            <img
+                              src={review.user.avatar}
+                              alt={review.user?.name}
+                              className="w-10 h-10 rounded-full object-cover ring-2 ring-gray-100"
+                            />
+                          ) : (
+                            <FaUserCircle className="w-10 h-10 text-gray-400" />
+                          )}
+                        </div>
+                        <div className="flex-grow">
+                          <div className="flex justify-between items-start">
+                            <div>
+                              <h3 className="font-semibold text-gray-800 text-base">
+                                {review.user?.name || "Anonymous"}
+                              </h3>
+                              <div className="flex items-center gap-2 mt-1">
+                                <div className="flex text-yellow-400">
+                                  {[...Array(5)].map((_, i) => (
+                                    <FaStar
+                                      key={i}
+                                      className={`${i < review.rating ? "text-yellow-400" : "text-gray-200"} text-sm`}
+                                    />
+                                  ))}
+                                </div>
+                                <span className="text-xs text-gray-500 border-l pl-2">
+                                  {review.createdAt ? format(new Date(review.createdAt), 'MMM dd, yyyy') : ''}
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                          <p className="mt-2 text-gray-600 text-sm leading-relaxed line-clamp-3">
+                            {review.comment}
+                          </p>
                         </div>
                       </div>
-                      <p className="text-gray-700 mt-1">{review.comment}</p>
                     </div>
                   ))}
                 </div>
               ) : (
-                <p className="text-gray-500 mt-2">No reviews yet.</p>
+                <div className="text-center py-8 bg-gray-50 rounded-lg">
+                  <FaStar className="mx-auto text-4xl text-gray-300 mb-2" />
+                  <p className="text-gray-500">No reviews yet. Be the first to review!</p>
+                </div>
               )}
             </div>
-            <button
-              className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-              onClick={() => setIsModalOpen(true)}
-            >
-              Add Your Review
-            </button>
           </div>
 
           {/* Booking Section */}
@@ -275,11 +342,12 @@ const Rooms = () => {
               <select
                 className="w-full p-2 border rounded-md"
                 value={rating}
-                onChange={(e) => setRating(e.target.value)}
+                onChange={(e) => setRating(Number(e.target.value))}
+                required
               >
                 {[1, 2, 3, 4, 5].map((num) => (
                   <option key={num} value={num}>
-                    {num} Star
+                    {num} Star{num !== 1 ? 's' : ''}
                   </option>
                 ))}
               </select>
@@ -290,16 +358,27 @@ const Rooms = () => {
                 className="w-full p-2 border rounded-md"
                 value={comment}
                 onChange={(e) => setComment(e.target.value)}
+                required
+                minLength={3}
+                placeholder="Write your review here..."
               />
             </div>
+            {error && (
+              <p className="mt-2 text-sm text-red-600">{error}</p>
+            )}
+            {successMessage && (
+              <p className="mt-2 text-sm text-green-600">{successMessage}</p>
+            )}
             <div className="mt-4 flex justify-end gap-2">
               <button
+                type="button"
                 className="px-4 py-2 bg-gray-400 text-white rounded-lg"
                 onClick={() => setIsModalOpen(false)}
               >
                 Cancel
               </button>
               <button
+                type="button"
                 className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
                 onClick={submitReview}
               >

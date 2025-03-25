@@ -4,6 +4,7 @@ import Listings from "../pages/Listings";
 import { FaChevronDown } from "react-icons/fa";
 import { MdApartment, MdHotel } from "react-icons/md";
 import { Link, useNavigate } from "react-router-dom";
+import Navbar from "./Navbar2";
 
 const FilterSection = () => {
   const navigate = useNavigate();
@@ -243,28 +244,12 @@ const handleResetFilters = () => {
       <div className="w-full mx-auto p-2 sm:p-4 bg-white shadow-md rounded-lg">
         {/* Header and filters container */}
         <div className="flex flex-col sm:flex-row items-center justify-between mb-6">
-          {/* Logo container */}
-          <div className="w-full sm:w-auto flex items-center justify-between mb-4 sm:mb-0">
-            <h1 className="text-slate-900 font-bold text-3xl sm:text-4xl tracking-tight"> June </h1>
-            {/* Add Listing btn - Mobile position */}
-            <div className="sm:hidden">
-              <Link to={"/ListingForm"}>
-                <button className="px-4 py-2 bg-slate-800 text-white rounded-full shadow-lg hover:bg-slate-900 transition-all text-sm">
-                  + Add Room
-                </button>
-              </Link>
-            </div>
-          </div>
+         
+         {/* Logo container */}
+         <Navbar />
 
-          {/* Add Listing btn - Desktop position */}
-          <div className="hidden sm:block">
-            <Link to={"/ListingForm"}>
-              <button className="px-6 py-2.5 bg-slate-800 text-white rounded-full shadow-lg hover:bg-slate-900 transition-all flex items-center gap-2">
-                <span className="text-lg font-medium">+</span>
-                <span>Add Room</span>
-              </button>
-            </Link>
-          </div>
+          
+         
         </div>
 
         {/* Filters grid */}

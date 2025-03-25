@@ -101,19 +101,24 @@ const Profile = () => {
   return (
     <>
     <Navbar/>
-    <div className="flex justify-center items-center min-h-screen bg-gray-100">
-      <div className="bg-white shadow-md rounded-lg flex overflow-hidden w-[700px] relative">
+    <div className="flex justify-center items-center min-h-screen bg-gray-100 p-4 relative">
+      {/* Background Pattern */}
+      <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-5"></div>
+      
+      {/* Main Content */}
+      <div className="bg-white/95 backdrop-blur-sm shadow-xl rounded-lg flex flex-col md:flex-row overflow-hidden w-full max-w-[700px] relative border border-gray-100">
         {/* Verified Badge */}
-        <div className="absolute top-4 right-4">
+        <div className="absolute top-4 right-4 z-10">
           {user.isVerified ? (
-            <span className="bg-green-500 text-white px-3 py-2 rounded-full text-sm">Verified </span>
+            <span className="bg-green-500 text-white px-3 py-2 rounded-full text-sm shadow-md">Verified </span>
           ) : (
-            <span className="bg-red-500 text-white px-3 py-2 rounded-full text-sm">Not Verified </span>
+            <span className="bg-red-500 text-white px-3 py-2 rounded-full text-sm shadow-md">Not Verified </span>
           )}
         </div>
 
         {/* Left - Avatar */}
-        <div className="bg-gradient-to-br from-blue-500 to-purple-400 to-pink-400 flex flex-col justify-center items-center p-6 w-1/3 text-white relative">
+        <div className="bg-gradient-to-br from-blue-600 via-purple-500 to-pink-500 flex flex-col justify-center items-center p-6 w-full md:w-1/3 text-white relative">
+          <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/diamond-upholstery.png')] opacity-10"></div>
           <img
             src={
               user.profilePicture
@@ -121,15 +126,15 @@ const Profile = () => {
                 : `https://ui-avatars.com/api/?name=${user.name}&background=random`
             }
             alt="Avatar"
-            className="w-24 h-24 rounded-full object-cover mb-4 border-4 border-white"
+            className="w-24 h-24 rounded-full object-cover mb-4 border-4 border-white shadow-lg relative z-10"
           />
-          <h2 className="text-xl font-semibold">{user.name}</h2>
-          <p className="capitalize mt-1">{user.role}</p>
+          <h2 className="text-xl font-semibold text-center relative z-10">{user.name}</h2>
+          <p className="capitalize mt-1 text-center relative z-10">{user.role}</p>
 
           {/* Edit Icon */}
-          <div className="mt-3">
+          <div className="mt-3 relative z-10">
             <button
-              className="flex items-center bg-white text-pink-500 px-2 py-2 rounded-full text-xs"
+              className="flex items-center bg-white/90 hover:bg-white text-pink-500 px-3 py-2 rounded-full text-xs transition-all duration-200 shadow-md"
               onClick={() => fileInputRef.current.click()}
               disabled={uploading}
             >
@@ -147,59 +152,59 @@ const Profile = () => {
         </div>
 
         {/* Right - User Info */}
-        <div className="p-6 flex-1 relative">
+        <div className="p-6 flex-1 relative w-full md:w-2/3 bg-white">
           <h2 className="text-2xl text-blue-600 font-semibold mb-4">User Information</h2>
           <div className="space-y-4">
             <div>
-              <label className="block font-medium">Full Name</label>
+              <label className="block font-medium text-gray-700">Full Name</label>
               {editMode ? (
                 <input
                   type="text"
                   name="name"
                   value={formData.name}
                   onChange={handleChange}
-                  className="border rounded p-2 w-full"
+                  className="border rounded p-2 w-full focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all duration-200"
                 />
               ) : (
-                <p>{user.name}</p>
+                <p className="break-words text-gray-800">{user.name}</p>
               )}
             </div>
 
             <div>
-              <label className="block font-medium">Email</label>
+              <label className="block font-medium text-gray-700">Email</label>
               {editMode ? (
                 <input
                   type="email"
                   name="email"
                   value={formData.email}
                   onChange={handleChange}
-                  className="border rounded p-2 w-full"
+                  className="border rounded p-2 w-full focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all duration-200"
                 />
               ) : (
-                <p>{user.email}</p>
+                <p className="break-words text-gray-800">{user.email}</p>
               )}
             </div>
 
             <div>
-              <label className="block font-medium">Role</label>
-              <p className="capitalize">{user.role}</p>
+              <label className="block font-medium text-gray-700">Role</label>
+              <p className="capitalize break-words text-gray-800">{user.role}</p>
             </div>
           </div>
 
           {/* Buttons */}
-          <div className="mt-6">
+          <div className="mt-6 flex flex-wrap gap-2">
             {editMode ? (
               <>
                 <button
                   onClick={handleSave}
-                  className="bg-blue-600 text-white px-4 py-2 rounded mr-3"
+                  className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded transition-all duration-200 shadow-md"
                   disabled={loading}
                 >
                   {loading ? 'Saving...' : 'Save'}
                 </button>
                 <button
                   onClick={() => setEditMode(false)}
-                  className="bg-gray-400 text-white px-4 py-2 rounded ml-2"
+                  className="bg-gray-400 hover:bg-gray-500 text-white px-4 py-2 rounded transition-all duration-200 shadow-md"
                 >
                   Cancel
                 </button>
@@ -207,7 +212,7 @@ const Profile = () => {
             ) : (
               <button
                 onClick={() => setEditMode(true)}
-                className="bg-blue-600 text-white px-4 py-2 rounded flex items-center"
+                className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded flex items-center transition-all duration-200 shadow-md"
               >
                 <Pencil className="w-4 h-4 mr-1" /> Edit Profile
               </button>
