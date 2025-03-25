@@ -2,17 +2,25 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Navbar from "../components/Navbar2";
-import { FaWifi, FaTv, FaSnowflake, FaShower, FaStar, FaUserCircle } from "react-icons/fa";
+import {
+  FaWifi,
+  FaTv,
+  FaSnowflake,
+  FaShower,
+  FaStar,
+  FaUserCircle,
+} from "react-icons/fa";
 import { MdPets } from "react-icons/md";
 import Footer from "../components/Footer";
 import { Dialog } from "@headlessui/react";
 import { CiShare2 } from "react-icons/ci";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { roominfor } from "../redux/reducers/orderSlice";
 import { IoHomeOutline } from "react-icons/io5";
 
 import { format } from "date-fns";
+import toast from "react-hot-toast";
 
 const Rooms = () => {
   const { id } = useParams();
@@ -27,8 +35,9 @@ const Rooms = () => {
   const [successMessage, setSuccessMessage] = useState("");
   const [showFullDescription, setShowFullDescription] = useState(false);
   const MAX_DESCRIPTION_LENGTH = 150; // Maximum characters to show initially
-  const [checkInDate, setCheckInDate] = useState('');
-  const [checkOutDate, setCheckOutDate] = useState('');
+  const [checkInDate, setCheckInDate] = useState("");
+  const [checkOutDate, setCheckOutDate] = useState("");
+  const { isAuthenticated } = useSelector((state) => state.auth);
 
   const navigate = useNavigate();
 
@@ -37,33 +46,43 @@ const Rooms = () => {
   };
 
   const handlepayment = async (room) => {
-    if (!checkInDate || !checkOutDate) {
+    if (!isAuthenticated) {
+      toast.error("Please login to continue.");
       return;
     }
-    
+    if (!checkInDate || !checkOutDate) {
+      toast.error("Please select check-in and check-out dates.");
+      return;
+    }
+
     const totalprice = calculateTotal();
     const bookingDetails = {
       checkIn: checkInDate,
       checkOut: checkOutDate,
       nights: calculateNights(checkInDate, checkOutDate),
-      totalAmount: totalprice
+      totalAmount: totalprice,
     };
-    
+
     navigate("/payment");
     dispatch(roominfor({ ...room, bookingDetails }));
     localStorage.setItem("amount", totalprice);
     localStorage.setItem("orderId", room._id);
-    localStorage.setItem("bookingDates", JSON.stringify({
-      checkIn: checkInDate,
-      checkOut: checkOutDate
-    }));
+    localStorage.setItem(
+      "bookingDates",
+      JSON.stringify({
+        checkIn: checkInDate,
+        checkOut: checkOutDate,
+      })
+    );
   };
 
   useEffect(() => {
     const fetchRoomDetails = async () => {
       try {
         console.log("Fetching room details for ID:", id);
-        const response = await axios.get(`${import.meta.env.VITE_SERVER}/api/v1/listings/${id}`);
+        const response = await axios.get(
+          `${import.meta.env.VITE_SERVER}/api/v1/listings/${id}`
+        );
 
         console.log("API Response:", response.data);
         if (!response.data.success) throw new Error("Listing not found");
@@ -83,7 +102,9 @@ const Rooms = () => {
 
   const fetchReviews = async () => {
     try {
-      const response = await axios.get(`${import.meta.env.VITE_SERVER}/api/v1/reviews/${id}`);
+      const response = await axios.get(
+        `${import.meta.env.VITE_SERVER}/api/v1/reviews/${id}`
+      );
       setReviews(response.data.reviews);
     } catch (err) {
       console.error("Error fetching reviews:", err);
@@ -200,7 +221,9 @@ const Rooms = () => {
             <h2 className="text-2xl font-semibold">Overview</h2>
             <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 mt-2">
               <p className="flex flex-wrap items-center gap-x-3 gap-y-2 text-gray-600 text-base sm:text-lg">
-                <span className="flex items-center"><IoHomeOutline className="mr-1" /> {room.size} ft²</span>
+                <span className="flex items-center">
+                  <IoHomeOutline className="mr-1" /> {room.size} ft²
+                </span>
                 <span className="hidden sm:inline">|</span>
                 <span>🏢 {room.floor} Floor</span>
                 <span className="hidden sm:inline">|</span>
@@ -216,11 +239,14 @@ const Rooms = () => {
               {room.description?.length > MAX_DESCRIPTION_LENGTH ? (
                 <>
                   <p>
-                    {showFullDescription 
-                      ? room.description 
-                      : `${room.description.slice(0, MAX_DESCRIPTION_LENGTH)}...`}
+                    {showFullDescription
+                      ? room.description
+                      : `${room.description.slice(
+                          0,
+                          MAX_DESCRIPTION_LENGTH
+                        )}...`}
                   </p>
-                  <button 
+                  <button
                     onClick={() => setShowFullDescription(!showFullDescription)}
                     className="text-blue-600 hover:text-blue-800 text-sm font-medium mt-1"
                   >
@@ -269,20 +295,27 @@ const Rooms = () => {
                   <div className="flex items-center gap-3 text-gray-600">
                     <div className="flex items-center">
                       <FaStar className="text-yellow-400 mr-1" />
-                      <span className="font-semibold text-lg">{reviews.length > 0 ? '4.8' : '0'}</span>
+                      <span className="font-semibold text-lg">
+                        {reviews.length > 0 ? "4.8" : "0"}
+                      </span>
                     </div>
                     <span className="text-gray-400">•</span>
                     <span>{reviews.length} reviews</span>
                   </div>
                 </div>
-                
+
                 <button
                   className="px-4 py-2 bg-white text-blue-600 border-2 border-blue-600 rounded-lg hover:bg-blue-50 transition-all flex items-center gap-2"
                   onClick={() => setIsModalOpen(true)}
                 >
                   <span className="hidden sm:inline">Write a review</span>
                   <span className="sm:hidden">Review</span>
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-5 w-5"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
                     <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
                   </svg>
                 </button>
@@ -317,7 +350,12 @@ const Rooms = () => {
                                 {review.user?.name || "Anonymous"}
                               </h3>
                               <span className="text-xs text-gray-500">
-                                {review.createdAt ? format(new Date(review.createdAt), 'MMM dd, yyyy') : ''}
+                                {review.createdAt
+                                  ? format(
+                                      new Date(review.createdAt),
+                                      "MMM dd, yyyy"
+                                    )
+                                  : ""}
                               </span>
                             </div>
                             <div className="flex items-center gap-2 mt-1">
@@ -326,7 +364,9 @@ const Rooms = () => {
                                   <FaStar
                                     key={i}
                                     className={`${
-                                      i < review.rating ? "text-yellow-400" : "text-gray-200"
+                                      i < review.rating
+                                        ? "text-yellow-400"
+                                        : "text-gray-200"
                                     } w-3 h-3`}
                                   />
                                 ))}
@@ -346,8 +386,12 @@ const Rooms = () => {
                   <div className="mb-4">
                     <FaStar className="mx-auto text-5xl text-gray-300" />
                   </div>
-                  <h3 className="text-xl font-semibold text-gray-800 mb-2">No Reviews Yet</h3>
-                  <p className="text-gray-500 mb-6">Be the first one to review this place!</p>
+                  <h3 className="text-xl font-semibold text-gray-800 mb-2">
+                    No Reviews Yet
+                  </h3>
+                  <p className="text-gray-500 mb-6">
+                    Be the first one to review this place!
+                  </p>
                   <button
                     onClick={() => setIsModalOpen(true)}
                     className="px-6 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all"
@@ -380,24 +424,30 @@ const Rooms = () => {
           {/* Booking Section */}
           <div className="col-span-1">
             <div className="bg-[#3F51B5] text-white rounded-t-xl">
-              <h3 className="text-lg font-medium p-4">Select bedroom and dates</h3>
+              <h3 className="text-lg font-medium p-4">
+                Select bedroom and dates
+              </h3>
             </div>
-            
+
             <div className="bg-white shadow-lg rounded-b-xl p-6">
               {/* Date Selection */}
               <div className="grid grid-cols-2 gap-4 mb-6">
                 <div>
-                  <label className="block text-sm text-gray-600 mb-1">Check In</label>
-                  <input 
-                    type="date" 
+                  <label className="block text-sm text-gray-600 mb-1">
+                    Check In
+                  </label>
+                  <input
+                    type="date"
                     value={checkInDate}
                     onChange={(e) => setCheckInDate(e.target.value)}
                     className="w-full p-2 border border-gray-300 rounded-md text-gray-700 focus:outline-none focus:border-blue-500"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm text-gray-600 mb-1">Check Out</label>
-                  <input 
+                  <label className="block text-sm text-gray-600 mb-1">
+                    Check Out
+                  </label>
+                  <input
                     type="date"
                     value={checkOutDate}
                     onChange={(e) => setCheckOutDate(e.target.value)}
@@ -409,12 +459,22 @@ const Rooms = () => {
               {/* Price Breakdown */}
               <div className="space-y-3 border-b border-gray-200 pb-4">
                 <div className="flex justify-between items-center">
-                  <span className="text-gray-600">${room.price} × {checkInDate && checkOutDate ? calculateNights(checkInDate, checkOutDate) : 'X'} nights</span>
-                  <span className="text-gray-800">${calculateTotalNights()}</span>
+                  <span className="text-gray-600">
+                    ${room.price} ×{" "}
+                    {checkInDate && checkOutDate
+                      ? calculateNights(checkInDate, checkOutDate)
+                      : "X"}{" "}
+                    nights
+                  </span>
+                  <span className="text-gray-800">
+                    ${calculateTotalNights()}
+                  </span>
                 </div>
                 <div className="flex justify-between items-center text-gray-600">
                   <span>New user discount</span>
-                  <span className="text-green-600">-${Math.floor(room.price * 0.1)}</span>
+                  <span className="text-green-600">
+                    -${Math.floor(room.price * 0.1)}
+                  </span>
                 </div>
                 <div className="flex justify-between items-center text-gray-600">
                   <span>Service fee</span>
@@ -425,9 +485,7 @@ const Rooms = () => {
               {/* Total */}
               <div className="flex justify-between items-center py-4 font-medium">
                 <span>Total(USD)</span>
-                <span className="text-lg">
-                  ${calculateTotal()}/month
-                </span>
+                <span className="text-lg">${calculateTotal()}/month</span>
               </div>
 
               {/* Action Buttons */}
@@ -446,8 +504,17 @@ const Rooms = () => {
                   disabled={!checkInDate || !checkOutDate}
                 >
                   <span>Proceed to Pay</span>
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                    <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-5 w-5"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
+                      clipRule="evenodd"
+                    />
                   </svg>
                 </button>
 
@@ -457,25 +524,24 @@ const Rooms = () => {
 
                 {/* Payment Methods */}
                 <div className="flex items-center justify-center gap-6 mt-4 pt-4 border-t border-gray-200">
-                  <img 
-                    src="/assets/Razorpay.png" 
-                    alt="Razorpay" 
+                  <img
+                    src="/assets/Razorpay.png"
+                    alt="Razorpay"
                     className="h-12 w-auto object-contain hover:scale-105 transition-transform duration-200"
                   />
                   <span className="text-gray-300 text-2xl">|</span>
-                  <img 
-                    src="/assets/Stripe.png" 
-                    alt="Stripe" 
+                  <img
+                    src="/assets/Stripe.png"
+                    alt="Stripe"
                     className="h-12 w-auto object-contain hover:scale-105 transition-transform duration-200"
                   />
                   <span className="text-gray-300 text-2xl">|</span>
-                  <img 
-                    src="/assets/Paypal.png" 
-                    alt="Paypal" 
+                  <img
+                    src="/assets/Paypal.png"
+                    alt="Paypal"
                     className="h-12 w-auto object-contain hover:scale-105 transition-transform duration-200"
                   />
                 </div>
-                
               </div>
             </div>
           </div>
@@ -499,7 +565,7 @@ const Rooms = () => {
               >
                 {[1, 2, 3, 4, 5].map((num) => (
                   <option key={num} value={num}>
-                    {num} Star{num !== 1 ? 's' : ''}
+                    {num} Star{num !== 1 ? "s" : ""}
                   </option>
                 ))}
               </select>
@@ -515,9 +581,7 @@ const Rooms = () => {
                 placeholder="Write your review here..."
               />
             </div>
-            {error && (
-              <p className="mt-2 text-sm text-red-600">{error}</p>
-            )}
+            {error && <p className="mt-2 text-sm text-red-600">{error}</p>}
             {successMessage && (
               <p className="mt-2 text-sm text-green-600">{successMessage}</p>
             )}

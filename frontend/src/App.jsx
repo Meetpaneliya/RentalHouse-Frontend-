@@ -41,16 +41,18 @@ function App() {
   }, [data, error, dispatch]);
 
   useEffect(() => {
-    if (!isAuthenticated && !timeoutRef.current) {
-      timeoutRef.current = setTimeout(() => {
-        setShowLoginModal(true);
-      });
+    if (!isAuthenticated) {
+      if (!timeoutRef.current) {
+        timeoutRef.current = setTimeout(() => {
+          setShowLoginModal(true);
+        }, 5000);
+      }
     } else {
-      setShowLoginModal(false);
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
         timeoutRef.current = null;
       }
+      setShowLoginModal(false);
     }
   }, [isAuthenticated]);
 
