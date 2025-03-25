@@ -57,22 +57,56 @@ const Navbar = ({ setShowLoginModal, setShowSignupModal }) => {
         {/* Right Section: Buttons & Profile */}
         {isAuthenticated ? (
           <div className="relative group p-2">
-            <Link to="/user">
+            
                  <User className="p-2 h-10 w-10 shadow-md rounded-full cursor-pointer hover:text-gray-200" />
-            </Link>
+           
 
             {/* Add dropdown menu for desktop */}
-            <div className="hidden md:block absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 text-gray-700 invisible group-hover:visible">
-              <Link to="/user" className="block px-4 py-2 hover:bg-gray-100">
-                Profile
-              </Link>
-              <button
-                onClick={handleLogout}
-                disabled={isloggingOut}
-                className="block w-full text-left px-4 py-2 hover:bg-gray-100"
-              >
-                Logout
-              </button>
+            <div className="hidden md:block absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-xl py-2 text-gray-700 invisible group-hover:visible border border-gray-100 z-50">
+              {/* User Info Section */}
+              <div className="px-4 py-3 border-b border-gray-100">
+                <div className="flex items-center space-x-3">
+                  <div className="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center">
+                    <User className="h-6 w-6 text-blue-600" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-gray-800">John Doe</p>
+                    <p className="text-xs text-gray-500">john@example.com</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Main Menu Items */}
+              <div className="py-1">
+                <Link to="/user" className="flex items-center px-4 py-2 hover:bg-gray-50 transition-colors">
+                  <i className="fas fa-user-circle w-5 text-gray-400"></i>
+                  <span className="ml-3">My Profile</span>
+                </Link>
+                
+              </div>
+
+              {/* Settings Section */}
+              <div className="py-1 border-t border-gray-100">
+                
+                <Link to="/contact" className="flex items-center px-4 py-2 hover:bg-gray-50 transition-colors">
+                  <i className="fas fa-question-circle w-5 text-gray-400"></i>
+                  <span className="ml-3">Help Center</span>
+                </Link>
+              </div>
+
+              {/* Logout Section */}
+              <div className="py-1 border-t border-gray-100">
+                <button
+                  onClick={handleLogout}
+                  disabled={isloggingOut}
+                  className="flex items-center w-full px-4 py-2 text-left hover:bg-gray-50 transition-colors text-red-600"
+                >
+                  <i className="fas fa-sign-out-alt w-5"></i>
+                  <span className="ml-3">
+                    {isloggingOut ? "Logging out..." : "Logout"}
+                  </span>
+                </button>
+              </div>
             </div>
          </div>
         ) : (
@@ -146,6 +180,54 @@ const Navbar = ({ setShowLoginModal, setShowSignupModal }) => {
             </button>
           )}
         </nav>
+      )}
+
+      {/* Mobile Menu Profile Section */}
+      {isAuthenticated && isMenuOpen && (
+        <div className="md:hidden bg-white mx-4 mb-4 rounded-lg shadow-lg">
+          <div className="p-4 border-b border-gray-100">
+            <div className="flex items-center space-x-3">
+              <div className="h-12 w-12 rounded-full bg-blue-100 flex items-center justify-center">
+                <User className="h-6 w-6 text-blue-600" />
+              </div>
+              <div>
+                <p className="font-medium text-gray-800">John Doe</p>
+                <p className="text-sm text-gray-500">john@example.com</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="py-2">
+            <Link to="/user" className="flex items-center px-4 py-3 text-gray-700 hover:bg-gray-50">
+              <i className="fas fa-user-circle w-5 text-gray-400"></i>
+              <span className="ml-3">My Profile</span>
+            </Link>
+            <Link to="/my-properties" className="flex items-center px-4 py-3 text-gray-700 hover:bg-gray-50">
+              <i className="fas fa-home w-5 text-gray-400"></i>
+              <span className="ml-3">My Properties</span>
+            </Link>
+            <Link to="/bookings" className="flex items-center px-4 py-3 text-gray-700 hover:bg-gray-50">
+              <i className="fas fa-calendar w-5 text-gray-400"></i>
+              <span className="ml-3">My Bookings</span>
+            </Link>
+            <Link to="/favorites" className="flex items-center px-4 py-3 text-gray-700 hover:bg-gray-50">
+              <i className="fas fa-heart w-5 text-gray-400"></i>
+              <span className="ml-3">Saved Properties</span>
+            </Link>
+            <Link to="/settings" className="flex items-center px-4 py-3 text-gray-700 hover:bg-gray-50">
+              <i className="fas fa-cog w-5 text-gray-400"></i>
+              <span className="ml-3">Settings</span>
+            </Link>
+            <button
+              onClick={handleLogout}
+              disabled={isloggingOut}
+              className="flex items-center w-full px-4 py-3 text-left text-red-600 hover:bg-gray-50"
+            >
+              <i className="fas fa-sign-out-alt w-5"></i>
+              <span className="ml-3">{isloggingOut ? "Logging out..." : "Logout"}</span>
+            </button>
+          </div>
+        </div>
       )}
     </header>
   );
