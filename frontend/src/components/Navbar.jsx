@@ -60,6 +60,20 @@ const Navbar = ({ setShowLoginModal, setShowSignupModal }) => {
             <Link to="/user">
                  <User className="p-2 h-10 w-10 shadow-md rounded-full cursor-pointer hover:text-gray-200" />
             </Link>
+
+            {/* Add dropdown menu for desktop */}
+            <div className="hidden md:block absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 text-gray-700 invisible group-hover:visible">
+              <Link to="/user" className="block px-4 py-2 hover:bg-gray-100">
+                Profile
+              </Link>
+              <button
+                onClick={handleLogout}
+                disabled={isloggingOut}
+                className="block w-full text-left px-4 py-2 hover:bg-gray-100"
+              >
+                Logout
+              </button>
+            </div>
          </div>
         ) : (
           <div className="hidden md:flex items-center space-x-4">
