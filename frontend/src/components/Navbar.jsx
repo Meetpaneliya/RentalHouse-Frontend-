@@ -7,9 +7,7 @@ import { toast } from "react-toastify";
 import { useLogoutuserMutation } from "../redux/APi/api";
 import "react-toastify/dist/ReactToastify.css";
 
-
 const Navbar = ({ setShowLoginModal, setShowSignupModal }) => {
-
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -21,8 +19,9 @@ const Navbar = ({ setShowLoginModal, setShowSignupModal }) => {
     try {
       await logoutUser().unwrap();
       dispatch(logout());
-      toast.success("Logout Successfully.")
+      toast.success("Logout Successfully.");
       navigate("/");
+      window.location.reload();
     } catch (error) {
       console.error("Logout error:", error);
       toast.error("Failed to log out.");
@@ -31,11 +30,11 @@ const Navbar = ({ setShowLoginModal, setShowSignupModal }) => {
 
   // Helper function to get user initials for avatar fallback
   const getInitials = (name) => {
-    if (!name) return '?';
+    if (!name) return "?";
     return name
-      .split(' ')
-      .map(word => word[0])
-      .join('')
+      .split(" ")
+      .map((word) => word[0])
+      .join("")
       .toUpperCase()
       .slice(0, 2);
   };
@@ -69,7 +68,6 @@ const Navbar = ({ setShowLoginModal, setShowSignupModal }) => {
           <div className="relative group p-2 hidden md:block">
             <User className="p-2 h-10 w-10 shadow-md rounded-full cursor-pointer hover:text-gray-200" />
 
-
             {/* Add dropdown menu for desktop */}
             <div className="hidden md:block absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-xl py-2 text-gray-700 invisible group-hover:visible border border-gray-100 z-50">
               {/* User Info Section */}
@@ -92,10 +90,10 @@ const Navbar = ({ setShowLoginModal, setShowSignupModal }) => {
                   </div>
                   <div>
                     <p className="text-sm font-medium text-gray-800">
-                      {user?.name || 'Guest User'}
+                      {user?.name || "Guest User"}
                     </p>
                     <p className="text-xs text-gray-500">
-                      {user?.email || 'No email provided'}
+                      {user?.email || "No email provided"}
                     </p>
                   </div>
                 </div>
@@ -103,17 +101,21 @@ const Navbar = ({ setShowLoginModal, setShowSignupModal }) => {
 
               {/* Main Menu Items */}
               <div className="py-1">
-                <Link to="/user" className="flex items-center px-4 py-2 hover:bg-gray-50 transition-colors">
+                <Link
+                  to="/user"
+                  className="flex items-center px-4 py-2 hover:bg-gray-50 transition-colors"
+                >
                   <i className="fas fa-user-circle w-5 text-gray-400"></i>
                   <span className="ml-3">My Profile</span>
                 </Link>
-
               </div>
 
               {/* Help Center Section */}
               <div className="py-1 border-t border-gray-100">
-
-                <Link to="/contact" className="flex items-center px-4 py-2 hover:bg-gray-50 transition-colors">
+                <Link
+                  to="/contact"
+                  className="flex items-center px-4 py-2 hover:bg-gray-50 transition-colors"
+                >
                   <i className="fas fa-question-circle w-5 text-gray-400"></i>
                   <span className="ml-3">Help Center</span>
                 </Link>
@@ -211,8 +213,6 @@ const Navbar = ({ setShowLoginModal, setShowSignupModal }) => {
           )}
         </nav>
       )}
-
-
     </header>
   );
 };
