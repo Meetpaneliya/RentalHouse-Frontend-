@@ -52,38 +52,48 @@ const Sliderinfo = () => {
                 </div>
             </div>
 
-            {/* Search CTA Section (with rounded corners and card effect) */}
+            {/* Search CTA Section */}
             <div
-                className="relative -mb-40 bg-cover bg-center text-white py-10 px-6 w-full max-w-5xl mx-auto rounded-3xl shadow-lg overflow-hidden"
+                className="relative -mb-40 bg-cover bg-center text-white py-10 px-4 sm:px-6 w-full max-w-5xl mx-auto rounded-3xl shadow-lg overflow-hidden"
                 style={{
                     backgroundImage: "url('/assets/girlroom.jpg')",
-                    backgroundSize: 'cover',
-                    backgroundPosition: 'center',
-                    height: '300px', // Reduced height
-                    maxHeight: '300px' // Added max-height constraint
+                    backgroundSize: "cover",
+                    backgroundPosition: "center",
+                    height: "300px",
+                    maxHeight: "300px",
                 }}
             >
-
-                <div className="z-10 flex justify-between items-center max-w-5xl mx-auto">
-                    <div className="gap-3 p-5 w-2/6  bg-white/70 rounded-3xl">
-                        <h2 className="text-4xl font-bold text-blue-800 text-center">Start your search today</h2>
+                <div className="z-10 flex flex-col sm:flex-row justify-between items-center max-w-5xl mx-auto">
+                    <div className="gap-3 p-5 w-full sm:w-2/6 bg-white/70 rounded-3xl">
+                        <h2 className="text-2xl sm:text-4xl font-bold text-blue-800 text-center">
+                            Start your search today
+                        </h2>
                         <p className="mt-3 text-sm text-blue-800">
-                            Get ready for the easiest rental experience of your life. Browse homes, take a tour,
-                            submit an application, and get your key in a few clicks!
+                            Get ready for the easiest rental experience of your life. Browse
+                            homes, take a tour, submit an application, and get your key in a
+                            few clicks!
                         </p>
                     </div>
 
-
-                    <div className="flex flex-col space-y-10">
+                    <div className="flex flex-col space-y-4 sm:space-y-10 mt-4 sm:mt-0">
                         <button className="">
-                            <a href="/search" className="bg-blue-500/50 hover:bg-blue-600 text-white px-10 py-3 rounded-full">Search Apartments</a>
+                            <a
+                                href="/search"
+                                className="bg-blue-500/50 hover:bg-blue-600 text-white px-6 sm:px-10 py-2 sm:py-3 rounded-full"
+                            >
+                                Search Apartments
+                            </a>
                         </button>
 
                         <button>
-                            <a href="/signup" className="bg-blue-500/50 hover:bg-blue-600 text-white px-10 py-3 rounded-full">Speak to a Human</a>
+                            <a
+                                href="/signup"
+                                className="bg-blue-500/50 hover:bg-blue-600 text-white px-6 sm:px-10 py-2 sm:py-3 rounded-full"
+                            >
+                                Speak to a Human
+                            </a>
                         </button>
                     </div>
-
                 </div>
             </div>
         </>
