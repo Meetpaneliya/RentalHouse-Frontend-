@@ -18,6 +18,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { roominfor } from "../redux/reducers/orderSlice";
 import { IoHomeOutline } from "react-icons/io5";
+import { X } from "lucide-react";
 
 import { format } from "date-fns";
 import toast from "react-hot-toast";
@@ -38,6 +39,7 @@ const Rooms = () => {
   const [checkInDate, setCheckInDate] = useState("");
   const [checkOutDate, setCheckOutDate] = useState("");
   const { isAuthenticated } = useSelector((state) => state.auth);
+  const [selectedImage, setSelectedImage] = useState(null);
 
   const navigate = useNavigate();
 
@@ -187,9 +189,12 @@ const Rooms = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="flex  sm:flex justify-between items-center mb-6">
-          <h1 className="text-2xl sm:text-3xl font-bold text-blue-800">
-            {room.title} - #{room._id}
-          </h1>
+          <div className="flex flex-col">
+            <h1 className="text-2xl sm:text-3xl font-bold text-blue-800">
+              {room.title}
+            </h1>
+            <span className="text-blue-800 text-lg font-semibold">{room.propertyType}</span>
+          </div>
           <CiShare2 onClick={handleShare} className="text-3xl" />
         </div>
 
@@ -197,22 +202,43 @@ const Rooms = () => {
         <div className="grid grid-cols-1 sm:grid-cols-5 gap-4">
           <div className="col-span-1 sm:col-span-3">
             <img
-              className="w-full h-64 sm:h-96 object-cover rounded-xl shadow-md"
+              className="w-full h-64 sm:h-96 object-cover rounded-xl shadow-md cursor-pointer"
               src={room.images[0]?.url}
               alt={room.title}
+              onClick={() => setSelectedImage(room.images[0]?.url)}
             />
           </div>
           <div className="col-span-1 sm:col-span-2 grid grid-cols-2 gap-2">
             {room.images?.slice(1, 5).map((image, index) => (
               <img
                 key={index}
-                className="w-full h-32 sm:h-36 object-cover rounded-lg hover:scale-105 transition"
+                className="w-full h-32 sm:h-36 object-cover rounded-lg hover:scale-105 transition cursor-pointer"
                 src={image.url}
                 alt={`Thumbnail ${index + 1}`}
+                onClick={() => setSelectedImage(image.url)}
               />
             ))}
           </div>
         </div>
+
+        {/* Image Modal */}
+        {selectedImage && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm">
+            <div className="relative max-w-7xl mx-auto p-4">
+              <button
+                onClick={() => setSelectedImage(null)}
+                className="absolute top-4 right-4 text-white hover:text-gray-300 transition-colors z-50"
+              >
+                <X size={32} />
+              </button>
+              <img
+                src={selectedImage}
+                alt="Full size room image"
+                className="max-h-[90vh] w-auto rounded-lg shadow-2xl"
+              />
+            </div>
+          </div>
+        )}
 
         {/* Overview & Booking Section */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mt-6">
@@ -242,9 +268,9 @@ const Rooms = () => {
                     {showFullDescription
                       ? room.description
                       : `${room.description.slice(
-                          0,
-                          MAX_DESCRIPTION_LENGTH
-                        )}...`}
+                        0,
+                        MAX_DESCRIPTION_LENGTH
+                      )}...`}
                   </p>
                   <button
                     onClick={() => setShowFullDescription(!showFullDescription)}
@@ -352,9 +378,9 @@ const Rooms = () => {
                               <span className="text-xs text-gray-500">
                                 {review.createdAt
                                   ? format(
-                                      new Date(review.createdAt),
-                                      "MMM dd, yyyy"
-                                    )
+                                    new Date(review.createdAt),
+                                    "MMM dd, yyyy"
+                                  )
                                   : ""}
                               </span>
                             </div>
@@ -363,11 +389,10 @@ const Rooms = () => {
                                 {[...Array(5)].map((_, i) => (
                                   <FaStar
                                     key={i}
-                                    className={`${
-                                      i < review.rating
+                                    className={`${i < review.rating
                                         ? "text-yellow-400"
                                         : "text-gray-200"
-                                    } w-3 h-3`}
+                                      } w-3 h-3`}
                                   />
                                 ))}
                               </div>

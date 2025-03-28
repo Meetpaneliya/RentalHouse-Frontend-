@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Home } from "./pages/Home";
 import SignupPage from "./components/auth/RegisterForm";
@@ -8,7 +8,7 @@ import Rooms from "./pages/Rooms";
 import Favorites from "./components/listings/Favoritelist";
 import FilterSection from "./components/FilterSection";
 import ListingForm from "./components/listings/ListingForm";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { login, logout } from "./redux/reducers/Auth";
 import AboutUs from "./pages/AboutUs";
 import ContactUs from "./pages/ContactUs";
@@ -25,13 +25,13 @@ import PaymentPage from "./components/payments/PaymentPage";
 import PaymentSuccess from "./components/payments/PaymentSuccess";
 import PaymentCancel from "./components/payments/PaymentCancel";
 
+
 function App() {
-  const { isAuthenticated } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [showSignupModal, setShowSignupModal] = useState(false);
   const { data, error } = useMyprofileQuery();
-  const timeoutRef = useRef(null);
+
   useEffect(() => {
     if (data && data.user) {
       dispatch(login(data.user));
@@ -39,22 +39,6 @@ function App() {
       dispatch(logout());
     }
   }, [data, error, dispatch]);
-
-  useEffect(() => {
-    if (!isAuthenticated) {
-      if (!timeoutRef.current) {
-        timeoutRef.current = setTimeout(() => {
-          setShowLoginModal(true);
-        }, 5000);
-      }
-    } else {
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
-        timeoutRef.current = null;
-      }
-      setShowLoginModal(false);
-    }
-  }, [isAuthenticated]);
 
   return (
     <BrowserRouter>
@@ -92,7 +76,6 @@ function App() {
           <Route path="/about" element={<AboutUs />} />
           <Route path="/contact" element={<ContactUs />} />
           <Route path="/faq" element={<FAQSection />} />
-          //payment wala abhi add kia
           <Route path="/payment" element={<PaymentPage />} />
           <Route path="/success" element={<PaymentSuccess />} />
           <Route path="/cancel" element={<PaymentCancel />} />

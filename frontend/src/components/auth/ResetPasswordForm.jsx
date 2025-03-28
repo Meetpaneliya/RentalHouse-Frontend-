@@ -1,112 +1,175 @@
 import React, { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import toast from "react-hot-toast";
 import { useResetpasswordMutation } from "../../redux/APi/api";
 import { useAsyncMutation } from "../../hooks/useError";
+import Navbar from "../Navbar2";
+import { FaLock, FaEye, FaEyeSlash } from "react-icons/fa";
 
 const ResetPassword = () => {
   const { token } = useParams();
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({
-    email: "",
+  const [state, setState] = useState({ 
     password: "",
-    confirmPassword: "",
+    confirmPassword: "" 
   });
-
-  const [updatingPassword, isUpdatingpasswordLoading] = useAsyncMutation(
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [errors, setErrors] = useState({});
+  const [resetPassword, isResetPasswordLoading] = useAsyncMutation(
     useResetpasswordMutation
   );
+
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setState({ ...state, [name]: value });
+    // Clear error when user starts typing
+    if (errors[name]) {
+      setErrors({ ...errors, [name]: "" });
+    }
+  };
+
+  const validateForm = () => {
+    const newErrors = {};
+    
+    if (!state.password) {
+      newErrors.password = "Password is required";
+    } else if (state.password.length < 6) {
+      newErrors.password = "Password must be at least 6 characters";
+    }
+
+    if (!state.confirmPassword) {
+      newErrors.confirmPassword = "Please confirm your password";
+    } else if (state.password !== state.confirmPassword) {
+      newErrors.confirmPassword = "Passwords do not match";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (formData.password !== formData.confirmPassword) {
-      toast.error("Passwords do not match");
-      return;
+    
+    if (validateForm()) {
+      await resetPassword("Password Reset Successfully", {
+        token,
+        password: state.password,
+      });
+      navigate("/login");
     }
-    const requestData = { ...formData, token };
-    updatingPassword("Updating new Password..", requestData);
-
-    navigate("/");
   };
 
   return (
-    <section className="bg-gray-50 dark:bg-gray-900">
-      <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
-        <a
-          href="#"
-          className="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white"
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50">
+      <Navbar />
+      
+      <div className="container mx-auto px-4 py-8">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="max-w-md mx-auto bg-white rounded-2xl shadow-xl overflow-hidden"
         >
-          <img
-            className="w-8 h-8 mr-2"
-            src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/logo.svg"
-            alt="logo"
-          />
-          Flowbite
-        </a>
-        <div className="w-full p-6 bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md dark:bg-gray-800 dark:border-gray-700 sm:p-8">
-          <h2 className="mb-1 text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
-            Change Password
-          </h2>
-          <form
-            className="mt-4 space-y-4 lg:mt-5 md:space-y-5"
-            onSubmit={handleSubmit}
-          >
-            <div>
-              <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                Enter your Email address
-              </label>
-              <input
-                type="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                placeholder="Enter your email address"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                required
-              />
+          <div className="p-8">
+            <div className="text-center mb-8">
+              <div className="flex justify-center mb-4">
+                <div className="bg-blue-100 p-3 rounded-full">
+                  <FaLock className="text-blue-600 text-2xl" />
+                </div>
+              </div>
+              <h1 className="text-2xl font-bold text-gray-800 mb-2">
+                Reset Your Password
+              </h1>
+              <p className="text-gray-600">
+                Please enter your new password below
+              </p>
             </div>
-            <div>
-              <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                New Password
-              </label>
-              <input
-                type="password"
-                name="password"
-                value={formData.password}
-                onChange={handleChange}
-                placeholder="••••••••"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                required
-              />
+
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  New Password
+                </label>
+                <div className="relative">
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    name="password"
+                    value={state.password}
+                    onChange={handleChange}
+                    className={`w-full px-4 py-3 rounded-lg border ${
+                      errors.password ? "border-red-500" : "border-gray-300"
+                    } focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200`}
+                    placeholder="Enter your new password"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                  >
+                    {showPassword ? <FaEyeSlash /> : <FaEye />}
+                  </button>
+                </div>
+                {errors.password && (
+                  <p className="mt-1 text-sm text-red-500">{errors.password}</p>
+                )}
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Confirm Password
+                </label>
+                <div className="relative">
+                  <input
+                    type={showConfirmPassword ? "text" : "password"}
+                    name="confirmPassword"
+                    value={state.confirmPassword}
+                    onChange={handleChange}
+                    className={`w-full px-4 py-3 rounded-lg border ${
+                      errors.confirmPassword ? "border-red-500" : "border-gray-300"
+                    } focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200`}
+                    placeholder="Confirm your new password"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                  >
+                    {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
+                  </button>
+                </div>
+                {errors.confirmPassword && (
+                  <p className="mt-1 text-sm text-red-500">{errors.confirmPassword}</p>
+                )}
+              </div>
+
+              <button
+                type="submit"
+                disabled={isResetPasswordLoading}
+                className={`w-full py-3 px-4 rounded-lg text-white font-medium transition-all duration-200 ${
+                  isResetPasswordLoading
+                    ? "bg-blue-400 cursor-not-allowed"
+                    : "bg-blue-600 hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                }`}
+              >
+                {isResetPasswordLoading ? "Resetting Password..." : "Reset Password"}
+              </button>
+            </form>
+
+            <div className="mt-6 text-center">
+              <p className="text-sm text-gray-600">
+                Remember your password?{" "}
+                <a
+                  href="/login"
+                  className="text-blue-600 hover:text-blue-800 font-medium"
+                >
+                  Login here
+                </a>
+              </p>
             </div>
-            <div>
-              <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                Confirm Password
-              </label>
-              <input
-                type="password"
-                name="confirmPassword"
-                value={formData.confirmPassword}
-                onChange={handleChange}
-                placeholder="••••••••"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                required
-              />
-            </div>
-            <button
-              type="submit"
-              disabled={isUpdatingpasswordLoading}
-              className="w-full text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-            >
-              {isUpdatingpasswordLoading ? "Resetting..." : "Reset Password"}
-            </button>
-          </form>
-        </div>
+          </div>
+        </motion.div>
       </div>
-    </section>
+    </div>
   );
 };
 
