@@ -439,7 +439,15 @@ const Rooms = () => {
                   <input
                     type="date"
                     value={checkInDate}
-                    onChange={(e) => setCheckInDate(e.target.value)}
+                    onChange={(e) => {
+                      const newCheckInDate = e.target.value;
+                      setCheckInDate(newCheckInDate);
+                      // Clear check-out date if it's before the new check-in date
+                      if (checkOutDate && checkOutDate < newCheckInDate) {
+                        setCheckOutDate('');
+                      }
+                    }}
+                    min={new Date().toISOString().split('T')[0]}
                     className="w-full p-2 border border-gray-300 rounded-md text-gray-700 focus:outline-none focus:border-blue-500"
                   />
                 </div>
@@ -451,6 +459,7 @@ const Rooms = () => {
                     type="date"
                     value={checkOutDate}
                     onChange={(e) => setCheckOutDate(e.target.value)}
+                    min={checkInDate || new Date().toISOString().split('T')[0]}
                     className="w-full p-2 border border-gray-300 rounded-md text-gray-700 focus:outline-none focus:border-blue-500"
                   />
                 </div>
