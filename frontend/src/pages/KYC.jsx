@@ -3,6 +3,7 @@ import { FaIdCard, FaMoneyCheckAlt } from "react-icons/fa";
 import { MdExpandMore, MdExpandLess } from "react-icons/md";
 import Navbar from "../components/Navbar2";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 const KYCApplication = () => {
   const [requiredOpen, setRequiredOpen] = useState(true);
@@ -11,6 +12,7 @@ const KYCApplication = () => {
   const Navigate = useNavigate();
 
   const handleNext = () => {
+    toast.success("Starting KYC application process");
     Navigate('/MultiStepKYCForm1');
   }
 

@@ -3,9 +3,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { Menu, X, User } from "lucide-react";
 import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../redux/slices/authSlice.jsx"; // Adjust the path as needed
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 import { useLogoutuserMutation } from "../redux/APi/api";
-import "react-toastify/dist/ReactToastify.css";
 
 const Navbar = ({ setShowLoginModal, setShowSignupModal }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);

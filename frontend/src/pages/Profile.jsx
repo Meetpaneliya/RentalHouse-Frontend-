@@ -1,9 +1,16 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { FaUser, FaCog, FaSignOutAlt } from "react-icons/fa";
+import toast from "react-hot-toast";
 
 const ProfileDropdown = () => {
   const [isOpen, setIsOpen] = useState(false);
+
+  const handleLogout = () => {
+    setIsOpen(false);
+    // Add actual logout logic here
+    toast.success("Logged out successfully!");
+  };
 
   return (
     <div className="relative">
@@ -44,10 +51,7 @@ const ProfileDropdown = () => {
             <li>
               <button
                 className="w-full text-left flex items-center px-4 py-2 text-red-600 hover:bg-gray-100 dark:hover:bg-gray-700"
-                onClick={() => {
-                  setIsOpen(false);
-                  alert("Logged out!"); // Replace with actual logout logic
-                }}
+                onClick={handleLogout}
               >
                 <FaSignOutAlt className="mr-2" /> Logout
               </button>

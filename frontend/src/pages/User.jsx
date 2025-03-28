@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { Pencil, Upload } from 'lucide-react';
 import Navbar from '../components/Navbar2';
 import Footer from "../components/Footer";
+import toast from "react-hot-toast";
 
 const Profile = () => {
   const [user, setUser] = useState(null);
@@ -33,6 +34,7 @@ const Profile = () => {
         });
       } catch (error) {
         console.error('Error fetching user:', error);
+        toast.error("Failed to load user data");
       }
     };
     fetchUser();
@@ -52,12 +54,12 @@ const Profile = () => {
         name: formData.name,
         email: formData.email,
       });
-      alert('Profile updated successfully!');
+      toast.success('Profile updated successfully!');
       // Redirect to same page to refresh
       navigate(0);
     } catch (error) {
       console.error('Error updating user:', error);
-      alert('Failed to update profile');
+      toast.error(error?.response?.data?.message || 'Failed to update profile');
     } finally {
       setLoading(false);
     }
@@ -83,12 +85,12 @@ const Profile = () => {
         profilePicture: res.data.profilePicture,
       }));
   
-      alert("Profile picture updated!");
+      toast.success("Profile picture updated successfully!");
       navigate(0);
   
     } catch (err) {
       console.error("Error uploading profile picture:", err);
-      alert("Failed to upload picture");
+      toast.error(err?.response?.data?.message || "Failed to upload picture");
     } finally {
       setUploading(false);
     }

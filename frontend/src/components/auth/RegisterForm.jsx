@@ -146,7 +146,7 @@ export default function SignupPage({ onClose, setShowLoginModal }) {
           <label className="block text-sm font-medium text-gray-700">
             Select your role
           </label>
-          <div className="grid grid-cols-3 gap-3">
+          <div className="grid grid-cols-2 gap-3">
             <button
               type="button"
               onClick={() => setFormData({ ...formData, role: "tenant" })}
@@ -166,16 +166,6 @@ export default function SignupPage({ onClose, setShowLoginModal }) {
                 }`}
             >
               Landlord
-            </button>
-            <button
-              type="button"
-              onClick={() => setFormData({ ...formData, role: "admin" })}
-              className={`p-2 text-sm border rounded-md transition-colors ${formData.role === "admin"
-                ? "bg-blue-600 text-white border-blue-600"
-                : "bg-white text-gray-700 border-gray-300 hover:bg-gray-50"
-                }`}
-            >
-              Admin
             </button>
           </div>
         </div>
