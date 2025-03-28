@@ -90,7 +90,7 @@ export default function SignupPage({ onClose, setShowLoginModal }) {
           config
         );
         dispatch(login(data.user));
-        toast.success(data.message, { id: toastId });
+        toast.success("Signed up successfully..");
       } catch (error) {
         const errorMessage = error?.response?.data?.message || "something went wrong";
         setApiError(errorMessage);
@@ -259,8 +259,8 @@ export default function SignupPage({ onClose, setShowLoginModal }) {
           Already have an account?{" "}
           <button
             onClick={() => {
-              onClose()
-              setShowLoginModal(true)
+              onClose();
+              setShowLoginModal && setShowLoginModal(true);
             }}
             className="text-blue-600 hover:underline"
           >

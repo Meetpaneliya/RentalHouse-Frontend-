@@ -80,7 +80,7 @@ export default function LoginPage({ onClose, setShowSignupModal }) {
           config
         );
         dispatch(login(data.user));
-        toast.success(data.message, { id: toastId });
+        toast.success("Logged in successfully..");
       } catch (error) {
         toast.error(error?.response?.data?.message || "something went wrong", {
           id: toastId,
@@ -233,7 +233,7 @@ export default function LoginPage({ onClose, setShowSignupModal }) {
           <button
             onClick={() => {
               onClose();
-              setShowSignupModal(true);
+              setShowSignupModal && setShowSignupModal(true);
             }}
             className="text-blue-600 hover:underline"
           >

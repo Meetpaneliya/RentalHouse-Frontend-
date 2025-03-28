@@ -72,8 +72,18 @@ function App() {
               />
             }
           />
-          <Route path="/signup" element={<SignupPage />} />
-          <Route path="/login" element={<LoginPage />} />
+          <Route path="/signup" element={
+            <SignupPage 
+              onClose={() => {}} 
+              setShowLoginModal={setShowLoginModal}
+            />
+          } />
+          <Route path="/login" element={
+            <LoginPage 
+              onClose={() => {}} 
+              setShowSignupModal={setShowSignupModal}
+            />
+          } />
           <Route path="/user" element={<Profile />} />
           <Route path="/filtered-listings" element={<FilterSection />} />
           <Route path="/room/:id" element={<Rooms />} />
@@ -101,13 +111,19 @@ function App() {
 
         {showLoginModal && (
           <div className="fixed inset-0 flex items-center justify-center z-50">
-            <LoginPage onClose={() => setShowLoginModal(false)} />
+            <LoginPage 
+              onClose={() => setShowLoginModal(false)} 
+              setShowSignupModal={setShowSignupModal}
+            />
           </div>
         )}
 
         {showSignupModal && (
           <div className="fixed inset-0 flex items-center justify-center z-50">
-            <SignupPage onClose={() => setShowSignupModal(false)} />
+            <SignupPage 
+              onClose={() => setShowSignupModal(false)} 
+              setShowLoginModal={setShowLoginModal}
+            />
           </div>
         )}
       </div>
