@@ -65,7 +65,7 @@ export default function LoginPage({ onClose, setShowSignupModal }) {
     e.preventDefault();
 
     if (validateForm()) {
-      const toastId = toast.loading("Logging in...");
+      
       setIsLoading(true);
       const config = {
         withCredentials: true,
@@ -82,9 +82,7 @@ export default function LoginPage({ onClose, setShowSignupModal }) {
         dispatch(login(data.user));
         toast.success("Logged in successfully..");
       } catch (error) {
-        toast.error(error?.response?.data?.message || "something went wrong", {
-          id: toastId,
-        });
+        toast.error(error?.response?.data?.message || "something went wrong");
       } finally {
         setIsLoading(false);
       }

@@ -75,7 +75,7 @@ export default function SignupPage({ onClose, setShowLoginModal }) {
     e.preventDefault();
 
     if (validateForm()) {
-      const toastId = toast.loading("Signing up...");
+      
       setIsLoading(true);
       const config = {
         withCredentials: true,
@@ -94,9 +94,7 @@ export default function SignupPage({ onClose, setShowLoginModal }) {
       } catch (error) {
         const errorMessage = error?.response?.data?.message || "something went wrong";
         setApiError(errorMessage);
-        toast.error(errorMessage, {
-          id: toastId,
-        });
+        toast.error(errorMessage);
       } finally {
         setIsLoading(false);
       }

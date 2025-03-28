@@ -5,15 +5,27 @@ import { CityCombobox } from "./combobox-demo";
 //import { useSearchQuery } from "../redux/APi/listingApi";
 import { useNavigate } from "react-router-dom";
 import { Calendar, Search } from "lucide-react";
+import toast from "react-hot-toast";
 
 const Searchbar = () => {
   const [checkInDate, setCheckInDate] = useState(null);
   const [checkOutDate, setCheckOutDate] = useState(null);
-  const [ setSelectedCity] = useState("");
+  const [selectedCity, setSelectedCity] = useState("");
   const navigate = useNavigate();
 
-
   const handleSearch = () => {
+    if (!selectedCity) {
+      toast.error("Please select a city");
+      return;
+    }
+    if (!checkInDate || !checkOutDate) {
+      toast.error("Please select both check-in and check-out dates");
+      return;
+    }
+    if (checkOutDate <= checkInDate) {
+      toast.error("Check-out date must be after check-in date");
+      return;
+    }
     navigate("/filtered-listings");
   };
 
@@ -30,6 +42,8 @@ const Searchbar = () => {
       setCheckOutDate(null);
     }
   };
+
+  const isSearchDisabled = !selectedCity || !checkInDate || !checkOutDate || checkOutDate <= checkInDate;
 
   return (
     <div className="w-full max-w-2xl mx-auto px-4">
@@ -84,10 +98,15 @@ const Searchbar = () => {
         <button
           type="submit"
           onClick={handleSearch}
-          className="w-full md:w-auto px-6 py-1.5  bg-black hover:bg-black/85 text-white rounded-lg transition-colors duration-200 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed md:ml-1"
+          disabled={isSearchDisabled}
+          className={`w-full md:w-auto px-6 py-1.5 text-white rounded-lg transition-colors duration-200 flex items-center justify-center gap-2 md:ml-1 ${
+            isSearchDisabled 
+              ? "bg-gray-400 cursor-not-allowed" 
+              : "bg-black hover:bg-black/85"
+          }`}
         >
-              <Search size={16} />
-              <span className="text-sm">Search</span>
+          <Search size={16} />
+          <span className="text-sm">Search</span>
         </button>
       </div>
     </div>
