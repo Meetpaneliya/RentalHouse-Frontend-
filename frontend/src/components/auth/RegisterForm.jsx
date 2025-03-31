@@ -4,6 +4,7 @@ import toast from "react-hot-toast";
 import axios from "axios";
 import { login } from "../../redux/reducers/Auth";
 import { useDispatch } from "react-redux";
+import ClipLoader from "react-spinners/ClipLoader";
 
 export default function SignupPage({ onClose, setShowLoginModal }) {
   const [showPassword, setShowPassword] = useState(false);
@@ -258,7 +259,20 @@ export default function SignupPage({ onClose, setShowLoginModal }) {
             className={`w-full text-white rounded-md py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition 
                                  ${isLoading ? "bg-blue-400 cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700"}`}
           >
-            {isLoading ? "Signing up..." : "Sign up"}
+            {isLoading ? (
+              <span className="flex items-center justify-center">
+                <ClipLoader
+                  color="#ffffff"
+                  size={20}
+                  aria-label="Loading Spinner"
+                  data-testid="loader"
+                  className="mr-2"
+                />
+                Signing up...
+              </span>
+            ) : (
+              "Sign up"
+            )}
           </button>
 
           {/* Display API error message if present */}
