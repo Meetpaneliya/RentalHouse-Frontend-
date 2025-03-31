@@ -5,10 +5,9 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import { login } from "../../redux/reducers/Auth";
 import { Link } from "react-router-dom";
-
+import ClipLoader from "react-spinners/ClipLoader";
 
 export default function LoginPage({ onClose, setShowSignupModal }) {
-
   const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
   const [showPassword, setShowPassword] = useState(false);
@@ -64,30 +63,50 @@ export default function LoginPage({ onClose, setShowSignupModal }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (validateForm()) {
-      
-      setIsLoading(true);
-      const config = {
-        withCredentials: true,
-        headers: {
-          "Content-Type": "application/json",
-        },
-      };
-      try {
-        const { data } = await axios.post(
-          `${import.meta.env.VITE_SERVER}/api/v1/user/login`,
-          formData,
-          config
-        );
-        dispatch(login(data.user));
-        toast.success("Logged in successfully..");
-      } catch (error) {
-        toast.error(error?.response?.data?.message || "something went wrong");
-      } finally {
-        setIsLoading(false);
-      }
+    if (!validateForm()) {
+      return;
+    }
 
-      onClose();
+    setIsLoading(true);
+    const config = {
+      withCredentials: true,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+
+    try {
+      const { data } = await axios.post(
+        `${import.meta.env.VITE_SERVER}/api/v1/user/login`,
+        formData,
+        config
+      );
+      
+      dispatch(login(data.user));
+      toast.success("Logged in successfully!", {
+        duration: 3000,
+        position: "top-left",
+        style: {
+          background: '#4CAF50',
+          color: '#fff',
+        },
+      });
+      
+      // Close the modal after successful login
+      if (onClose) {
+        onClose();
+      }
+    } catch (error) {
+      toast.error(error?.response?.data?.message || "Login failed. Please try again.", {
+        duration: 3000,
+        position: "top-center",
+        style: {
+          background: '#f44336',
+          color: '#fff',
+        },
+      });
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -113,6 +132,7 @@ export default function LoginPage({ onClose, setShowSignupModal }) {
           <button
             className="flex items-center justify-center gap-2 p-2 border rounded-md hover:bg-gray-50"
             onClick={() => console.log("Facebook login clicked")}
+            disabled={isLoading}
           >
             <FaApple className="text-black" />
             Apple
@@ -120,6 +140,7 @@ export default function LoginPage({ onClose, setShowSignupModal }) {
           <button
             className="flex items-center justify-center gap-2 p-2 border rounded-md hover:bg-gray-50"
             onClick={() => console.log("Google login clicked")}
+            disabled={isLoading}
           >
             <FaGoogle className="text-blue-600" />
             Google
@@ -153,9 +174,12 @@ export default function LoginPage({ onClose, setShowSignupModal }) {
               value={formData.email}
               onChange={handleInputChange}
               autoComplete="email"
+              disabled={isLoading}
               className={`mt-1 block w-full rounded-md border ${
                 errors.email ? "border-red-500" : "border-gray-300"
-              } px-3 py-2 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500`}
+              } px-3 py-2 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 ${
+                isLoading ? "bg-gray-50 cursor-not-allowed" : ""
+              }`}
             />
             {errors.email && (
               <p className="text-xs text-red-500 mt-1">{errors.email}</p>
@@ -176,14 +200,18 @@ export default function LoginPage({ onClose, setShowSignupModal }) {
               value={formData.password}
               onChange={handleInputChange}
               autoComplete="current-password"
+              disabled={isLoading}
               className={`block w-full rounded-md border ${
                 errors.password ? "border-red-500" : "border-gray-300"
-              } px-3 py-2 pr-10 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500`}
+              } px-3 py-2 pr-10 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 ${
+                isLoading ? "bg-gray-50 cursor-not-allowed" : ""
+              }`}
             />
             <button
               type="button"
               onClick={togglePasswordVisibility}
               className="absolute right-3 top-2/3 -translate-y-1/2 text-gray-500"
+              disabled={isLoading}
             >
               {showPassword ? <FaEyeSlash /> : <FaEye />}
             </button>
@@ -198,6 +226,7 @@ export default function LoginPage({ onClose, setShowSignupModal }) {
                 name="remember-me"
                 type="checkbox"
                 className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                disabled={isLoading}
               />
               <label
                 htmlFor="remember-me"
@@ -210,6 +239,7 @@ export default function LoginPage({ onClose, setShowSignupModal }) {
               <Link
                 to={"/forget-password"}
                 className="text-blue-600 hover:underline"
+                onClick={(e) => isLoading && e.preventDefault()}
               >
                 Forgot password?
               </Link>
@@ -218,9 +248,24 @@ export default function LoginPage({ onClose, setShowSignupModal }) {
           <button
             disabled={isLoading}
             type="submit"
-            className="w-full bg-blue-600 text-white rounded-md py-2 px-4 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+            className={`w-full bg-blue-600 text-white rounded-md py-2 px-4 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-200 ${
+              isLoading ? "opacity-75 cursor-not-allowed" : ""
+            }`}
           >
-            Sign in
+            {isLoading ? (
+              <span className="flex items-center justify-center">
+                <ClipLoader
+                  color="#ffffff"
+                  size={20}
+                  aria-label="Loading Spinner"
+                  data-testid="loader"
+                  className="mr-2"
+                />
+                Signing in...
+              </span>
+            ) : (
+              "Sign in"
+            )}
           </button>
         </form>
       </div>
@@ -234,6 +279,7 @@ export default function LoginPage({ onClose, setShowSignupModal }) {
               setShowSignupModal && setShowSignupModal(true);
             }}
             className="text-blue-600 hover:underline"
+            disabled={isLoading}
           >
             Sign up
           </button>

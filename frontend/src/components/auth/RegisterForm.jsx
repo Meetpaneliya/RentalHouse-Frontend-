@@ -90,11 +90,25 @@ export default function SignupPage({ onClose, setShowLoginModal }) {
           config
         );
         dispatch(login(data.user));
-        toast.success("Signed up successfully..");
+        toast.success("Signed up successfully..", {
+          duration: 3000,
+          position: "top-left",
+          style: {
+            background: '#4CAF50',
+            color: '#fff',
+          },
+        });
       } catch (error) {
         const errorMessage = error?.response?.data?.message || "something went wrong";
         setApiError(errorMessage);
-        toast.error(errorMessage);
+        toast.error(errorMessage, {
+          duration: 3000,
+          position: "top-left",
+          style: {
+            background: '#FF0000',
+            color: '#fff',
+          },
+        });
       } finally {
         setIsLoading(false);
       }

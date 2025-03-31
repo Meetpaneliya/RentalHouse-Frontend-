@@ -25,7 +25,6 @@ import PaymentPage from "./components/payments/PaymentPage";
 import PaymentSuccess from "./components/payments/PaymentSuccess";
 import PaymentCancel from "./components/payments/PaymentCancel";
 
-
 function App() {
   const dispatch = useDispatch();
   const [showLoginModal, setShowLoginModal] = useState(false);

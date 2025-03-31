@@ -9,50 +9,50 @@ const faqs = [
     answer: `Ready, set, rent! StaySafe is the simplest, fastest way to rent a home.
 
     Here’s why renters are choosing StaySafe:
-    • **Flexible leases:** Enjoy lease terms that range from 1 to 18 months, allowing you to extend your lease at any time without hassle.
-    • **Furnished or unfurnished spaces:** You get the choice of renting a fully furnished home or bringing your own furniture.
-    • **Shared or entire homes:** Choose between co-living with roommates or renting the entire space for yourself.
-    • **Quick move-in:** No long waits! Browse, apply, and move in within a matter of hours.
-    • **24/7 support & services:** Our Resident Portal provides seamless maintenance requests, support, and communication.`
+    • Flexible leases:  Enjoy lease terms that range from 1 to 18 months, allowing you to extend your lease at any time without hassle.
+    • Furnished or unfurnished spaces:  You get the choice of renting a fully furnished home or bringing your own furniture.
+    • Shared or entire homes:  Choose between co-living with roommates or renting the entire space for yourself.
+    • Quick move-in:  No long waits! Browse, apply, and move in within a matter of hours.
+    • 24/7 support & services:  Our Resident Portal provides seamless maintenance requests, support, and communication.`
   },
   {
     question: "How do I Become a StaySafe resident?",
     answer: `Becoming a StaySafe resident is easy and convenient! Here's how it works:
-    1. **Browse Listings:** Explore our available homes in your preferred city.
-    2. **Apply Online:** Fill out our secure application form and upload necessary documents.
-    3. **Verification & Approval:** Our team will review your application and verify details.
-    4. **Sign Your Lease:** Once approved, sign the lease agreement digitally.
-    5. **Move-In Ready:** Get your keys and move in hassle-free!`
+    • Browse Listings:  Explore our available homes in your preferred city.
+    • Apply Online:  Fill out our secure application form and upload necessary documents.
+    • Verification & Approval:  Our team will review your application and verify details.
+    • Sign Your Lease:  Once approved, sign the lease agreement digitally.
+    • Move-In Ready:  Get your keys and move in hassle-free!`
   },
   {
     question: "What cities is StaySafe available in?",
     answer: `StaySafe is expanding rapidly! We currently provide rental solutions in several major cities including:
-    - **New York City**
-    - **San Francisco**
-    - **Los Angeles**
-    - **Boston**
-    - **Chicago**
-    - **Washington, D.C.**
+    •  New York City 
+    •  San Francisco 
+    •  Los Angeles 
+    •  Boston 
+    •  Chicago 
+    •  Washington, D.C. 
     
     And many more! Check our website for the latest city updates.`
   },
   {
     question: "Does StaySafe offer co-living?",
     answer: `Yes, absolutely! Co-living is one of our most popular options. Here's why people love it:
-    - **Affordability:** Rent a shared space at a lower price instead of paying full rent for an entire unit.
-    - **Fully Furnished:** Co-living spaces come with all the necessary furniture and utilities included.
-    - **Community Experience:** Live with like-minded individuals and enjoy a social living environment.
-    - **Flexible Leasing:** Whether you need a short-term or long-term stay, we have flexible options for you!`
+    • Affordability:  Rent a shared space at a lower price instead of paying full rent for an entire unit.
+    • Fully Furnished:  Co-living spaces come with all the necessary furniture and utilities included.
+    • Community Experience:  Live with like-minded individuals and enjoy a social living environment.
+    • Flexible Leasing:  Whether you need a short-term or long-term stay, we have flexible options for you!`
   },
   {
     question: "Is StaySafe a hotel?",
-    answer: `No, StaySafe is **not a hotel**. We provide **long-term and short-term rentals** that offer a home-like experience. 
+    answer: `No, StaySafe is  not a hotel . We provide  long-term and short-term rentals  that offer a home-like experience. 
     Unlike hotels:
-    - Our properties are **fully equipped apartments** designed for comfortable everyday living.
-    - You can **rent for months instead of nights**, making it ideal for professionals, students, and travelers.
-    - We provide **co-living options** and private residences with a seamless rental experience.
+    • Our properties are  fully equipped apartments  designed for comfortable everyday living.
+    • You can  rent for months instead of nights , making it ideal for professionals, students, and travelers.
+    • We provide  co-living options  and private residences with a seamless rental experience.
     
-    Think of us as the **modern solution for hassle-free renting!**`
+    Think of us as the  modern solution for hassle-free renting! `
   }
 ];
 

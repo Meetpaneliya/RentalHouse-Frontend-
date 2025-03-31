@@ -19,17 +19,28 @@ const Navbar = ({ setShowLoginModal, setShowSignupModal }) => {
       await logoutUser().unwrap();
       dispatch(logout());
       toast.success("Logout Successfully.", {
-        duration: 5000, // Show for 5 seconds
+        duration: 3000,
+        position: "top-left",
+        style: {
+          background: '#4CAF50',
+          color: '#fff',
+        },
       });
       // Add a small delay before navigation
       setTimeout(() => {
         navigate("/");
         window.location.reload();
       }, 2000);
+      
     } catch (error) {
       console.error("Logout error:", error);
       toast.error("Failed to log out.", {
-        duration: 5000,
+        duration: 3000,
+        position: "top-left",
+        style: {
+          background: '#4CAF50',
+          color: '#fff',
+        },
       });
     }
   };
