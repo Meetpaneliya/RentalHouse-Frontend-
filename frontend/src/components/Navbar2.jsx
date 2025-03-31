@@ -52,7 +52,7 @@ const Navbar = () => {
 
         {user && user.role === "landlord" && (
           <Link
-            to="/add-room"
+            to="/ListingForm"
             className="bg-indigo-800 text-white px-4 py-2 rounded-lg hover:bg-indigo-900 transition"
             onClick={() => setMenuOpen(false)}
           >

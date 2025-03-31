@@ -267,17 +267,14 @@ const Rooms = () => {
                   <p>
                     {showFullDescription
                       ? room.description
-                      : `${room.description.slice(
-                        0,
-                        MAX_DESCRIPTION_LENGTH
-                      )}...`}
+                      : `${room.description.slice(0, MAX_DESCRIPTION_LENGTH)}... `}
+                    <button
+                      onClick={() => setShowFullDescription(!showFullDescription)}
+                      className="text-blue-600 hover:text-blue-800 text-sm font-medium"
+                    >
+                      {showFullDescription ? "Show less" : "Show more"}
+                    </button>
                   </p>
-                  <button
-                    onClick={() => setShowFullDescription(!showFullDescription)}
-                    className="text-blue-600 hover:text-blue-800 text-sm font-medium mt-1"
-                  >
-                    {showFullDescription ? "Show less" : "Show more"}
-                  </button>
                 </>
               ) : (
                 <p>{room.description}</p>
@@ -390,8 +387,8 @@ const Rooms = () => {
                                   <FaStar
                                     key={i}
                                     className={`${i < review.rating
-                                        ? "text-yellow-400"
-                                        : "text-gray-200"
+                                      ? "text-yellow-400"
+                                      : "text-gray-200"
                                       } w-3 h-3`}
                                   />
                                 ))}
