@@ -6,10 +6,12 @@ import toast from "react-hot-toast";
 import { login } from "../../redux/reducers/Auth";
 import { Link } from "react-router-dom";
 import ClipLoader from "react-spinners/ClipLoader";
+import { useNavigate } from "react-router-dom";
 
 export default function LoginPage({ onClose, setShowSignupModal }) {
   const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
@@ -91,6 +93,7 @@ export default function LoginPage({ onClose, setShowSignupModal }) {
           color: '#fff',
         },
       });
+      navigate("/");
       
       // Close the modal after successful login
       if (onClose) {
