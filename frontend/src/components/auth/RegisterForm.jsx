@@ -79,7 +79,6 @@ export default function SignupPage({ onClose, setShowLoginModal }) {
     setErrors(newErrors);
     return valid;
   };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -95,25 +94,27 @@ export default function SignupPage({ onClose, setShowLoginModal }) {
         const { data } = await axios.post(
           `${import.meta.env.VITE_SERVER}/api/v1/user/send-otp`,
           { email: formData.email },
-          {
-            withCredentials: true,
-            headers: { "Content-Type": "application/json" },
-          }
+          config
         );
-        console.log(data);
-        dispatch(setuserForm(formData));
-        toast.success("OTP sent successfully. Please check your email.", {
-          duration: 3000,
-          position: "top-left",
-          style: {
-            background: "#4CAF50",
-            color: "#fff",
-          },
-        });
-        navigate("/verify-otp", { state: formData });
+
+        // Make sure navigate is called after a successful response
+        if (data.success) {
+          dispatch(setuserForm(formData)); // Store form data for later use
+          toast.success("OTP sent successfully. Please check your email.", {
+            duration: 3000,
+            position: "top-left",
+            style: {
+              background: "#4CAF50",
+              color: "#fff",
+            },
+          });
+          navigate("/verify-otp");
+        } else {
+          throw new Error("Failed to send OTP");
+        }
       } catch (error) {
         const errorMessage =
-          error?.response?.data?.message || "something went wrong";
+          error?.response?.data?.message || "Something went wrong";
         setApiError(errorMessage);
         toast.error(errorMessage, {
           duration: 3000,
