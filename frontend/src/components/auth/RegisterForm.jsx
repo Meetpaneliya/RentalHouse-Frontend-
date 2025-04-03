@@ -6,6 +6,7 @@ import { login } from "../../redux/reducers/Auth";
 import { useDispatch } from "react-redux";
 import ClipLoader from "react-spinners/ClipLoader";
 
+
 export default function SignupPage({ onClose, setShowLoginModal }) {
   const [showPassword, setShowPassword] = useState(false);
   const dispatch = useDispatch();
@@ -119,6 +120,7 @@ export default function SignupPage({ onClose, setShowLoginModal }) {
 
   return (
     <div className="w-96 max-w-3xl bg-white rounded-lg shadow-xl p-9 relative animate-fadeIn">
+      
       {/* Add close button */}
       <button
         onClick={onClose}
