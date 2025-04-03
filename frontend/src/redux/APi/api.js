@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { logout } from '../slices/authSlice';
+
 
 export const api = createApi({
   reducerPath: "rentalApi",
@@ -61,6 +61,21 @@ export const api = createApi({
       }),
       invalidatesTags: ["User"],
     }),
+    verifyOTP: builder.mutation({
+      query: (body) => ({
+        method: "POST",
+        url: `user/verify-otp`,
+        body,
+      }),
+      invalidatesTags: ["User"],
+    }),
+    resendOTP: builder.mutation({
+      query: (body) => ({
+        method: "POST",
+        url: `user/resend-otp`,
+        body,
+      }),
+    }),
   }),
 });
 
@@ -71,4 +86,8 @@ export const {
   useResetpasswordMutation,
   useMyprofileQuery,
   useLogoutuserMutation,
+  useVerifyOTPMutation,
+  useResendOTPMutation,
 } = api;
+
+export default api;
