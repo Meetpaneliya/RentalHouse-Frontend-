@@ -1,13 +1,16 @@
 import React, { useState, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { Toaster, toast } from "react-hot-toast";
+import { toast } from "react-hot-toast";
+import { useDispatch, useSelector } from "react-redux";
+import axios from "axios";
+import { login } from "../redux/reducers/Auth";
 
 const OTPVerification = () => {
-  const [otp, setOtp] = useState(["", "", "", ""]);
+  const [otp, setOtp] = useState(["", "", "", "", "", ""]);
+  const dispatch = useDispatch();
   const navigate = useNavigate();
-  const location = useLocation();
-  const email = location.state?.email || "";
   const inputRefs = useRef([]);
+  const { userForm } = useSelector((state) => state.auth);
 
   const handleChange = (index, value) => {
     if (!/\d/.test(value) && value !== "") return;
@@ -15,37 +18,101 @@ const OTPVerification = () => {
     newOtp[index] = value;
     setOtp(newOtp);
 
-    if (value && index < 3) inputRefs.current[index + 1]?.focus();
+    if (value && index < 5) {
+      inputRefs.current[index + 1]?.focus();
+    } else if (!value && index > 0) {
+      inputRefs.current[index - 1]?.focus();
+    }
+  };
+
+  const handlePaste = (e) => {
+    const pastedOtp = e.clipboardData.getData("Text");
+    if (/^\d{6}$/.test(pastedOtp)) {
+      // Only proceed if the pasted content is exactly 6 digits
+      setOtp(pastedOtp.split(""));
+      inputRefs.current[5]?.focus(); // Focus on the last field after pasting
+    }
+  };
+
+  const handleResendButton = async () => {
+    try {
+      const { data } = await axios.post(
+        `${import.meta.env.VITE_SERVER}/api/v1/user/send-otp`,
+        { email: userForm?.email },
+        {
+          withCredentials: true,
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+      toast.success("OTP sent successfully. Please check your email.", {
+        duration: 3000,
+        position: "top-left",
+        style: {
+          background: "#4CAF50",
+          color: "#fff",
+        },
+      });
+    } catch (error) {
+      const errorMessage =
+        error?.response?.data?.message || "Something went wrong";
+      toast.error(errorMessage, {
+        duration: 3000,
+        position: "top-left",
+        style: {
+          background: "#FF0000",
+          color: "#fff",
+        },
+      });
+    }
   };
 
   const handleVerify = async () => {
     const otpValue = otp.join("");
-    if (otpValue.length < 4) return toast.error("Please enter all 4 digits.");
-
+    if (otpValue.length < 6) return toast.error("Please enter all 6 digits.");
     try {
-      const response = await fetch(`${import.meta.env.VITE_SERVER}/api/v1/user/verify-otp`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, otp: otpValue }),
-      });
-      const data = await response.json();
+      const { data } = await axios.post(
+        `${import.meta.env.VITE_SERVER}/api/v1/user/register`,
+        {
+          email: userForm.email,
+          name: userForm.name,
+          password: userForm.password,
+          role: userForm.role,
+          otp: otpValue,
+        },
+        {
+          withCredentials: true,
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+
       if (data.success) {
+        dispatch(login(data.user));
         toast.success("OTP Verified Successfully!");
-        setTimeout(() => navigate("/home"), 2000);
+        setTimeout(() => navigate("/"), 2000);
       } else {
         toast.error("Invalid OTP. Please try again.");
       }
     } catch (error) {
-      toast.error("OTP verification failed. Try again later.");  
-      console.error("OTP verification failed", error);
+      const errorMessage =
+        error?.response?.data?.message || "Something went wrong";
+      toast.error(errorMessage, {
+        duration: 3000,
+        position: "top-left",
+        style: {
+          background: "#FF0000",
+          color: "#fff",
+        },
+      });
     }
   };
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-white-100">
-      <div className="bg-gray-400 p-8 rounded-lg shadow-xl max-w-md w-full text-center text-gray-800">
-        <h2 className="text-3xl font-bold mb-6 ">Verify Your Email</h2>
-        <p className="text-gray-800 mb-6 text-lg">Enter the OTP sent to your email</p>
+      <div className="bg-gray-300 p-8 rounded-lg shadow-xl max-w-lg w-full text-center text-gray-800">
+        <h2 className="text-3xl font-bold mb-6">Verify Your Email</h2>
+        <p className="text-gray-800 mb-6 text-lg">
+          Enter the OTP sent to your email
+        </p>
         <div className="flex justify-center gap-4 mb-6">
           {otp.map((digit, index) => (
             <input
@@ -56,12 +123,19 @@ const OTPVerification = () => {
               maxLength="1"
               value={digit}
               onChange={(e) => handleChange(index, e.target.value)}
+              onPaste={handlePaste}
             />
           ))}
         </div>
         <button
+          onClick={handleResendButton}
+          className="w-full bg-gray-800 my-6 text-white py-3 rounded-lg text-lg hover:bg-gray-900 transition duration-300"
+        >
+          Resend OTP
+        </button>
+        <button
           onClick={handleVerify}
-          className="w-full bg-gray-800 text-white py-3 rounded-lg text-lg hover:bg-gray-900 transition duration-300"
+          className="w-full bg-blue-600 text-white py-3 rounded-lg text-lg hover:bg-gray-900 transition duration-300"
         >
           Verify OTP
         </button>
