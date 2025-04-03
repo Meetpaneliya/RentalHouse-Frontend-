@@ -4,6 +4,7 @@ import { useResetpasswordMutation } from "../../redux/APi/api";
 import { useAsyncMutation } from "../../hooks/useError";
 import Navbar from "../Navbar2";
 import { FaLock, FaEye, FaEyeSlash } from "react-icons/fa";
+import ClipLoader from "react-spinners/ClipLoader";
 
 const ResetPassword = () => {
   const { token } = useParams();
@@ -64,7 +65,7 @@ const ResetPassword = () => {
         password: state.password,
         confirmPassword: state.confirmPassword
       });
-      navigate("/login");
+      navigate("/");
     }
   };
 
@@ -95,6 +96,8 @@ const ResetPassword = () => {
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-6">
+
+              {/* Email Input Field */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Email Address
@@ -116,6 +119,7 @@ const ResetPassword = () => {
                 )}
               </div>
 
+              {/* Password Input Field */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   New Password
@@ -144,6 +148,7 @@ const ResetPassword = () => {
                 )}
               </div>
 
+              {/* Confirm Password Input Field */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Confirm Password
@@ -181,7 +186,20 @@ const ResetPassword = () => {
                     : "bg-blue-600 hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                 }`}
               >
-                {isResetPasswordLoading ? "Resetting Password..." : "Reset Password"}
+                {isResetPasswordLoading ? (
+                  <span className="flex items-center justify-center">
+                    <ClipLoader
+                      color="#ffffff"
+                      size={20}
+                      aria-label="Loading Spinner"
+                      data-testid="loader"
+                      className="mr-2"
+                    />
+                    Resetting Password...
+                  </span>
+                ) : (
+                  "Reset Password"
+                )}
               </button>
             </form>
 
@@ -189,10 +207,10 @@ const ResetPassword = () => {
               <p className="text-sm text-gray-600">
                 Remember your password?{" "}
                 <a
-                  href="/login"
+                  href="/"
                   className="text-blue-600 hover:text-blue-800 font-medium"
                 >
-                  Login here
+                  Back here
                 </a>
               </p>
             </div>
