@@ -9,6 +9,7 @@ const ResetPassword = () => {
   const { token } = useParams();
   const navigate = useNavigate();
   const [state, setState] = useState({ 
+    email: "",
     password: "",
     confirmPassword: "" 
   });
@@ -30,6 +31,12 @@ const ResetPassword = () => {
 
   const validateForm = () => {
     const newErrors = {};
+    
+    if (!state.email) {
+      newErrors.email = "Email is required";
+    } else if (!/\S+@\S+\.\S+/.test(state.email)) {
+      newErrors.email = "Please enter a valid email address";
+    }
     
     if (!state.password) {
       newErrors.password = "Password is required";
@@ -53,7 +60,9 @@ const ResetPassword = () => {
     if (validateForm()) {
       await resetPassword("Password Reset Successfully", {
         token,
+        email: state.email,
         password: state.password,
+        confirmPassword: state.confirmPassword
       });
       navigate("/login");
     }
@@ -81,11 +90,32 @@ const ResetPassword = () => {
                 Reset Your Password
               </h1>
               <p className="text-gray-600">
-                Please enter your new password below
+                Please enter your email and new password below
               </p>
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-6">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Email Address
+                </label>
+                <div className="relative">
+                  <input
+                    type="email"
+                    name="email"
+                    value={state.email}
+                    onChange={handleChange}
+                    className={`w-full px-4 py-3 rounded-lg border ${
+                      errors.email ? "border-red-500" : "border-gray-300"
+                    } focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200`}
+                    placeholder="Enter your email address"
+                  />
+                </div>
+                {errors.email && (
+                  <p className="mt-1 text-sm text-red-500">{errors.email}</p>
+                )}
+              </div>
+
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   New Password
