@@ -24,6 +24,7 @@ import Profile from "./pages/User";
 import PaymentPage from "./components/payments/PaymentPage";
 import PaymentSuccess from "./components/payments/PaymentSuccess";
 import PaymentCancel from "./components/payments/PaymentCancel";
+import OTPVerification from "./pages/OTP";
 
 function App() {
   const dispatch = useDispatch();
@@ -84,6 +85,7 @@ function App() {
           <Route path="/KYC" element={<KYC />} />
           <Route path="/MultiStepKYCForm1" element={<MultiStepKYCForm1 />} />
           <Route path="/MultiStepKYCForm2" element={<MultiStepKYCForm2 />} />
+          <Route path="/verify-otp" element={<OTPVerification />} />
         </Routes>
 
         {/* Modal Overlays */}
