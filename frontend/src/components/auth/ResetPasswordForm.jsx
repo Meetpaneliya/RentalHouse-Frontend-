@@ -65,7 +65,7 @@ const ResetPassword = () => {
         password: state.password,
         confirmPassword: state.confirmPassword
       });
-      navigate("/");
+      navigate("/login");
     }
   };
 
