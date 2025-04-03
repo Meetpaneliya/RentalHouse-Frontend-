@@ -30,7 +30,7 @@ const Searchbar = () => {
   };
 
   const handleCheckOutDateChange = (date) => {
-    if (checkInDate && date < checkInDate) {
+    if (checkInDate && date <= checkInDate) {
       return;
     }
     setCheckOutDate(date);
@@ -38,8 +38,12 @@ const Searchbar = () => {
 
   const handleCheckInDateChange = (date) => {
     setCheckInDate(date);
-    if (checkOutDate && date > checkOutDate) {
+    if (checkOutDate && date >= checkOutDate) {
       setCheckOutDate(null);
+    } else {
+      const nextDay = new Date(date);
+      nextDay.setDate(nextDay.getDate() + 1);
+      setCheckOutDate(nextDay);
     }
   };
 
@@ -86,7 +90,7 @@ const Searchbar = () => {
               selectsEnd
               startDate={checkInDate}
               endDate={checkOutDate}
-              minDate={checkInDate || new Date()}
+              minDate={checkInDate ? new Date(checkInDate.getTime() + 86400000) : new Date()}
               placeholderText="Check out"
               className="w-full pl-8 pr-2 py-1.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-blue-500 bg-white"
               dateFormat="MMM dd"

@@ -69,6 +69,11 @@ export default function SignupPage({ onClose, setShowLoginModal }) {
       valid = false;
     }
 
+    if (!formData.role) {
+      newErrors.role = "Role is required";
+      valid = false;
+    }
+
     setErrors(newErrors);
     return valid;
   };
@@ -183,6 +188,7 @@ export default function SignupPage({ onClose, setShowLoginModal }) {
               Landlord
             </button>
           </div>
+          {errors.role && <p className="text-xs text-red-500 mt-1">{errors.role}</p>}
         </div>
 
         <div className="relative">

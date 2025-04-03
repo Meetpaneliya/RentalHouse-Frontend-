@@ -78,7 +78,7 @@ const Sliderinfo = () => {
                     <div className="flex flex-col space-y-4 sm:space-y-10 mt-4 sm:mt-0">
                         <button className="">
                             <a
-                                href="/search"
+                                href=""
                                 className="bg-blue-500/50 hover:bg-blue-600 text-white px-6 sm:px-10 py-2 sm:py-3 rounded-full"
                             >
                                 Search Apartments
@@ -87,7 +87,7 @@ const Sliderinfo = () => {
 
                         <button>
                             <a
-                                href="/signup"
+                                href=""
                                 className="bg-blue-500/50 hover:bg-blue-600 text-white px-6 sm:px-10 py-2 sm:py-3 rounded-full"
                             >
                                 Speak to a Human

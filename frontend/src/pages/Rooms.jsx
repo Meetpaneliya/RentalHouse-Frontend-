@@ -464,10 +464,10 @@ const Rooms = () => {
                     onChange={(e) => {
                       const newCheckInDate = e.target.value;
                       setCheckInDate(newCheckInDate);
-                      // Clear check-out date if it's before the new check-in date
-                      if (checkOutDate && checkOutDate < newCheckInDate) {
-                        setCheckOutDate('');
-                      }
+                      // Automatically set check-out date to one day after check-in
+                      const nextDay = new Date(newCheckInDate);
+                      nextDay.setDate(nextDay.getDate() + 1);
+                      setCheckOutDate(nextDay.toISOString().split('T')[0]); // Set check-out date to next day
                     }}
                     min={new Date().toISOString().split('T')[0]}
                     className="w-full p-2 border border-gray-300 rounded-md text-gray-700 focus:outline-none focus:border-blue-500"
@@ -480,8 +480,14 @@ const Rooms = () => {
                   <input
                     type="date"
                     value={checkOutDate}
-                    onChange={(e) => setCheckOutDate(e.target.value)}
-                    min={checkInDate || new Date().toISOString().split('T')[0]}
+                    onChange={(e) => {
+                      const newCheckOutDate = e.target.value;
+                      if (checkInDate && newCheckOutDate <= checkInDate) {
+                        return; // Prevent selecting the same day or before check-in
+                      }
+                      setCheckOutDate(newCheckOutDate);
+                    }}
+                    min={checkInDate ? new Date(checkInDate).toISOString().split('T')[0] : new Date().toISOString().split('T')[0]}
                     className="w-full p-2 border border-gray-300 rounded-md text-gray-700 focus:outline-none focus:border-blue-500"
                   />
                 </div>

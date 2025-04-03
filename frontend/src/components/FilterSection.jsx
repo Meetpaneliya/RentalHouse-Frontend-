@@ -71,8 +71,8 @@ const FilterSection = () => {
     });
   };
 
-   // Filter listings by Room Title
-   const handleRoomTitleFilterChange = (e) => {
+  // Filter listings by Room Title
+  const handleRoomTitleFilterChange = (e) => {
     setFilters((prevFilters) => ({
       ...prevFilters,
       rentalRoomName: e.target.value,
@@ -122,7 +122,7 @@ const FilterSection = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  
+
   // Fetch listings from the API
   useEffect(() => {
     const fetchListings = async () => {
@@ -168,27 +168,27 @@ const FilterSection = () => {
         );
       });
       console.log("filterd listing: ", filtered);
-      
+
       setFilteredListings(filtered);
     } else {
       setFilteredListings([...listings]);
     }
   }, [filters, listings]);
 
-// ✅ Proper Reset Filters Function
-const handleResetFilters = () => {
-  setFilters({
-    price: [500, 5000],
-    rooms: 1,
-    beds: 1,
-    bathrooms: 1,
-    amenities: [],
-    location: "",
-    propertyType: "",
-    availableOnly: false,
-    rentalRoomName: ""
-  });
-};
+  // ✅ Proper Reset Filters Function
+  const handleResetFilters = () => {
+    setFilters({
+      price: [500, 5000],
+      rooms: 1,
+      beds: 1,
+      bathrooms: 1,
+      amenities: [],
+      location: "",
+      propertyType: "",
+      availableOnly: false,
+      rentalRoomName: ""
+    });
+  };
 
   // Update the filter handlers to include navigation
   const handleFilterApply = () => {
@@ -244,16 +244,15 @@ const handleResetFilters = () => {
       <div className="w-full mx-auto p-2 sm:p-4 bg-white shadow-md rounded-lg">
         {/* Header and filters container */}
         <div className="flex flex-col sm:flex-row items-center justify-between mb-6">
-         
-         {/* Logo container */}
-         <Navbar />
 
-          
-         
+          {/* Logo container */}
+          <Navbar />
+
         </div>
 
         {/* Filters grid */}
         <div className=" w-10/12 mx-auto grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:flex gap-2 sm:gap-4">
+
           {/* Price Filter */}
           <div className="relative w-full" ref={priceFilterRef}>
             <button
@@ -438,17 +437,18 @@ const handleResetFilters = () => {
                     <span className="text-indigo-700 font-semibold text-lg">Bed</span>
                     <div className="flex items-center space-x-3 mt-2">
                       <button
-                        onClick={() => updateCount("beds", 1)}
-                        className="bg-indigo-800 text-white rounded-full w-8 h-8 flex items-center justify-center hover:bg-indigo-900"
-                      >
-                        +
-                      </button>
-                      <span className="text-indigo-700 font-bold text-lg">{filters.beds}</span>
-                      <button
                         onClick={() => updateCount("beds", -1)}
                         className="bg-indigo-800 text-white rounded-full w-8 h-8 flex items-center justify-center hover:bg-indigo-900"
                       >
                         −
+                      </button>
+                      <span className="text-indigo-700 font-bold text-lg">{filters.beds}</span>
+
+                      <button
+                        onClick={() => updateCount("beds", 1)}
+                        className="bg-indigo-800 text-white rounded-full w-8 h-8 flex items-center justify-center hover:bg-indigo-900"
+                      >
+                        +
                       </button>
                     </div>
                   </div>
@@ -456,17 +456,18 @@ const handleResetFilters = () => {
                     <span className="text-indigo-700 font-semibold text-lg">Bath</span>
                     <div className="flex items-center space-x-3 mt-2">
                       <button
-                        onClick={() => updateCount("bathrooms", 1)}
-                        className="bg-indigo-800 text-white rounded-full w-8 h-8 flex items-center justify-center hover:bg-indigo-900"
-                      >
-                        +
-                      </button>
-                      <span className="text-indigo-700 font-bold text-lg">{filters.bathrooms}</span>
-                      <button
                         onClick={() => updateCount("bathrooms", -1)}
                         className="bg-indigo-800 text-white rounded-full w-8 h-8 flex items-center justify-center hover:bg-indigo-900"
                       >
                         −
+                      </button>
+                      <span className="text-indigo-700 font-bold text-lg">{filters.bathrooms}</span>
+
+                      <button
+                        onClick={() => updateCount("bathrooms", 1)}
+                        className="bg-indigo-800 text-white rounded-full w-8 h-8 flex items-center justify-center hover:bg-indigo-900"
+                      >
+                        +
                       </button>
                     </div>
                   </div>
