@@ -2,15 +2,14 @@ import { useState } from "react";
 import { FaEye, FaEyeSlash, FaApple, FaGoogle, FaTimes } from "react-icons/fa";
 import toast from "react-hot-toast";
 import axios from "axios";
-import { login, setuserForm } from "../../redux/reducers/Auth";
-import { useDispatch, useSelector } from "react-redux";
+import { setuserForm } from "../../redux/reducers/Auth";
+import { useDispatch } from "react-redux";
 import ClipLoader from "react-spinners/ClipLoader";
 import { useNavigate } from "react-router-dom";
 
 export default function SignupPage({ onClose, setShowLoginModal }) {
   const [showPassword, setShowPassword] = useState(false);
   const dispatch = useDispatch();
-  const { userForm } = useSelector((state) => state.auth);
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({

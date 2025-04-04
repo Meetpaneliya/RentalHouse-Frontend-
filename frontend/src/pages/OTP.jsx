@@ -1,5 +1,5 @@
 import React, { useState, useRef } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
@@ -31,38 +31,6 @@ const OTPVerification = () => {
       // Only proceed if the pasted content is exactly 6 digits
       setOtp(pastedOtp.split(""));
       inputRefs.current[5]?.focus(); // Focus on the last field after pasting
-    }
-  };
-
-  const handleResendButton = async () => {
-    try {
-      const { data } = await axios.post(
-        `${import.meta.env.VITE_SERVER}/api/v1/user/send-otp`,
-        { email: userForm?.email },
-        {
-          withCredentials: true,
-          headers: { "Content-Type": "application/json" },
-        }
-      );
-      toast.success("OTP sent successfully. Please check your email.", {
-        duration: 3000,
-        position: "top-left",
-        style: {
-          background: "#4CAF50",
-          color: "#fff",
-        },
-      });
-    } catch (error) {
-      const errorMessage =
-        error?.response?.data?.message || "Something went wrong";
-      toast.error(errorMessage, {
-        duration: 3000,
-        position: "top-left",
-        style: {
-          background: "#FF0000",
-          color: "#fff",
-        },
-      });
     }
   };
 
@@ -127,12 +95,7 @@ const OTPVerification = () => {
             />
           ))}
         </div>
-        <button
-          onClick={handleResendButton}
-          className="w-full bg-gray-800 my-6 text-white py-3 rounded-lg text-lg hover:bg-gray-900 transition duration-300"
-        >
-          Resend OTP
-        </button>
+      
         <button
           onClick={handleVerify}
           className="w-full bg-blue-600 text-white py-3 rounded-lg text-lg hover:bg-gray-900 transition duration-300"
