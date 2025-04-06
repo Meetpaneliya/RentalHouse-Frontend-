@@ -125,7 +125,7 @@ const OTPVerification = () => {
                     data-testid="loader"
                     className="mr-2"
                   />
-                  Verify OTP...
+                  OTP Verified...
                 </span>
               ) : (
                 "Verify OTP"
