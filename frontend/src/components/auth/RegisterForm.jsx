@@ -78,6 +78,7 @@ export default function SignupPage({ onClose, setShowLoginModal }) {
     setErrors(newErrors);
     return valid;
   };
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
 
