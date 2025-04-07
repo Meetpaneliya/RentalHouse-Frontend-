@@ -66,7 +66,7 @@ const OTPVerification = () => {
       }
     } catch (error) {
       const errorMessage =
-        error?.response?.data?.message || "Something went wrong";
+        error?.response?.data?.error || "Something went wrong";
       toast.error(errorMessage, {
         duration: 3000,
         position: "top-left",
