@@ -5,7 +5,7 @@ const authSlice = createSlice({
   initialState: {
     isAuthenticated: false,
     user: null,
-    userForm: [],
+    userForm: null,
   },
   reducers: {
     login: (state, action) => {
