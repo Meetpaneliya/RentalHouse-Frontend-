@@ -49,7 +49,7 @@ const OTPVerification = () => {
           name: userForm.name,
           password: userForm.password,
           role: userForm.role,
-          otp: otpValue,
+          otp: otpValue.toString(),
         },
         {
           withCredentials: true,
