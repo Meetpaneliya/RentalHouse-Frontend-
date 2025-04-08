@@ -80,19 +80,19 @@ export const Home = () => {
             <div className="flex flex-col lg:flex-row justify-between w-11/12 lg:w-10/12 m-auto border rounded-xl bg-blue-950 text-slate-200 p-6 lg:p-8 mt-10">
                 <div className="w-full lg:w-1/2 space-y-3 text-center lg:text-left">
                     <h1 className="text-xl sm:text-2xl">Get Pre-Approved and Book Instantly</h1>
-                    <h4 className="text-base sm:text-lg">Skip the line and get approved to instantly book a home with June.</h4>
+                    <h4 className="text-base sm:text-lg">Skip the line and get approved to instantly book a home with StaySafe.</h4>
                 </div>
 
                 <div className="w-full lg:w-1/2 space-y-5 mt-3 items-center flex flex-col">
                     <button className="bg-slate-200 text-black rounded-3xl w-3/4 p-2"> Get pre-approved now </button>
-                    <p className="text-sm text-center">June Homes uses iDenfy and Plaid to provide a streamlined, quick, and secure way to verify your identity and income to calculate a range of homes you can instantly book.</p>
+                    <p className="text-sm text-center">StaySafe Homes uses iDenfy and Plaid to provide a streamlined, quick, and secure way to verify your identity and income to calculate a range of homes you can instantly book.</p>
                 </div>
             </div>
 
             {/* Section-4 */}
             <div className="w-11/12 lg:w-10/12 m-auto mt-14 mb-14">
                 <h1 className="text-2xl sm:text-3xl font-semibold text-center text-blue-950 mb-10">
-                    Here's why renters are choosing June
+                    Here's why renters are choosing StaySafe
                 </h1>
 
                 {/* Grid Layout for Responsiveness */}
