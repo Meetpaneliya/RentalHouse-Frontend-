@@ -114,7 +114,7 @@ export default function SignupPage({ onClose, setShowLoginModal }) {
         }
       } catch (error) {
         const errorMessage =
-          error?.response?.data?.message || "Something went wrong";
+          error?.response?.data?.message || "User already exist please login";
         setApiError(errorMessage);
         toast.error(errorMessage, {
           duration: 3000,
