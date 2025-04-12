@@ -51,16 +51,15 @@ const Searchbar = () => {
 
   return (
     <div className="w-full max-w-2xl mx-auto px-4">
-      <div className="bg-black/50 backdrop-blur-sm rounded-2xl shadow-xl p-4 flex flex-col md:flex-row items-center border border-white/10">
+      <div className="bg-black/50 backdrop-blur-md rounded-2xl shadow-2xl p-4 flex flex-col md:flex-row items-center border border-white/10 space-y-3 md:space-y-0 md:space-x-2">
 
         {/* City Selection */}
-        <div className="w-full md:w-1/3 min-w-[120px] md:mr-2 mb-2 md:mb-0 ">
+        <div className="w-full md:w-1/3">
           <CityCombobox onSelect={(city) => setSelectedCity(city)} />
         </div>
 
         {/* Date Selection */}
-        <div className="w-full md:w-2/5 grid grid-cols-2 gap-3 mb-2 md:mb-0 md:mx-2">
-
+        <div className="w-full md:w-2/5 grid grid-cols-2 gap-2">
           {/* Check-in Date */}
           <div className="relative">
             <div className="absolute left-2 top-1/2 -translate-y-1/2 text-gray-300">
@@ -74,7 +73,7 @@ const Searchbar = () => {
               endDate={checkOutDate}
               minDate={new Date()}
               placeholderText="Check in"
-              className="w-full pl-8 pr-2 py-1.5 bg-[#1f1f1f] text-white border border-gray-700 rounded-lg text-sm placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-white/50"
+              className="w-full pl-8 pr-2 py-2 bg-[#1f1f1f]/80 text-white border border-white/10 rounded-lg text-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-white/30"
               dateFormat="MMM dd"
             />
           </div>
@@ -92,7 +91,7 @@ const Searchbar = () => {
               endDate={checkOutDate}
               minDate={checkInDate ? new Date(checkInDate.getTime() + 86400000) : new Date()}
               placeholderText="Check out"
-              className="w-full pl-8 pr-2 py-1.5 bg-[#1f1f1f] text-white border border-gray-700 rounded-lg text-sm placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-white/50"
+              className="w-full pl-8 pr-2 py-2 bg-[#1f1f1f]/80 text-white border border-white/10 rounded-lg text-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-white/30"
               dateFormat="MMM dd"
             />
           </div>
@@ -103,8 +102,9 @@ const Searchbar = () => {
           type="submit"
           onClick={handleSearch}
           disabled={isSearchDisabled}
-          className={`w-full md:w-auto px-6 py-2 rounded-lg text-sm font-medium flex items-center justify-center gap-2 md:ml-2 ${isSearchDisabled
-              ? "bg-gray-600 text-gray-300 cursor-not-allowed"
+          className={`w-full md:w-auto px-6 py-2 rounded-lg text-sm font-medium flex items-center justify-center gap-2 transition-all duration-200 ease-in-out md:ml-2
+        ${isSearchDisabled
+              ? "bg-gray-600/70 text-gray-300 cursor-not-allowed"
               : "bg-white text-black hover:bg-white/90"
             }`}
         >
@@ -113,6 +113,7 @@ const Searchbar = () => {
         </button>
       </div>
     </div>
+
 
 
   );
