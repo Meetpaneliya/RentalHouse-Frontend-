@@ -19,11 +19,17 @@ export const Home = () => {
             <div
                 className="relative w-full h-screen bg-cover"
                 style={{
-                    backgroundImage: `url('/assets/room2.jpg')`,
+                    backgroundImage: `url('/assets/im4.jpg')`,
                     backgroundSize: 'cover',
                     backgroundPosition: 'center'
                 }}
             >
+                {/* Bottom to Top Gradient */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-70 z-10"></div>
+
+                {/* Top to Bottom Gradient */}
+                <div className="absolute inset-0 bg-gradient-to-b from-black via-transparent to-transparent opacity-70 z-10"></div>
+
                 {/* Navbar - positioned at top */}
                 <div className="absolute top-0 left-0 right-0 z-20">
                     <Navbar
@@ -37,8 +43,8 @@ export const Home = () => {
 
                 {/* Content */}
                 <div className="absolute inset-0 z-10 flex flex-col items-center justify-center space-y-6 px-4">
-                    <div className="text-slate-200 text-center bg-gray-800/30 rounded-3xl p-5 sm:p-10 w-full max-w-lg">
-                        <h2 className="text-2xl sm:text-4xl font-bold">Ready, Set, Rent.</h2>
+                    <div className="text-white text-center p-5 sm:p-10 w-full max-w-lg">
+                        <h2 className="text-4xl sm:text-5xl font-bold">Ready, Set, Rent.</h2>
                         <p className="mt-2 sm:mt-4 text-base sm:text-lg">
                             Furnished and unfurnished apartments <br />
                             and rooms on flexible lease terms.

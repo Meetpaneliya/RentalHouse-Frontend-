@@ -51,19 +51,19 @@ const Searchbar = () => {
 
   return (
     <div className="w-full max-w-2xl mx-auto px-4">
-      <div className="bg-slate-300 rounded-2xl shadow-lg p-2.5 flex flex-col md:flex-row items-center">
+      <div className="bg-black/50 backdrop-blur-sm rounded-2xl shadow-xl p-4 flex flex-col md:flex-row items-center border border-white/10">
+
         {/* City Selection */}
-        <div className="w-full md:w-1/3 min-w-[120px] md:mr-1">
-          <div className="relative">
-            <CityCombobox onSelect={(city) => setSelectedCity(city)} />
-          </div>
+        <div className="w-full md:w-1/3 min-w-[120px] md:mr-2 mb-2 md:mb-0 ">
+          <CityCombobox onSelect={(city) => setSelectedCity(city)} />
         </div>
 
         {/* Date Selection */}
-        <div className="w-full md:w-2/5 grid grid-cols-2 gap-3 my-2 md:my-0 md:mx-1">
+        <div className="w-full md:w-2/5 grid grid-cols-2 gap-3 mb-2 md:mb-0 md:mx-2">
+
           {/* Check-in Date */}
           <div className="relative">
-            <div className="absolute left-2 top-1/2 -translate-y-1/2 text-gray-400">
+            <div className="absolute left-2 top-1/2 -translate-y-1/2 text-gray-300">
               <Calendar size={16} />
             </div>
             <DatePicker
@@ -74,14 +74,14 @@ const Searchbar = () => {
               endDate={checkOutDate}
               minDate={new Date()}
               placeholderText="Check in"
-              className="w-full pl-8 pr-2 py-1.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-blue-500 bg-white"
+              className="w-full pl-8 pr-2 py-1.5 bg-[#1f1f1f] text-white border border-gray-700 rounded-lg text-sm placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-white/50"
               dateFormat="MMM dd"
             />
           </div>
 
           {/* Check-out Date */}
           <div className="relative">
-            <div className="absolute left-2 top-1/2 -translate-y-1/2 text-gray-400">
+            <div className="absolute left-2 top-1/2 -translate-y-1/2 text-gray-300">
               <Calendar size={16} />
             </div>
             <DatePicker
@@ -92,7 +92,7 @@ const Searchbar = () => {
               endDate={checkOutDate}
               minDate={checkInDate ? new Date(checkInDate.getTime() + 86400000) : new Date()}
               placeholderText="Check out"
-              className="w-full pl-8 pr-2 py-1.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-blue-500 bg-white"
+              className="w-full pl-8 pr-2 py-1.5 bg-[#1f1f1f] text-white border border-gray-700 rounded-lg text-sm placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-white/50"
               dateFormat="MMM dd"
             />
           </div>
@@ -103,17 +103,18 @@ const Searchbar = () => {
           type="submit"
           onClick={handleSearch}
           disabled={isSearchDisabled}
-          className={`w-full md:w-auto px-6 py-1.5 text-white rounded-lg transition-colors duration-200 flex items-center justify-center gap-2 md:ml-1 ${
-            isSearchDisabled 
-              ? "bg-gray-400 cursor-not-allowed" 
-              : "bg-black hover:bg-black/85"
-          }`}
+          className={`w-full md:w-auto px-6 py-2 rounded-lg text-sm font-medium flex items-center justify-center gap-2 md:ml-2 ${isSearchDisabled
+              ? "bg-gray-600 text-gray-300 cursor-not-allowed"
+              : "bg-white text-black hover:bg-white/90"
+            }`}
         >
           <Search size={16} />
-          <span className="text-sm">Search</span>
+          <span>Search</span>
         </button>
       </div>
     </div>
+
+
   );
 };
 

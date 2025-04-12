@@ -7,7 +7,8 @@ import { IoHomeOutline } from "react-icons/io5";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 
-const Listings = ({ listings = [] }) => {
+const Listings = ({ listings = [] }) => { 
+
   // Define a custom icon for map markers
   const customIcon = new L.Icon({
     iconUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png",
@@ -69,6 +70,7 @@ const Listings = ({ listings = [] }) => {
       </div>
 
       {/* Right Side: Map */}
+
       <div className="w-full md:w-[40%] h-screen md:h-auto mt-4 md:mt-0 z-10">
         <MapContainer
           center={[40.7128, -74.006]} // Default center (New York)
@@ -98,6 +100,7 @@ const Listings = ({ listings = [] }) => {
           )}
         </MapContainer>
       </div>
+    
     </div>
   );
 };

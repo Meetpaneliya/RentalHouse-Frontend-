@@ -24,7 +24,7 @@ export function CityCombobox({ onSelect }) {
     <div className="relative">
       <Button
         onClick={handleSelectClick}
-        className="w-[120px] flex items-center justify-between bg-transparent text-gray-700 hover:bg-gray-100 rounded-3xl px-3 py-2"
+        className="w-[120px] flex items-center justify-between bg-transparent border-gray-500 border text-gray-400 hover:bg-black rounded-3xl px-3 py-2"
       >
         {value
           ? cities.find((city) => city.value === value)?.label
@@ -33,12 +33,12 @@ export function CityCombobox({ onSelect }) {
       </Button>
 
       {open && (
-        <div className="absolute top-full left-0 mt-1 w-[200px] bg-slate-100 rounded-2xl p-3 shadow-lg z-50">
+        <div className="absolute top-full left-0 mt-1 w-[200px] bg-black/80 text-gray-400 rounded-2xl p-3 shadow-lg z-50">
           <div className="p-2">
             <input
               type="text"
               placeholder="Search city..."
-              className="w-full p-2 border rounded-md mb-2"
+              className="w-full p-2 bg-slate-950 text-black border rounded-md mb-2"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
@@ -47,8 +47,8 @@ export function CityCombobox({ onSelect }) {
                 filteredCities.map((city) => (
                   <div
                     key={city.value}
-                    className={`p-2 cursor-pointer hover:bg-gray-100 rounded-md ${
-                      value === city.value ? "bg-gray-50" : ""
+                    className={`p-2 cursor-pointer hover:bg-gray-800 rounded-md ${
+                      value === city.value ? "bg-gray-900" : ""
                     }`}
                     onClick={() => {
                       setValue(city.value);
