@@ -167,6 +167,8 @@ const Rooms = () => {
     const nights = calculateNights(checkInDate, checkOutDate);
     return nights * room.price;
   };
+   const capitalizeWords = (str) =>
+    str?.split(" ").map((w) => w.charAt(0).toUpperCase() + w.slice(1)).join(" ");
 
   const calculateTotal = () => {
     const basePrice = calculateTotalNights();
@@ -191,9 +193,9 @@ const Rooms = () => {
         <div className="flex  sm:flex justify-between items-center mb-6 tracking-wide">
           <div className="flex flex-col">
             <h1 className="text-2xl sm:text-3xl font-bold text-blue-800 ">
-              {room.title}
+             {capitalizeWords(room.title)}
             </h1>
-            <span className="text-blue-800 text-lg font-semibold capitalize ">{room.propertyType}</span>
+            <span className="text-blue-800 text-lg font-semibold capitalize ">{capitalizeWords(room.propertyType)}</span>
           </div>
           <CiShare2 onClick={handleShare} className="text-3xl" />
         </div>
