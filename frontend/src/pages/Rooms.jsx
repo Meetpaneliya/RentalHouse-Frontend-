@@ -190,10 +190,10 @@ const Rooms = () => {
         {/* Header */}
         <div className="flex  sm:flex justify-between items-center mb-6 tracking-wide">
           <div className="flex flex-col">
-            <h1 className="text-2xl sm:text-3xl font-bold text-blue-800 capitalize">
+            <h1 className="text-2xl sm:text-3xl font-bold text-blue-800 ">
               {room.title}
             </h1>
-            <span className="text-blue-800 text-lg font-semibold ">{room.propertyType}</span>
+            <span className="text-blue-800 text-lg font-semibold capitalize ">{room.propertyType}</span>
           </div>
           <CiShare2 onClick={handleShare} className="text-3xl" />
         </div>
