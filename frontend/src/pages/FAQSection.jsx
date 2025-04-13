@@ -65,40 +65,34 @@ const FAQSection = () => {
 
   return (
     <div>
-        <Navbar/>
-    <div className="max-w-3xl mx-auto my-12 p-4">
-      <h1 className="text-8xl font-bold text-center text-indigo-900 mb-8">FAQ</h1>
-      <div className="space-y-4">
-        {faqs.map((faq, index) => (
-          <div
-            key={index}
-            className={`border border-gray-300 rounded-lg shadow-lg ${
-              openIndex === index ? "bg-gray-100" : "bg-white"
-            }`}
-          >
-            <button
-              onClick={() => toggleFAQ(index)}
-              className="w-full flex justify-between items-center text-left p-4 text-indigo-900 font-semibold text-lg"
+      <Navbar />
+      <div className="max-w-4xl mx-auto px-6 py-12">
+        <h1 className="text-8xl font-bold text-center text-indigo-900 mb-12">FAQ</h1>
+        <div className="space-y-6">
+          {faqs.map((faq, index) => (
+            <div
+              key={index}
+              className={`rounded-xl shadow-md border border-gray-300 transition-all ${
+                openIndex === index ? "bg-gray-50" : "bg-white"
+              }`}
             >
-              {faq.question}
-              {openIndex === index ? (
-                <FaMinus className="text-indigo-900" />
-              ) : (
-                <FaPlus className="text-indigo-900" />
+              <button
+                onClick={() => toggleFAQ(index)}
+                className="w-full flex justify-between items-center text-left px-6 py-5 text-indigo-900 font-semibold text-lg focus:outline-none"
+              >
+                {faq.question}
+                {openIndex === index ? <FaMinus /> : <FaPlus />}
+              </button>
+              {openIndex === index && (
+                <div className="px-6 pb-6 text-gray-700 text-[15px] leading-relaxed whitespace-pre-line">
+                  {faq.answer}
+                </div>
               )}
-            </button>
-            {openIndex === index && (
-              <div className="p-4 text-gray-700 text-md">
-                {faq.answer.split("\n").map((line, i) => (
-                  <p key={i} className="mb-2">{line}</p>
-                ))}
-              </div>
-            )}
-          </div>
-        ))}
+            </div>
+          ))}
+        </div>
       </div>
-    </div>
-    <Footer/>
+      <Footer />
     </div>
   );
 };
