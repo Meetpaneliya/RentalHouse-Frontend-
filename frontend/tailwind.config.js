@@ -6,6 +6,9 @@ export default {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        sans: ['DM Sans'],
+      },
       animation: {
         blob: "blob 7s infinite",
       },
