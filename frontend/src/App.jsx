@@ -43,7 +43,7 @@ function App() {
   return (
     <BrowserRouter>
       <Toaster position="top-left" />
-      <div className="relative">
+      <div className="relative font-sans">
         <Routes>
           <Route
             path="/"
