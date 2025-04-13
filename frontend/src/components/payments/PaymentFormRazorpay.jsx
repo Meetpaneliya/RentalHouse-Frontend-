@@ -6,7 +6,6 @@ const PaymentFormRazorpay = ({
   amount,
   room,
   currency = "INR",
-  description = "Room Booking Payment",
 }) => {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
@@ -84,7 +83,7 @@ const PaymentFormRazorpay = ({
               setMessage("Payment verification failed.");
             }
           } catch (error) {
-            setMessage("Error verifying payment.");
+            setMessage("Error verifying payment.",error);
           }
         },
         prefill: {
@@ -113,7 +112,7 @@ const PaymentFormRazorpay = ({
       const rzp = new window.Razorpay(options);
       rzp.open();
     } catch (error) {
-      setMessage("Error initializing payment.");
+      setMessage("Error initializing payment.",error);
     }
 
     setLoading(false);

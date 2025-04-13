@@ -42,7 +42,7 @@ const AboutUs = () => {
             <h2 className="text-2xl font-bold text-gray-800">Simplicity at every step.</h2>
             <p className="text-gray-600 mt-4">
               We believe that renting a home should be easy, but it’s historically been an overly complicated 
-              process with too many hoops to jump through. At StaySafe, we’re trying to bring a fresher look to an 
+              process with too many hoops to jump through. At Cozzi Roam, we’re trying to bring a fresher look to an 
               outdated system. As a mobile-first company, our teams are working tirelessly to challenge the 
               status quo and provide our residents and owners with a clearer, simpler, more straightforward rental experience.
             </p>
@@ -72,7 +72,7 @@ const AboutUs = () => {
           <div className="text-left px-4 md:pl-8 mt-6 md:mt-0">
             <h2 className="text-2xl font-bold text-gray-800">Best customer service</h2>
             <p className="text-gray-600 mt-4">
-              At StaySafe, we take care of our residents and owners. Whether you’re a resident working with our 
+              At Cozzi Roam, we take care of our residents and owners. Whether you’re a resident working with our 
               24/7 support team to solve a maintenance issue or an owner discussing ways to optimize your NOI 
               with your personal relationship manager, we strive to provide a level of service unmatched in 
               the residential rental industry.
@@ -87,7 +87,7 @@ const AboutUs = () => {
             <h2 className="text-2xl font-bold text-gray-800">Transparency in the rental</h2>
             <p className="text-gray-600 mt-4">
               We never gatekeep information and are always upfront and honest when it comes to 
-              requirements and fees, listings and locations, and what you can expect as a StaySafe resident or owner. 
+              requirements and fees, listings and locations, and what you can expect as a Cozzi Roam resident or owner. 
               In an industry peppered with shady characters and scams galore, we pride ourselves on maintaining 
               transparent and professional communication with our customers throughout the process.
             </p>

@@ -108,15 +108,15 @@ const ContactUs = () => {
         <div className="flex-grow flex flex-col items-center justify-center px-4 sm:px-8 py-10 w-full">
           <h1 className="text-4xl sm:text-5xl font-bold text-indigo-900 text-center">Contact</h1>
           <h2 className="text-lg font-semibold text-gray-900 text-center mt-2">
-            Why landlords choose <span className="text-black">StaySafe Homes</span>
+            Why landlords choose <span className="text-black">Cozzi Roam Homes</span>
           </h2>
           <p className="text-gray-600 text-center max-w-lg mx-auto mt-2">
-            StaySafe Homes is a national housing brand and operator that specializes in flexible furnished rentals for the new generation of renters.
+            Cozzi Roam Homes is a national housing brand and operator that specializes in flexible furnished rentals for the new generation of renters.
           </p>
 
           <div className="w-full max-w-lg bg-white shadow-xl rounded-xl p-6 mt-8">
             <h3 className="text-xl font-bold text-indigo-900 text-center">Schedule a call</h3>
-            <p className="text-gray-500 text-center text-sm mb-6">Fill this form to learn more about StaySafe</p>
+            <p className="text-gray-500 text-center text-sm mb-6">Fill this form to learn more about Cozzi Roam</p>
 
             <form className="space-y-5" onSubmit={handleSubmit}>
               <div>

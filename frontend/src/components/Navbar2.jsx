@@ -13,7 +13,7 @@ const Navbar = () => {
     <header className="w-full shadow-md bg-white">
       <div className="flex justify-between items-center px-6 md:px-10 py-4 ">
         {/* Brand Logo */}
-        <Link to="/" className="text-2xl font-bold text-indigo-800">StaySafe</Link>
+        <Link to="/" className="text-2xl font-bold text-indigo-800">Cozzi Roam</Link>
 
         {/* Desktop Menu */}
         <nav className="hidden md:flex items-center space-x-8">

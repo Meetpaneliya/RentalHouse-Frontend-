@@ -44,10 +44,9 @@ export const Home = () => {
                 {/* Content */}
                 <div className="absolute inset-0 z-10 flex flex-col items-center justify-center space-y-6 px-4">
                     <div className="text-white text-center p-5 sm:p-10 w-full max-w-lg">
-                        <h2 className="text-4xl sm:text-5xl font-bold">Ready, Set, Rent.</h2>
+                        <h2 className="text-3xl sm:text-4xl font-bold">Where Every Rental Feels Like Home</h2>
                         <p className="mt-2 sm:mt-4 text-base sm:text-lg">
-                            Furnished and unfurnished apartments <br />
-                            and rooms on flexible lease terms.
+                              Experience effortless, personalized rentals that perfectly match your lifestyle.   
                         </p>
                     </div>
 
@@ -86,19 +85,19 @@ export const Home = () => {
             <div className="flex flex-col lg:flex-row justify-between w-11/12 lg:w-10/12 m-auto border rounded-xl bg-blue-950 text-slate-200 p-6 lg:p-8 mt-10">
                 <div className="w-full lg:w-1/2 space-y-3 text-center lg:text-left">
                     <h1 className="text-xl sm:text-2xl">Get Pre-Approved and Book Instantly</h1>
-                    <h4 className="text-base sm:text-lg">Skip the line and get approved to instantly book a home with StaySafe.</h4>
+                    <h4 className="text-base sm:text-lg">Skip the line and get approved to instantly book a home with Cozzi Roam.</h4>
                 </div>
 
                 <div className="w-full lg:w-1/2 space-y-5 mt-3 items-center flex flex-col">
                     <button className="bg-slate-200 text-black rounded-3xl w-3/4 p-2"> Get pre-approved now </button>
-                    <p className="text-sm text-center">StaySafe Homes uses iDenfy and Plaid to provide a streamlined, quick, and secure way to verify your identity and income to calculate a range of homes you can instantly book.</p>
+                    <p className="text-sm text-center">Cozzi Roam Homes uses iDenfy and Plaid to provide a streamlined, quick, and secure way to verify your identity and income to calculate a range of homes you can instantly book.</p>
                 </div>
             </div>
 
             {/* Section-4 */}
             <div className="w-11/12 lg:w-10/12 m-auto mt-14 mb-14">
                 <h1 className="text-2xl sm:text-3xl font-semibold text-center text-blue-950 mb-10">
-                    Here's why renters are choosing StaySafe
+                    Here's why renters are choosing Cozzi Roam
                 </h1>
 
                 {/* Grid Layout for Responsiveness */}

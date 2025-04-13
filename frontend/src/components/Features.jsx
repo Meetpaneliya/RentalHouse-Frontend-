@@ -10,7 +10,7 @@ export default function FeaturesSection() {
         <img src="/assets/family.jpg" alt="Trust and Safety" className="w-full rounded-lg shadow-lg" />
         {/* Badge */}
         <div className="absolute top-4 right-4 bg-green-600 text-white px-3 py-1 rounded-full text-sm font-semibold">
-          StaySafe Approved
+          Cozzi Roam Approved
         </div>
         {/* Overlay Text */}
         <div className="absolute bottom-0 w-full bg-white bg-opacity-50 p-4 text-center">
@@ -39,7 +39,7 @@ export default function FeaturesSection() {
           <div className="ml-4">
             <h3 className="text-black-700 font-bold text-lg">Vetted Residents</h3>
             <p className="text-gray-600 text-sm">
-                 StaySafe residents are generally professionals and students, and all our renters go through background checks.
+                 Cozzi Roam residents are generally professionals and students, and all our renters go through background checks.
             </p>
           </div>
         </div>
