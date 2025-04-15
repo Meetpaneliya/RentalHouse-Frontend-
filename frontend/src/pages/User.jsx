@@ -5,7 +5,6 @@ import { Pencil, Upload } from "lucide-react";
 import Navbar from "../components/Navbar2";
 import Footer from "../components/Footer";
 import toast from "react-hot-toast";
-import { useSelector } from "react-redux";
 
 const Profile = () => {
   const [user, setUser] = useState(null);

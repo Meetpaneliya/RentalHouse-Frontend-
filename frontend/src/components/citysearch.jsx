@@ -39,6 +39,7 @@ export default function CitySearch() {
               src={city.image}
               alt={city.name}
               className="w-full h-80 object-cover transition-transform duration-300 group-hover:scale-105"
+              loading="lazy"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div>
             <div className="absolute inset-x-0 bottom-4 flex justify-center">
