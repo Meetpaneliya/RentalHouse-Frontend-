@@ -251,7 +251,7 @@ const FilterSection = () => {
         </div>
 
         {/* Filters grid */}
-        <div className=" w-10/12 mx-auto grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:flex gap-2 sm:gap-4">
+        <div className=" w-auto mx-auto grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:flex gap-2 sm:gap-4">
 
           {/* Price Filter */}
           <div className="relative w-full" ref={priceFilterRef}>

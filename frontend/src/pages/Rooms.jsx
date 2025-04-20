@@ -189,6 +189,18 @@ const Rooms = () => {
       <Navbar />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+        {/* whatsapp chat feature */}
+        <div>
+          <a href="https://api.whatsapp.com/send?phone=919999999999&text=Hello%20I%20need%20help" target="_blank" rel="noopener noreferrer">
+            <img
+              src="/assets/whatsapp.png"
+              alt="WhatsApp Chat"
+              className="fixed bottom-4 right-4 w-16 h-16 rounded-full shadow-lg cursor-pointer hover:scale-110 transition-transform duration-300"
+            />
+          </a>
+        </div>
+
         {/* Header */}
         <div className="flex  sm:flex justify-between items-center mb-6 tracking-wide">
           <div className="flex flex-col">
@@ -199,6 +211,8 @@ const Rooms = () => {
           </div>
           <CiShare2 onClick={handleShare} className="text-3xl" />
         </div>
+
+
 
         {/* Image & Thumbnails */}
         <div className="grid grid-cols-1 sm:grid-cols-5 gap-4">
