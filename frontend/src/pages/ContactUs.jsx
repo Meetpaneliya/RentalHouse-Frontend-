@@ -105,6 +105,17 @@ const ContactUs = () => {
       <div className="flex flex-col min-h-screen">
         <Navbar2 />
 
+         {/* whatsapp chat feature
+         <div>
+          <a href="https://api.whatsapp.com/send?phone=919999999999&text=Hello%20I%20need%20help" target="_blank" rel="noopener noreferrer">
+            <img
+              src="/assets/whatsapp.png"
+              alt="WhatsApp Chat"
+              className="fixed bottom-4 right-4 w-16 h-16 rounded-full shadow-lg cursor-pointer hover:scale-110 transition-transform duration-300"
+            />
+          </a>
+        </div> */}
+
         <div className="flex-grow flex flex-col items-center justify-center px-4 sm:px-8 py-10 w-full">
           <h1 className="text-4xl sm:text-5xl font-bold text-indigo-900 text-center">Contact</h1>
           <h2 className="text-lg font-semibold text-gray-900 text-center mt-2">
@@ -185,12 +196,15 @@ const ContactUs = () => {
                 {errors.city && <p className="text-red-500 text-sm mt-1">{errors.city}</p>}
               </div>
 
+              
               <button 
                 type="submit" 
                 className="w-full bg-indigo-800 text-white py-3 rounded-lg hover:bg-indigo-900 transition-all duration-300 transform hover:scale-105"
               >
                 Get In Touch
               </button>
+             
+              
             </form>
           </div>
         </div>
