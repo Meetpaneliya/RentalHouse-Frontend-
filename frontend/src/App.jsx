@@ -25,6 +25,13 @@ import PaymentPage from "./components/payments/PaymentPage";
 import PaymentSuccess from "./components/payments/PaymentSuccess";
 import PaymentCancel from "./components/payments/PaymentCancel";
 import OTPVerification from "./pages/OTP";
+import CreateListing from "./pages/CreateListing";
+import RecentListings from "./components/Profile/RecentListings";
+import NotificationsPage from "./components/Profile/NotificationPage";
+import ChatPage from "./components/Profile/ChatPage";
+import ProfileLayout from "./components/Layouts/ProfileLayout";
+import ProfileOverview from "./components/Profile/ProfileOverview";
+import { ListingFormProvider } from "./context/FormContext";
 
 function App() {
   const dispatch = useDispatch();
@@ -56,22 +63,42 @@ function App() {
               />
             }
           />
-          <Route path="/signup" element={
-            <SignupPage 
-              onClose={() => {}} 
-              setShowLoginModal={setShowLoginModal}
+          <Route
+            path="/signup"
+            element={
+              <SignupPage
+                onClose={() => {}}
+                setShowLoginModal={setShowLoginModal}
+              />
+            }
+          />
+          <Route
+            path="/login"
+            element={
+              <LoginPage
+                onClose={() => {}}
+                setShowSignupModal={setShowSignupModal}
+              />
+            }
+          />
+          {/* nested profile routes */}
+          <Route path="/user" element={<ProfileLayout />}>
+            <Route index element={<ProfileOverview />} />
+            <Route path="listings" element={<RecentListings />} />
+            <Route
+              path="create-listing"
+              element={
+                <ListingFormProvider>
+                  <ListingForm />
+                </ListingFormProvider>
+              }
             />
-          } />
-          <Route path="/login" element={
-            <LoginPage 
-              onClose={() => {}} 
-              setShowSignupModal={setShowSignupModal}
-            />
-          } />
-          <Route path="/user" element={<Profile />} />
+            <Route path="notifications" element={<NotificationsPage />} />
+            <Route path="chat" element={<ChatPage />} />
+          </Route>
+
           <Route path="/filtered-listings" element={<FilterSection />} />
           <Route path="/room/:id" element={<Rooms />} />
-          <Route path="/ListingForm" element={<ListingForm />} />
           <Route path="/favorites/:id" element={<Favorites />} />
           <Route path="/about" element={<AboutUs />} />
           <Route path="/contact" element={<ContactUs />} />
@@ -81,7 +108,6 @@ function App() {
           <Route path="/cancel" element={<PaymentCancel />} />
           <Route path="/forget-password" element={<ForgotPassword />} />
           <Route path="/reset-password/:token" element={<ResetPassword />} />
-          <Route path="/profile" element={() => <Profile />} />
           <Route path="/KYC" element={<KYC />} />
           <Route path="/MultiStepKYCForm1" element={<MultiStepKYCForm1 />} />
           <Route path="/MultiStepKYCForm2" element={<MultiStepKYCForm2 />} />
@@ -95,8 +121,8 @@ function App() {
 
         {showLoginModal && (
           <div className="fixed inset-0 flex items-center justify-center z-50">
-            <LoginPage 
-              onClose={() => setShowLoginModal(false)} 
+            <LoginPage
+              onClose={() => setShowLoginModal(false)}
               setShowSignupModal={setShowSignupModal}
             />
           </div>
@@ -104,8 +130,8 @@ function App() {
 
         {showSignupModal && (
           <div className="fixed inset-0 flex items-center justify-center z-50">
-            <SignupPage 
-              onClose={() => setShowSignupModal(false)} 
+            <SignupPage
+              onClose={() => setShowSignupModal(false)}
               setShowLoginModal={setShowLoginModal}
             />
           </div>

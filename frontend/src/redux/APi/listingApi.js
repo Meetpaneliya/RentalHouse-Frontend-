@@ -25,7 +25,7 @@ export const listingAPI = createApi({
     getUserlisting: builder.query({
       query: () => ({
         method: "GET",
-        url: `/listings/get`,
+        url: `/listings/getuserlisting`,
         credentials: "include",
       }),
       providesTags: ["Listing"],

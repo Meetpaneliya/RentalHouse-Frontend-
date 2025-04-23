@@ -83,7 +83,7 @@ const Rooms = () => {
       try {
         console.log("Fetching room details for ID:", id);
         const response = await axios.get(
-          `${import.meta.env.VITE_SERVER}/api/v1/listings/${id}`
+          `${import.meta.env.VITE_SERVER}/api/v1/listings/searchbyId/${id}`
         );
 
         console.log("API Response:", response.data);
@@ -167,8 +167,11 @@ const Rooms = () => {
     const nights = calculateNights(checkInDate, checkOutDate);
     return nights * room.price;
   };
-   const capitalizeWords = (str) =>
-    str?.split(" ").map((w) => w.charAt(0).toUpperCase() + w.slice(1)).join(" ");
+  const capitalizeWords = (str) =>
+    str
+      ?.split(" ")
+      .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+      .join(" ");
 
   const calculateTotal = () => {
     const basePrice = calculateTotalNights();
@@ -189,19 +192,18 @@ const Rooms = () => {
       <Navbar />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-
         {/* Header */}
         <div className="flex  sm:flex justify-between items-center mb-6 tracking-wide">
           <div className="flex flex-col">
             <h1 className="text-2xl sm:text-3xl font-bold text-blue-800 ">
-             {capitalizeWords(room.title)}
+              {capitalizeWords(room.title)}
             </h1>
-            <span className="text-blue-800 text-lg font-semibold capitalize ">{capitalizeWords(room.propertyType)}</span>
+            <span className="text-blue-800 text-lg font-semibold capitalize ">
+              {capitalizeWords(room.propertyType)}
+            </span>
           </div>
           <CiShare2 onClick={handleShare} className="text-3xl" />
         </div>
-
-
 
         {/* Image & Thumbnails */}
         <div className="grid grid-cols-1 sm:grid-cols-5 gap-4">
@@ -272,9 +274,14 @@ const Rooms = () => {
                   <p>
                     {showFullDescription
                       ? room.description
-                      : `${room.description.slice(0, MAX_DESCRIPTION_LENGTH)}... `}
+                      : `${room.description.slice(
+                          0,
+                          MAX_DESCRIPTION_LENGTH
+                        )}... `}
                     <button
-                      onClick={() => setShowFullDescription(!showFullDescription)}
+                      onClick={() =>
+                        setShowFullDescription(!showFullDescription)
+                      }
                       className="text-blue-600 hover:text-blue-800 text-sm font-medium"
                     >
                       {showFullDescription ? "Show less" : "Show more"}
@@ -380,9 +387,9 @@ const Rooms = () => {
                               <span className="text-xs text-gray-500">
                                 {review.createdAt
                                   ? format(
-                                    new Date(review.createdAt),
-                                    "MMM dd, yyyy"
-                                  )
+                                      new Date(review.createdAt),
+                                      "MMM dd, yyyy"
+                                    )
                                   : ""}
                               </span>
                             </div>
@@ -391,10 +398,11 @@ const Rooms = () => {
                                 {[...Array(5)].map((_, i) => (
                                   <FaStar
                                     key={i}
-                                    className={`${i < review.rating
-                                      ? "text-yellow-400"
-                                      : "text-gray-200"
-                                      } w-3 h-3`}
+                                    className={`${
+                                      i < review.rating
+                                        ? "text-yellow-400"
+                                        : "text-gray-200"
+                                    } w-3 h-3`}
                                   />
                                 ))}
                               </div>
@@ -472,9 +480,9 @@ const Rooms = () => {
                       // Automatically set check-out date to one day after check-in
                       const nextDay = new Date(newCheckInDate);
                       nextDay.setDate(nextDay.getDate() + 1);
-                      setCheckOutDate(nextDay.toISOString().split('T')[0]); // Set check-out date to next day
+                      setCheckOutDate(nextDay.toISOString().split("T")[0]); // Set check-out date to next day
                     }}
-                    min={new Date().toISOString().split('T')[0]}
+                    min={new Date().toISOString().split("T")[0]}
                     className="w-full p-2 border border-gray-300 rounded-md text-gray-700 focus:outline-none focus:border-blue-500"
                   />
                 </div>
@@ -492,7 +500,11 @@ const Rooms = () => {
                       }
                       setCheckOutDate(newCheckOutDate);
                     }}
-                    min={checkInDate ? new Date(checkInDate).toISOString().split('T')[0] : new Date().toISOString().split('T')[0]}
+                    min={
+                      checkInDate
+                        ? new Date(checkInDate).toISOString().split("T")[0]
+                        : new Date().toISOString().split("T")[0]
+                    }
                     className="w-full p-2 border border-gray-300 rounded-md text-gray-700 focus:outline-none focus:border-blue-500"
                   />
                 </div>
