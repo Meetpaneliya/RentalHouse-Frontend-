@@ -1,17 +1,20 @@
 import React, { useState, useRef } from "react";
-import { Pencil, Upload, Check, Camera } from "lucide-react";
+import { Pencil, Check, Camera } from "lucide-react";
 import { useSelector } from "react-redux";
 import toast from "react-hot-toast";
+import axios from "axios";
 
-const ProfileSection = ({ onUpdateProfile, onUpdateImage }) => {
+const ProfileSection = () => {
   const { user } = useSelector((state) => state.auth);
+  
   const [editMode, setEditMode] = useState(false);
   const [formData, setFormData] = useState({
     name: user?.name || "",
     email: user?.email || "",
   });
   const [loading, setLoading] = useState(false);
-  const [ setUploading] = useState(false);
+  const [, setUploading] = useState(false);
+  const [, setUser] = useState(user);
   const fileInputRef = useRef(null);
 
   const handleChange = (e) => {
@@ -24,25 +27,53 @@ const ProfileSection = ({ onUpdateProfile, onUpdateImage }) => {
   const handleSave = async () => {
     try {
       setLoading(true);
-      await onUpdateProfile(formData);
-      setEditMode(false);
-      toast.success("Profile updated successfully!");
+      await axios.put(
+        'http://localhost:4000/api/v1/user/update',
+        {
+          name: formData.name,
+          email: formData.email,
+        },
+        {
+          withCredentials: true,
+        }
+      );
+      toast.success('Profile updated successfully!');
     } catch (error) {
-      console.error("Error updating profile:", error);
-      toast.error("Failed to update profile");
+      console.error('Error updating user:', error);
+      toast.error('Failed to update profile');
     } finally {
       setLoading(false);
     }
   };
 
+  // Profile Picture Upload
   const handleFileChange = async (e) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
+    const file = e.target.files[0];
+    const imageFormData = new FormData();
+    imageFormData.append("profilePicture", file);
+  
     try {
       setUploading(true);
-      await onUpdateImage(file);
-      toast.success("Profile picture updated successfully!");
+      console.log("uploading image error 1")
+      const res = await axios.put(
+        "http://localhost:4000/api/v1/user/update-image",
+        imageFormData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+          withCredentials: true,
+        }
+      );
+      console.log("Upload Success", res.data);
+  
+      // ✅ Update user state immediately:
+      setUser((prevUser) => ({
+        ...prevUser,
+        profilePicture: res.data.profilePicture, // Make sure this matches backend response key
+      }));
+      toast.success("Profile picture updated!");
+
     } catch (err) {
       console.error("Error uploading profile picture:", err);
       toast.error("Failed to upload picture");

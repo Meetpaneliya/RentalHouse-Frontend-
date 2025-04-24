@@ -1,7 +1,6 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-
 import DashboardLayout from "../components/Layouts/ProfileLayout";
 import ProfileOverview from "../components/Profile/ProfileOverview";
 
@@ -30,14 +29,9 @@ const Dashboard = () => {
     );
   }
 
-  const isLandlord = user.role === "landlord";
-
   return (
     <DashboardLayout>
-      <ProfileOverview
-        handleUpdateProfile={handleUpdateProfile}
-        handleUpdateImage={handleUpdateImage}
-      />
+      <ProfileOverview/>
     </DashboardLayout>
   );
 };
