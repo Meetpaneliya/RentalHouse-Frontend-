@@ -8,6 +8,8 @@ import {
   MessageCircle,
   Settings,
   LogOut,
+  ArrowLeft,
+  X,
 } from "lucide-react";
 import { useSelector } from "react-redux";
 
@@ -32,6 +34,13 @@ const SIDEBAR_ITEMS = [
     icon: <PlusSquare className="mr-3 h-5 w-5" />,
     path: "/user/create-listing",
     role: "landlord",
+  },
+  {
+    key: "bookings",
+    label: "My Bookings",
+    icon: <Building className="mr-3 h-5 w-5" />,
+    path: "/user/bookings",
+    role: "tenant",
   },
   {
     key: "notifications",
@@ -59,6 +68,15 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
         ${isOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"} 
         w-60`}
     >
+      {/* Close button for mobile */}
+      {isOpen && (
+        <button
+          onClick={toggleSidebar}
+          className="absolute top-3 right-3 text-gray-600 hover:text-gray-900 md:hidden"
+        >
+          <X className="h-5 w-5" />
+        </button>
+      )}
       {/* Profile section */}
       <div className="p-4 border-b border-gray-200">
         <div className="flex items-center space-x-3">
@@ -87,7 +105,6 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
       <nav className="flex-1 flex flex-col mt-4 space-y-1 px-2">
         {SIDEBAR_ITEMS.map((item) => {
           if (item.role !== "all" && item.role !== user?.role) return null;
-          const Icon = item.icon;
 
           return (
             <NavLink
@@ -102,7 +119,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
                 }`
               }
             >
-              <Icon className="h-5 w-5 min-w-[20px]" />
+              {item.icon}
               <span className="ml-3">{item.label}</span>
             </NavLink>
           );
