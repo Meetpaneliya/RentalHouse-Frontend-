@@ -15,7 +15,7 @@ const DashboardLayout = () => {
     <div className="flex h-screen bg-gray-100">
       <Sidebar isOpen={sidebarOpen} toggleSidebar={toggleSidebar} />
 
-      <div className="flex-1 flex flex-col md:ml-64">
+      <div className="flex-1 flex flex-col">
         <Header
           isOpen={sidebarOpen}
           toggleSidebar={toggleSidebar}
