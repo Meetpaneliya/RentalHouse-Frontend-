@@ -1,5 +1,5 @@
 import React from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import {
   User,
   Building,
@@ -8,6 +8,7 @@ import {
   MessageCircle,
   Settings,
   LogOut,
+  ArrowLeft,
 } from "lucide-react";
 import { useSelector } from "react-redux";
 
@@ -34,6 +35,13 @@ const SIDEBAR_ITEMS = [
     role: "landlord",
   },
   {
+    key: "bookings",
+    label: "My Bookings",
+    icon: <Building className="mr-3 h-5 w-5" />,
+    path: "/user/bookings",
+    role: "tenant",
+  },
+  {
     key: "notifications",
     label: "Notifications",
     icon: <Bell className="mr-3 h-5 w-5" />,
@@ -51,13 +59,28 @@ const SIDEBAR_ITEMS = [
 
 const Sidebar = ({ isOpen, toggleSidebar }) => {
   const { user } = useSelector((state) => state.auth);
-  const isLandlord = user?.role === "landlord";
+  const navigate = useNavigate();
+
+  const handleGoBack = () => {
+    navigate("/");
+  };
 
   return (
     <div
       className={`fixed top-0 left-0 h-full bg-white shadow-xl z-30 transition-all duration-300 ease-in-out 
       ${isOpen ? "w-64" : "w-20"} md:w-64 flex flex-col`}
     >
+      {/* Back Button */}
+      <button
+        onClick={handleGoBack}
+        className="flex items-center px-4 py-3 text-gray-600 hover:text-gray-900 hover:bg-gray-50 transition-colors"
+      >
+        <ArrowLeft className="h-5 w-5" />
+        {(isOpen || window.innerWidth >= 768) && (
+          <span className="ml-2 text-sm font-medium">Go Back</span>
+        )}
+      </button>
+
       {/* Profile section */}
       <div className="p-4 border-b border-gray-200">
         <div className="flex items-center space-x-3">

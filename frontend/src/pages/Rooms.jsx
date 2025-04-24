@@ -19,9 +19,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { roominfor } from "../redux/reducers/orderSlice";
 import { IoHomeOutline } from "react-icons/io5";
 import { X } from "lucide-react";
-
+import { useAsyncMutation } from "../hooks/useError";
 import { format } from "date-fns";
 import toast from "react-hot-toast";
+import { useCreateBookingMutation } from "../redux/APi/listingApi";
 
 const Rooms = () => {
   const { id } = useParams();
@@ -38,18 +39,44 @@ const Rooms = () => {
   const MAX_DESCRIPTION_LENGTH = 150; // Maximum characters to show initially
   const [checkInDate, setCheckInDate] = useState("");
   const [checkOutDate, setCheckOutDate] = useState("");
-  const { isAuthenticated } = useSelector((state) => state.auth);
+  const { isAuthenticated, user } = useSelector((state) => state.auth);
   const [selectedImage, setSelectedImage] = useState(null);
-
   const navigate = useNavigate();
+  const [sendBookingRequest, isSendingBookingRequest] = useAsyncMutation(
+    useCreateBookingMutation
+  );
 
-  const handleNavigate = () => {
-    navigate("/KYC"); // Navigate to /KYC
+  const handleNavigate = async () => {
+    if (user.kycStatus !== "verified") {
+      toast.error("Please complete KYC to proceed.");
+      navigate("/KYC");
+      return;
+    }
+    if (!isAuthenticated) {
+      toast.error("Please login to continue.");
+      return;
+    }
+    if (!checkInDate || !checkOutDate) {
+      toast.error("Please select check-in and check-out dates.");
+      return;
+    }
+
+    const formData = {
+      listingId: id,
+      checkIn: checkInDate,
+      checkOut: checkOutDate,
+    };
+    await sendBookingRequest("Sending booking request", formData);
   };
 
   const handlepayment = async (room) => {
     if (!isAuthenticated) {
       toast.error("Please login to continue.");
+      return;
+    }
+    if (user.kycStatus !== "verified") {
+      toast.error("Please complete KYC to proceed.");
+      navigate("/KYC");
       return;
     }
     if (!checkInDate || !checkOutDate) {
@@ -547,15 +574,21 @@ const Rooms = () => {
                 <button
                   onClick={handleNavigate}
                   className="w-full bg-[#3F51B5] text-white py-3 rounded-lg hover:bg-[#2c3e99] transition-colors"
-                  disabled={!checkInDate || !checkOutDate}
+                  disabled={
+                    !checkInDate || !checkOutDate || isSendingBookingRequest
+                  }
                 >
-                  Reserve
+                  {isSendingBookingRequest ? "Loading..." : "Reserve Now"}
                 </button>
 
                 <button
                   onClick={() => handlepayment(room)}
                   className="w-full bg-green-600 text-white py-3 rounded-lg hover:bg-green-700 transition-colors flex items-center justify-center gap-2"
-                  disabled={!checkInDate || !checkOutDate}
+                  disabled={
+                    !checkInDate ||
+                    !checkOutDate ||
+                    user.kycStatus !== "verified"
+                  }
                 >
                   <span>Proceed to Pay</span>
                   <svg

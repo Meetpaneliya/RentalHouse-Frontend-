@@ -6,7 +6,7 @@ export const listingAPI = createApi({
     baseUrl: `${import.meta.env.VITE_SERVER}/api/v1`,
     credentials: "include",
   }),
-  tagTypes: ["Listing", "KYC"],
+  tagTypes: ["Listing", "KYC", "Bookings"],
   endpoints: (builder) => ({
     search: builder.query({
       query: ({ city, startDate, endDate }) => {
@@ -83,6 +83,33 @@ export const listingAPI = createApi({
       }),
       providesTags: ["KYC"],
     }),
+
+    //Booking section
+    createBooking: builder.mutation({
+      query: (body) => ({
+        method: "POST",
+        url: `/bookings/createBooking`,
+        credentials: "include",
+        body,
+      }),
+      invalidatesTags: ["Bookings"],
+    }),
+    getBooking: builder.query({
+      query: () => ({
+        method: "GET",
+        url: `/bookings/get/${id}`,
+        credentials: "include",
+      }),
+      providesTags: ["Bookings"],
+    }),
+    GetUserBookings: builder.query({
+      query: () => ({
+        method: "GET",
+        url: `/bookings/getBookingByUser`,
+        credentials: "include",
+      }),
+      providesTags: ["Bookings"],
+    }),
   }),
 });
 
@@ -95,4 +122,7 @@ export const {
   useUpdateListingMutation,
   useCreatekycMutation,
   useGetkycstatusQuery,
+  useCreateBookingMutation,
+  useGetBookingQuery,
+  useGetUserBookingsQuery,
 } = listingAPI;

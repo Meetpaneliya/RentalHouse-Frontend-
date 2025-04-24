@@ -32,6 +32,7 @@ import ChatPage from "./components/Profile/ChatPage";
 import ProfileLayout from "./components/Layouts/ProfileLayout";
 import ProfileOverview from "./components/Profile/ProfileOverview";
 import { ListingFormProvider } from "./context/FormContext";
+import RecentBookings from "./components/Profile/RecentBookings";
 
 function App() {
   const dispatch = useDispatch();
@@ -85,6 +86,7 @@ function App() {
           <Route path="/user" element={<ProfileLayout />}>
             <Route index element={<ProfileOverview />} />
             <Route path="listings" element={<RecentListings />} />
+            <Route path="bookings" element={<RecentBookings />} />
             <Route
               path="create-listing"
               element={

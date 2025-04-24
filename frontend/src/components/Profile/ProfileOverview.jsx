@@ -1,12 +1,15 @@
 import axios from "axios";
-import React from "react";
+import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import ProfileSection from "./ProfileSection";
 import RecentListings from "./RecentListings";
 import StatisticsSection from "./StatisticsSection";
+import RecentBookings from "./RecentBookings";
+import { useMyprofileQuery } from "../../redux/APi/api";
 const ProfileOverview = () => {
   const { user } = useSelector((state) => state.auth);
   const isLandlord = user?.role === "landlord";
+
   const handleUpdateProfile = async ({ name, email }) => {
     try {
       await axios.put("/api/v1/user/update", name, email);
@@ -62,27 +65,7 @@ const ProfileOverview = () => {
 
         {/* Listings Section */}
         <div className="lg:col-span-2">
-          {isLandlord ? (
-            <RecentListings />
-          ) : (
-            <div className="bg-white rounded-lg shadow-md p-6">
-              <h3 className="text-lg font-medium text-gray-900 mb-4">
-                Account Summary
-              </h3>
-              <p className="text-gray-600 mb-3">
-                You are currently logged in as a tenant. Explore available
-                properties and manage your applications.
-              </p>
-              <div className="flex space-x-3 mt-4">
-                <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md transition-colors">
-                  Browse Properties
-                </button>
-                <button className="bg-white hover:bg-gray-50 text-blue-600 border border-blue-600 px-4 py-2 rounded-md transition-colors">
-                  View Applications
-                </button>
-              </div>
-            </div>
-          )}
+          {isLandlord ? <RecentListings /> : <RecentBookings />}
         </div>
       </div>
     </>
