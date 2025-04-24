@@ -70,7 +70,7 @@ const ProfileSection = () => {
       // ✅ Update user state immediately:
       setUser((prevUser) => ({
         ...prevUser,
-        profilePicture: res.data.profilePicture, // Make sure this matches backend response key
+        profilePicture: res.data.profilePicture, 
       }));
       toast.success("Profile picture updated!");
 
@@ -100,7 +100,8 @@ const ProfileSection = () => {
             <div className="relative group">
               <div className="relative w-24 h-24">
                 <img
-                  src={user?.profilePicture || `https://ui-avatars.com/api/?name=${encodeURIComponent(user?.name || 'User')}&size=128&background=random`}
+                  src={user.profilePicture ? 
+                          user.profilePicture : `https://ui-avatars.com/api/?name=${encodeURIComponent(user?.name || 'User')}&size=128&background=random`}
                   alt="Profile"
                   className="w-full h-full rounded-full object-cover ring-4 ring-white shadow-lg"
                 />
