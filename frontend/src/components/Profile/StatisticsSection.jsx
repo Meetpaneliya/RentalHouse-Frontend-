@@ -17,66 +17,64 @@ const StatisticsSection = () => {
   if (!isLandlord) return null;
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-      <div className="bg-white rounded-lg shadow-md p-5 border-l-4 border-blue-500 hover:shadow-lg transition-shadow">
+    <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mb-6 px-2 sm:px-4">
+      {/* Card 1 */}
+      <div className="bg-white rounded-xl shadow-md p-4 sm:p-5 border-l-4 border-blue-500 hover:shadow-lg transition-shadow">
         <div className="flex justify-between items-start">
           <div>
-            <p className="text-sm font-medium text-gray-500">Total Listings</p>
-            <p className="text-2xl font-semibold mt-1">{stats.totalListings}</p>
+            <p className="text-xs sm:text-sm font-medium text-gray-500">Total Listings</p>
+            <p className="text-xl sm:text-2xl font-semibold mt-1">{stats.totalListings}</p>
           </div>
           <div className="bg-blue-100 p-2 rounded-md">
-            <Building className="h-6 w-6 text-blue-600" />
+            <Building className="h-5 w-5 sm:h-6 sm:w-6 text-blue-600" />
           </div>
         </div>
         <div className="mt-2">
           <p className="text-xs text-green-600">+2 new this month</p>
         </div>
       </div>
-
-      <div className="bg-white rounded-lg shadow-md p-5 border-l-4 border-purple-500 hover:shadow-lg transition-shadow">
+  
+      {/* Card 2 */}
+      <div className="bg-white rounded-xl shadow-md p-4 sm:p-5 border-l-4 border-purple-500 hover:shadow-lg transition-shadow">
         <div className="flex justify-between items-start">
           <div>
-            <p className="text-sm font-medium text-gray-500">Total Views</p>
-            <p className="text-2xl font-semibold mt-1">{stats.totalViews}</p>
+            <p className="text-xs sm:text-sm font-medium text-gray-500">Total Views</p>
+            <p className="text-xl sm:text-2xl font-semibold mt-1">{stats.totalViews}</p>
           </div>
           <div className="bg-purple-100 p-2 rounded-md">
-            <Eye className="h-6 w-6 text-purple-600" />
+            <Eye className="h-5 w-5 sm:h-6 sm:w-6 text-purple-600" />
           </div>
         </div>
         <div className="mt-2">
           <p className="text-xs text-green-600">+47 views this week</p>
         </div>
       </div>
-
-      <div className="bg-white rounded-lg shadow-md p-5 border-l-4 border-green-500 hover:shadow-lg transition-shadow">
+  
+      {/* Card 3 */}
+      <div className="bg-white rounded-xl shadow-md p-4 sm:p-5 border-l-4 border-green-500 hover:shadow-lg transition-shadow">
         <div className="flex justify-between items-start">
           <div>
-            <p className="text-sm font-medium text-gray-500">Monthly Revenue</p>
-            <p className="text-2xl font-semibold mt-1">
-              ${stats.monthlyRevenue}
-            </p>
+            <p className="text-xs sm:text-sm font-medium text-gray-500">Monthly Revenue</p>
+            <p className="text-xl sm:text-2xl font-semibold mt-1">${stats.monthlyRevenue}</p>
           </div>
           <div className="bg-green-100 p-2 rounded-md">
-            <DollarSign className="h-6 w-6 text-green-600" />
+            <DollarSign className="h-5 w-5 sm:h-6 sm:w-6 text-green-600" />
           </div>
         </div>
         <div className="mt-2">
           <p className="text-xs text-green-600">+12% from last month</p>
         </div>
       </div>
-
-      <div className="bg-white rounded-lg shadow-md p-5 border-l-4 border-amber-500 hover:shadow-lg transition-shadow">
+  
+      {/* Card 4 */}
+      <div className="bg-white rounded-xl shadow-md p-4 sm:p-5 border-l-4 border-amber-500 hover:shadow-lg transition-shadow">
         <div className="flex justify-between items-start">
           <div>
-            <p className="text-sm font-medium text-gray-500">
-              Pending Requests
-            </p>
-            <p className="text-2xl font-semibold mt-1">
-              {stats.pendingRequests}
-            </p>
+            <p className="text-xs sm:text-sm font-medium text-gray-500">Pending Requests</p>
+            <p className="text-xl sm:text-2xl font-semibold mt-1">{stats.pendingRequests}</p>
           </div>
           <div className="bg-amber-100 p-2 rounded-md">
-            <Clock className="h-6 w-6 text-amber-600" />
+            <Clock className="h-5 w-5 sm:h-6 sm:w-6 text-amber-600" />
           </div>
         </div>
         <div className="mt-2">
@@ -85,6 +83,7 @@ const StatisticsSection = () => {
       </div>
     </div>
   );
+  
 };
 
 export default StatisticsSection;
