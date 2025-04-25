@@ -6,7 +6,7 @@ const PaymentForm = ({ amount, currency = "usd", room }) => {
   const stripe = useStripe();
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
-
+  console.log(room, "room");
   const handlePayment = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -29,6 +29,8 @@ const PaymentForm = ({ amount, currency = "usd", room }) => {
             currency: "USD",
             room: room._id,
             gateway: "stripe",
+            checkIn: room?.bookingDetails?.checkIn,
+            checkOut: room?.bookingDetails?.checkOut,
           }),
           credentials: "include",
         }

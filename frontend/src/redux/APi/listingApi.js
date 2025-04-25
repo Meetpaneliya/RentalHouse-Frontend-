@@ -94,10 +94,10 @@ export const listingAPI = createApi({
       }),
       invalidatesTags: ["Bookings"],
     }),
-    getBooking: builder.query({
+    getBookingLandlord: builder.query({
       query: () => ({
         method: "GET",
-        url: `/bookings/get/${id}`,
+        url: `/bookings/landlord/bookings`,
         credentials: "include",
       }),
       providesTags: ["Bookings"],
@@ -109,6 +109,15 @@ export const listingAPI = createApi({
         credentials: "include",
       }),
       providesTags: ["Bookings"],
+    }),
+    updateBooking: builder.mutation({
+      query: ({ id, ...rest }) => ({
+        method: "PUT",
+        url: `/bookings/updateBooking/${id}`,
+        credentials: "include",
+        body: rest,
+      }),
+      invalidatesTags: ["Bookings"],
     }),
   }),
 });
@@ -123,6 +132,7 @@ export const {
   useCreatekycMutation,
   useGetkycstatusQuery,
   useCreateBookingMutation,
-  useGetBookingQuery,
+  useGetBookingLandlordQuery,
   useGetUserBookingsQuery,
+  useUpdateBookingMutation,
 } = listingAPI;
