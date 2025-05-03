@@ -16,12 +16,17 @@ import {
   Bath,
   Square,
 } from "lucide-react";
-import { useGetUserBookingsQuery } from "../../redux/APi/listingApi";
+import {
+  useDeleteBookingMutation,
+  useGetUserBookingsQuery,
+} from "../../redux/APi/listingApi";
 import { Link } from "react-router-dom";
+import { useAsyncMutation } from "../../hooks/useError";
 
 const RecentBookings = () => {
   const [selectedBooking, setSelectedBooking] = useState(null);
   const { data, isError, isLoading, error } = useGetUserBookingsQuery();
+  const [deleting, isdeleting] = useAsyncMutation(useDeleteBookingMutation);
   console.log(selectedBooking, "selectedBooking");
   const openDetails = (booking) => {
     setSelectedBooking(booking);
@@ -31,6 +36,20 @@ const RecentBookings = () => {
     setSelectedBooking(null);
   };
 
+  const handlecancel = async (booking) => {
+    console.log(booking, "booking");
+    const confirm = window.confirm(
+      "Are you sure you want to cancel this booking?"
+    );
+    if (confirm) {
+      try {
+        await deleting("Cancelling Booking", booking._id);
+        toast.success("Booking cancelled successfully.");
+      } catch (error) {
+        toast.error("Failed to cancel booking.");
+      }
+    }
+  };
   if (isLoading) {
     return (
       <div className="p-6 text-center text-gray-500">
@@ -321,7 +340,10 @@ const RecentBookings = () => {
                     Close
                   </button>
                   {selectedBooking.status === "confirmed" && (
-                    <button className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700">
+                    <button
+                      onClick={() => handlecancel(selectedBooking)}
+                      className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
+                    >
                       Cancel Booking
                     </button>
                   )}

@@ -47,6 +47,10 @@ const Rooms = () => {
   );
 
   const handleNavigate = async () => {
+    if (!isAuthenticated) {
+      toast.error("Please login to continue.");
+      return;
+    }
     if (user.kycStatus !== "verified") {
       toast.error("Please complete KYC to proceed.");
       navigate("/KYC");
@@ -584,11 +588,7 @@ const Rooms = () => {
                 <button
                   onClick={() => handlepayment(room)}
                   className="w-full bg-green-600 text-white py-3 rounded-lg hover:bg-green-700 transition-colors flex items-center justify-center gap-2"
-                  disabled={
-                    !checkInDate ||
-                    !checkOutDate ||
-                    user.kycStatus !== "verified"
-                  }
+                  disabled={!checkInDate || !checkOutDate}
                 >
                   <span>Proceed to Pay</span>
                   <svg

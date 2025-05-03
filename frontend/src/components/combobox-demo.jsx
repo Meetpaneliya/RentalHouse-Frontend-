@@ -2,11 +2,7 @@ import * as React from "react";
 import { Check, ChevronsUpDown } from "lucide-react";
 import { Button } from "./ui/button";
 
-const cities = [
-  { value: "new-york", label: "New York" },
-  { value: "london", label: "London" },
-  { value: "paris", label: "Paris" },
-];
+const cities = [{ value: "boston", label: "Boston" }];
 
 export function CityCombobox({ onSelect }) {
   // Accept onSelect prop
@@ -48,8 +44,9 @@ export function CityCombobox({ onSelect }) {
                 filteredCities.map((city) => (
                   <div
                     key={city.value}
-                    className={`p-2 cursor-pointer hover:bg-white/10 rounded-lg transition-all ${value === city.value ? "bg-white/10" : ""
-                      }`}
+                    className={`p-2 cursor-pointer hover:bg-white/10 rounded-lg transition-all ${
+                      value === city.value ? "bg-white/10" : ""
+                    }`}
                     onClick={() => {
                       setValue(city.value);
                       setOpen(false);
@@ -75,6 +72,5 @@ export function CityCombobox({ onSelect }) {
         </div>
       )}
     </div>
-
   );
 }
