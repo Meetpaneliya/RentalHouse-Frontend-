@@ -18,14 +18,27 @@ import {
   MapPin,
 } from "lucide-react";
 import {
+  useCheckStatusQuery,
   useGetBookingLandlordQuery,
   useUpdateBookingMutation,
 } from "../../redux/APi/listingApi";
 import { useAsyncMutation } from "../../hooks/useError";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { roominfor } from "../../redux/reducers/orderSlice";
 
 const NotificationPage = () => {
   const [selectedNotification, setSelectedNotification] = useState(null);
-  const { data, isLoading, isError, error } = useGetBookingLandlordQuery();
+  const { user } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const isLandlord = user?.role === "landlord";
+  console.log(selectedNotification, "selectedNotification");
+  // Use the appropriate query based on user role
+  const { data, isLoading, isError, error } = isLandlord
+    ? useGetBookingLandlordQuery()
+    : useCheckStatusQuery();
+
   const [updateBooking, isUpdatingBooking] = useAsyncMutation(
     useUpdateBookingMutation
   );
@@ -35,8 +48,10 @@ const NotificationPage = () => {
       case "pending":
         return "bg-yellow-100 text-yellow-800";
       case "accepted":
+      case "confirmed":
         return "bg-green-100 text-green-800";
       case "rejected":
+      case "cancelled":
         return "bg-red-100 text-red-800";
       default:
         return "bg-gray-100 text-gray-800";
@@ -48,15 +63,23 @@ const NotificationPage = () => {
       case "pending":
         return <Clock className="w-4 h-4" />;
       case "accepted":
+      case "confirmed":
         return <CheckCircle className="w-4 h-4" />;
       case "rejected":
+      case "cancelled":
         return <XCircle className="w-4 h-4" />;
       default:
         return <Bell className="w-4 h-4" />;
     }
   };
 
+  const handlepayment = (selectedNotification) => {
+    navigate(`/room/${selectedNotification.listing._id}`);
+  };
+
   const handleAccept = async (id, checkIn, checkOut) => {
+    if (!isLandlord) return;
+
     const api = {
       id,
       status: "confirmed",
@@ -72,6 +95,8 @@ const NotificationPage = () => {
   };
 
   const handleReject = async (id, checkIn, checkOut) => {
+    if (!isLandlord) return;
+
     const api = {
       id,
       status: "cancelled",
@@ -115,9 +140,13 @@ const NotificationPage = () => {
       <div className="max-w-4xl mx-auto px-4 py-8">
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">Notifications</h1>
+            <h1 className="text-2xl font-bold text-gray-900">
+              {isLandlord ? "Booking Requests" : "My Bookings"}
+            </h1>
             <p className="text-gray-600 mt-1">
-              Stay updated with your latest activities
+              {isLandlord
+                ? "Manage your property booking requests"
+                : "Track the status of your bookings"}
             </p>
           </div>
           <div className="relative">
@@ -153,14 +182,21 @@ const NotificationPage = () => {
                         </div>
                         <div>
                           <h3 className="text-lg font-medium text-gray-900">
-                            {notification.paid
-                              ? "Payment Received"
-                              : "New Booking Request"}
+                            {isLandlord
+                              ? notification.paid
+                                ? "Payment Received"
+                                : "New Booking Request"
+                              : `Booking for ${notification.listing.title}`}
                           </h3>
                           <p className="text-gray-600 mt-1">
-                            {notification.paid
-                              ? `Payment received for ${notification.listing.title}`
-                              : `New booking request for ${notification.listing.title}`}
+                            {isLandlord
+                              ? notification.paid
+                                ? `Payment received for ${notification.listing.title}`
+                                : `New booking request for ${notification.listing.title}`
+                              : `Status: ${
+                                  notification.status.charAt(0).toUpperCase() +
+                                  notification.status.slice(1)
+                                }`}
                           </p>
 
                           <div className="mt-4 bg-gray-50 rounded-lg p-4">
@@ -172,10 +208,22 @@ const NotificationPage = () => {
                                 </span>
                               </div>
                               <div className="flex items-center space-x-2">
-                                <User className="w-4 h-4 text-gray-500" />
-                                <span className="text-sm text-gray-600">
-                                  {notification.user.name}
-                                </span>
+                                {isLandlord ? (
+                                  <>
+                                    <User className="w-4 h-4 text-gray-500" />
+                                    <span className="text-sm text-gray-600">
+                                      {notification.user?.name || "N/A"}
+                                    </span>
+                                  </>
+                                ) : (
+                                  <>
+                                    <User className="w-4 h-4 text-gray-500" />
+                                    <span className="text-sm text-gray-600">
+                                      {notification.listing?.owner?.name ||
+                                        "N/A"}
+                                    </span>
+                                  </>
+                                )}
                               </div>
                               <div className="flex items-center space-x-2">
                                 <Calendar className="w-4 h-4 text-gray-500" />
@@ -230,7 +278,7 @@ const NotificationPage = () => {
                       >
                         View Details
                       </button>
-                      {notification.status === "pending" && (
+                      {isLandlord && notification.status === "pending" && (
                         <>
                           <button
                             disabled={isUpdatingBooking}
@@ -295,7 +343,9 @@ const NotificationPage = () => {
                 <div className="flex justify-between items-start">
                   <div>
                     <h3 className="text-2xl font-bold text-gray-900">
-                      Booking Request Details
+                      {isLandlord
+                        ? "Booking Request Details"
+                        : "Booking Details"}
                     </h3>
                     <p className="text-gray-500 mt-1">
                       Reference ID: {selectedNotification._id}
@@ -377,29 +427,37 @@ const NotificationPage = () => {
                   </div>
                 </div>
 
-                {/* Guest Information */}
+                {/* Contact Information */}
                 <div className="space-y-4">
                   <h4 className="font-semibold text-gray-900">
-                    Guest Information
+                    {isLandlord ? "Guest Information" : "Host Information"}
                   </h4>
                   <div className="grid grid-cols-1 gap-4">
                     <div className="flex items-center space-x-3">
                       <User className="w-5 h-5 text-gray-400" />
                       <span className="text-gray-600">
-                        {selectedNotification.user.name}
+                        {isLandlord
+                          ? selectedNotification.user.name
+                          : selectedNotification.listing.owner.name}
                       </span>
                     </div>
                     <div className="flex items-center space-x-3">
                       <Mail className="w-5 h-5 text-gray-400" />
                       <span className="text-gray-600">
-                        {selectedNotification.user.email}
+                        {isLandlord
+                          ? selectedNotification.user.email
+                          : selectedNotification.listing.owner.email}
                       </span>
                     </div>
-                    {selectedNotification.user.phone && (
+                    {(isLandlord
+                      ? selectedNotification.user.phone
+                      : selectedNotification.listing.owner.phone) && (
                       <div className="flex items-center space-x-3">
                         <Phone className="w-5 h-5 text-gray-400" />
                         <span className="text-gray-600">
-                          {selectedNotification.user.phone}
+                          {isLandlord
+                            ? selectedNotification.user.phone
+                            : selectedNotification.listing.owner.phone}
                         </span>
                       </div>
                     )}
@@ -458,7 +516,16 @@ const NotificationPage = () => {
                   >
                     Close
                   </button>
-                  {selectedNotification.status === "pending" && (
+                  {selectedNotification.status === "confirmed" && (
+                    <button
+                      onClick={() => handlepayment(selectedNotification)}
+                      className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
+                    >
+                      Proceed to Pay
+                    </button>
+                  )}
+
+                  {isLandlord && selectedNotification.status === "pending" && (
                     <>
                       <button
                         disabled={isUpdatingBooking}

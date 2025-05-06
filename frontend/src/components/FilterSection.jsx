@@ -3,11 +3,23 @@ import axios from "axios";
 import Listings from "../pages/Listings";
 import { FaChevronDown } from "react-icons/fa";
 import { MdApartment, MdHotel } from "react-icons/md";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import Navbar from "./Navbar2";
+import { useSearchQuery } from "../redux/APi/listingApi";
+import toast from "react-hot-toast";
+import { skipToken } from "@reduxjs/toolkit/query";
 
 const FilterSection = () => {
   const navigate = useNavigate();
+  const [params] = useSearchParams();
+  const city = params.get("city");
+  const startDate = params.get("startDate");
+  const endDate = params.get("endDate");
+
+  // Always call the hook, even if params are missing
+  const { data, isLoading, error } = useSearchQuery(
+    city && startDate && endDate ? { city, startDate, endDate } : skipToken // <-- prevents request if missing
+  );
 
   const amenitiesList = ["WiFi", "AC", "Geyser", "More"];
 
@@ -18,7 +30,7 @@ const FilterSection = () => {
     bathrooms: 1,
     amenities: [],
     location: "",
-    rentalRoomName: ""
+    rentalRoomName: "",
   });
 
   const [isResetChecked, setIsResetChecked] = useState(false); // ✅ Moved inside component
@@ -122,12 +134,13 @@ const FilterSection = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-
   // Fetch listings from the API
   useEffect(() => {
     const fetchListings = async () => {
       try {
-        const response = await axios.get(`${import.meta.env.VITE_SERVER}/api/v1/listings/all`);
+        const response = await axios.get(
+          `${import.meta.env.VITE_SERVER}/api/v1/listings/all`
+        );
         setListings(response.data);
         setFilteredListings(response.data);
       } catch (error) {
@@ -137,14 +150,12 @@ const FilterSection = () => {
     fetchListings();
   }, []);
 
-
   // Apply filtering only when filters change
 
   useEffect(() => {
     if (
       filters &&
-      (
-        filters.rentalRoomName ||
+      (filters.rentalRoomName ||
         filters.location ||
         filters.propertyType ||
         filters.amenities.length > 0 ||
@@ -152,19 +163,29 @@ const FilterSection = () => {
         filters.beds > 1 || // Updated condition
         filters.bathrooms > 1 || // Updated condition
         filters.price[0] !== 500 ||
-        filters.price[1] !== 5000
-      )
+        filters.price[1] !== 5000)
     ) {
       const filtered = listings.filter((listing) => {
         return (
-          listing.price >= filters.price[0] && listing.price <= filters.price[1] &&
+          listing.price >= filters.price[0] &&
+          listing.price <= filters.price[1] &&
           listing.rooms >= filters.rooms &&
           listing.beds >= filters.beds &&
           listing.bathrooms >= filters.bathrooms &&
-          (!filters.location || listing.location.toLowerCase().includes(filters.location.toLowerCase())) &&
-          (!filters.propertyType || listing.propertyType === filters.propertyType) &&
-          (!filters.rentalRoomName || listing.title.toLowerCase().includes(filters.rentalRoomName.toLowerCase())) &&
-          (filters.amenities.length === 0 || filters.amenities.some((amenity) => listing.amenities.includes(amenity))) // Updated condition
+          (!filters.location ||
+            listing.location
+              .toLowerCase()
+              .includes(filters.location.toLowerCase())) &&
+          (!filters.propertyType ||
+            listing.propertyType === filters.propertyType) &&
+          (!filters.rentalRoomName ||
+            listing.title
+              .toLowerCase()
+              .includes(filters.rentalRoomName.toLowerCase())) &&
+          (filters.amenities.length === 0 ||
+            filters.amenities.some((amenity) =>
+              listing.amenities.includes(amenity)
+            )) // Updated condition
         );
       });
       console.log("filterd listing: ", filtered);
@@ -186,13 +207,13 @@ const FilterSection = () => {
       location: "",
       propertyType: "",
       availableOnly: false,
-      rentalRoomName: ""
+      rentalRoomName: "",
     });
   };
 
   // Update the filter handlers to include navigation
   const handleFilterApply = () => {
-    navigate('/filtered-listings', { state: { filters } });
+    navigate("/filtered-listings", { state: { filters } });
   };
 
   // Update price filter
@@ -239,20 +260,16 @@ const FilterSection = () => {
 
   return (
     <div>
-
       {/* All Filter */}
       <div className="w-full mx-auto p-2 sm:p-4 bg-white shadow-md rounded-lg">
         {/* Header and filters container */}
         <div className="flex flex-col sm:flex-row items-center justify-between mb-6">
-
           {/* Logo container */}
           <Navbar />
-
         </div>
 
         {/* Filters grid */}
         <div className=" w-auto mx-auto grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:flex gap-2 sm:gap-4">
-
           {/* Price Filter */}
           <div className="relative w-full" ref={priceFilterRef}>
             <button
@@ -264,7 +281,9 @@ const FilterSection = () => {
             </button>
             {showPriceFilter && (
               <div className="fixed sm:absolute inset-x-0 sm:inset-auto bottom-0 sm:bottom-auto left-0 right-0 sm:left-auto sm:right-auto mt-3 w-full sm:w-80 bg-white shadow-xl rounded-t-xl sm:rounded-xl p-4 sm:p-6 z-50 border border-gray-300 sm:translate-y-0 translate-y-0 transition-transform">
-                <h3 className="text-lg font-semibold mb-4 text-center">Price Range</h3>
+                <h3 className="text-lg font-semibold mb-4 text-center">
+                  Price Range
+                </h3>
                 <div className="flex justify-between items-center mb-4">
                   <input
                     type="text"
@@ -334,7 +353,9 @@ const FilterSection = () => {
             </button>
             {showNearbyFilter && (
               <div className="fixed sm:absolute inset-x-0 sm:inset-auto bottom-0 sm:bottom-auto left-0 right-0 sm:left-auto sm:right-auto mt-3 w-full sm:w-80 bg-white shadow-xl rounded-t-xl sm:rounded-xl p-4 sm:p-6 z-50 border border-gray-300 sm:translate-y-0 translate-y-0 transition-transform">
-                <h3 className="text-lg font-semibold mb-4">Search by Neighborhood</h3>
+                <h3 className="text-lg font-semibold mb-4">
+                  Search by Neighborhood
+                </h3>
                 <input
                   type="text"
                   placeholder="Search by Neighborhood"
@@ -348,12 +369,23 @@ const FilterSection = () => {
                   className="w-full px-4 py-2 border rounded-lg text-gray-500 mb-4"
                 />
                 <div className="space-y-2">
-                  {["Brooklyn", "Bedford-Stuyvesant, Brooklyn", "Bushwick, Brooklyn", "Clinton Hill, Brooklyn", "Crown Heights, Brooklyn"]
+                  {[
+                    "Brooklyn",
+                    "Bedford-Stuyvesant, Brooklyn",
+                    "Bushwick, Brooklyn",
+                    "Clinton Hill, Brooklyn",
+                    "Crown Heights, Brooklyn",
+                  ]
                     .filter((neighborhood) =>
-                      neighborhood.toLowerCase().includes(filters.location.toLowerCase())
+                      neighborhood
+                        .toLowerCase()
+                        .includes(filters.location.toLowerCase())
                     )
                     .map((neighborhood, index) => (
-                      <label key={index} className="flex items-center space-x-2 cursor-pointer">
+                      <label
+                        key={index}
+                        className="flex items-center space-x-2 cursor-pointer"
+                      >
                         <input
                           type="checkbox"
                           checked={filters.location === neighborhood}
@@ -392,16 +424,22 @@ const FilterSection = () => {
               <div className="fixed sm:absolute inset-x-0 sm:inset-auto bottom-0 sm:bottom-auto left-0 right-0 sm:left-auto sm:right-auto mt-3 w-full sm:w-80 bg-white shadow-xl rounded-t-xl sm:rounded-xl p-4 sm:p-6 z-50 border border-gray-300 sm:translate-y-0 translate-y-0 transition-transform">
                 <div className="flex justify-between items-center mb-4">
                   <div
-                    className={`w-1/2 p-4 border rounded-lg flex flex-col items-center cursor-pointer ${filters.propertyType === "Apartment" ? "bg-blue-100" : "hover:bg-gray-100"
-                      }`}
+                    className={`w-1/2 p-4 border rounded-lg flex flex-col items-center cursor-pointer ${
+                      filters.propertyType === "Apartment"
+                        ? "bg-blue-100"
+                        : "hover:bg-gray-100"
+                    }`}
                     onClick={() => handlePropertyTypeSelect("apartment")}
                   >
                     <MdApartment className="text-3xl text-indigo-800" />
                     <span className="mt-2 font-medium">Apartment</span>
                   </div>
                   <div
-                    className={`w-1/2 p-4 border rounded-lg flex flex-col items-center cursor-pointer ${filters.propertyType === "Bedroom" ? "bg-blue-100" : "hover:bg-gray-100"
-                      }`}
+                    className={`w-1/2 p-4 border rounded-lg flex flex-col items-center cursor-pointer ${
+                      filters.propertyType === "Bedroom"
+                        ? "bg-blue-100"
+                        : "hover:bg-gray-100"
+                    }`}
                     onClick={() => handlePropertyTypeSelect("hotel")}
                   >
                     <MdHotel className="text-3xl text-indigo-800" />
@@ -409,7 +447,8 @@ const FilterSection = () => {
                   </div>
                 </div>
                 <p className="text-xs text-gray-500 mb-4 text-center">
-                  This is a shared apartment that you will rent with other roommates. June will help you find them.
+                  This is a shared apartment that you will rent with other
+                  roommates. June will help you find them.
                 </p>
                 <button
                   className="w-full bg-indigo-800 text-white py-2 rounded-lg hover:bg-indigo-900"
@@ -434,7 +473,9 @@ const FilterSection = () => {
               <div className="fixed sm:absolute inset-x-0 sm:inset-auto bottom-0 sm:bottom-auto left-0 right-0 sm:left-auto sm:right-auto mt-3 w-full sm:w-80 bg-white shadow-xl rounded-t-xl sm:rounded-xl p-4 sm:p-6 z-50 border border-gray-300 sm:translate-y-0 translate-y-0 transition-transform">
                 <div className="grid grid-cols-2 divide-x">
                   <div className="flex flex-col items-center px-4">
-                    <span className="text-indigo-700 font-semibold text-lg">Bed</span>
+                    <span className="text-indigo-700 font-semibold text-lg">
+                      Bed
+                    </span>
                     <div className="flex items-center space-x-3 mt-2">
                       <button
                         onClick={() => updateCount("beds", -1)}
@@ -442,7 +483,9 @@ const FilterSection = () => {
                       >
                         −
                       </button>
-                      <span className="text-indigo-700 font-bold text-lg">{filters.beds}</span>
+                      <span className="text-indigo-700 font-bold text-lg">
+                        {filters.beds}
+                      </span>
 
                       <button
                         onClick={() => updateCount("beds", 1)}
@@ -453,7 +496,9 @@ const FilterSection = () => {
                     </div>
                   </div>
                   <div className="flex flex-col items-center px-4">
-                    <span className="text-indigo-700 font-semibold text-lg">Bath</span>
+                    <span className="text-indigo-700 font-semibold text-lg">
+                      Bath
+                    </span>
                     <div className="flex items-center space-x-3 mt-2">
                       <button
                         onClick={() => updateCount("bathrooms", -1)}
@@ -461,7 +506,9 @@ const FilterSection = () => {
                       >
                         −
                       </button>
-                      <span className="text-indigo-700 font-bold text-lg">{filters.bathrooms}</span>
+                      <span className="text-indigo-700 font-bold text-lg">
+                        {filters.bathrooms}
+                      </span>
 
                       <button
                         onClick={() => updateCount("bathrooms", 1)}
@@ -495,7 +542,10 @@ const FilterSection = () => {
               <div className="fixed sm:absolute inset-x-0 sm:inset-auto bottom-0 sm:bottom-auto left-0 right-0 sm:left-auto sm:right-auto mt-3 w-full sm:w-72 bg-white shadow-xl rounded-t-xl sm:rounded-xl p-4 sm:p-6 z-50 border border-gray-300 sm:translate-y-0 translate-y-0 transition-transform">
                 <div className="space-y-3">
                   {amenitiesList.map((amenity, index) => (
-                    <label key={index} className="flex items-center space-x-3 cursor-pointer">
+                    <label
+                      key={index}
+                      className="flex items-center space-x-3 cursor-pointer"
+                    >
                       <input
                         type="checkbox"
                         checked={filters.amenities.includes(amenity)}
@@ -527,7 +577,9 @@ const FilterSection = () => {
             </button>
             {showRoomNameFilter && (
               <div className="fixed sm:absolute inset-x-0 sm:inset-auto bottom-0 sm:bottom-auto left-0 right-0 sm:left-auto sm:right-auto mt-3 w-full sm:w-80 bg-white shadow-xl rounded-t-xl sm:rounded-xl p-4 sm:p-6 z-50 border border-gray-300 sm:translate-y-0 translate-y-0 transition-transform">
-                <h3 className="text-lg font-semibold mb-4 text-center">Listing Room</h3>
+                <h3 className="text-lg font-semibold mb-4 text-center">
+                  Listing Room
+                </h3>
                 <input
                   type="text"
                   value={filters.rentalRoomName}
@@ -563,7 +615,9 @@ const FilterSection = () => {
                     onChange={handleAvailableChange}
                     className="form-checkbox h-5 w-5 text-blue-600 rounded"
                   />
-                  <span className="text-indigo-700 font-semibold text-lg">Show only Available</span>
+                  <span className="text-indigo-700 font-semibold text-lg">
+                    Show only Available
+                  </span>
                 </label>
                 <button
                   className="w-full mt-4 bg-indigo-800 text-white py-2 rounded-lg hover:bg-indigo-900"
@@ -592,7 +646,9 @@ const FilterSection = () => {
                     onChange={() => setIsResetChecked(!isResetChecked)} // Toggle checkbox state
                     className="form-checkbox h-5 w-5 text-blue-600 rounded"
                   />
-                  <span className="text-indigo-700 font-semibold text-lg">Reset Filters</span>
+                  <span className="text-indigo-700 font-semibold text-lg">
+                    Reset Filters
+                  </span>
                 </label>
                 <button
                   className="w-full mt-4 bg-indigo-800 text-white py-2 rounded-lg hover:bg-indigo-900"
@@ -606,45 +662,15 @@ const FilterSection = () => {
               </div>
             )}
           </div>
-
         </div>
-
       </div>
 
       {/* Listings + Map section */}
       <div>
-        <Listings listings={filteredListings} />
+        <Listings listings={filteredListings} data={data} city={city} />
       </div>
-
     </div>
-
   );
 };
 
 export default FilterSection;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

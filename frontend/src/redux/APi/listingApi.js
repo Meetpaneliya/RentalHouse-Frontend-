@@ -11,12 +11,10 @@ export const listingAPI = createApi({
     search: builder.query({
       query: ({ city, startDate, endDate }) => {
         const queryParams = new URLSearchParams();
-        if (city) queryParams.append("city", city);
-        if (startDate) queryParams.append("startDate", startDate);
-        if (endDate) queryParams.append("endDate", endDate);
+        if (city) queryParams.append("location", city);
         return {
           method: "GET",
-          url: `/search?${queryParams.toString()}`,
+          url: `/listings/search?${queryParams.toString()}`,
           credentials: "include",
         };
       },
@@ -119,6 +117,22 @@ export const listingAPI = createApi({
       }),
       invalidatesTags: ["Bookings"],
     }),
+    deleteBooking: builder.mutation({
+      query: (id) => ({
+        method: "DELETE",
+        url: `/bookings/deleteBooking/${id}`,
+        credentials: "include",
+      }),
+      invalidatesTags: ["Bookings"],
+    }),
+    checkStatus: builder.query({
+      query: () => ({
+        method: "GET",
+        url: `/bookings/checkStatus`,
+        credentials: "include",
+      }),
+      providesTags: ["Bookings"],
+    }),
   }),
 });
 
@@ -135,4 +149,6 @@ export const {
   useGetBookingLandlordQuery,
   useGetUserBookingsQuery,
   useUpdateBookingMutation,
+  useDeleteBookingMutation,
+  useCheckStatusQuery,
 } = listingAPI;
