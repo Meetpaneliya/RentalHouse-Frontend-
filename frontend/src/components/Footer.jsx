@@ -1,123 +1,66 @@
 import React from "react";
+import { Link } from "react-router-dom";
+import { FaDiscord, FaLinkedin, FaXTwitter } from "react-icons/fa6";
 
 const Footer = () => {
-    return (
-        <footer className="bg-[#0b0b45] text-white py-7 px-4 sm:px-8">
-            <div className="flex flex-col lg:flex-row justify-between items-center max-w-8xl mx-auto mt-40">
-                {/* Left Section */}
-                <div className="w-full lg:w-4/12 mb-8 lg:mb-0 lg:ml-10 text-center lg:text-left">
-                    <h2 className="text-xl sm:text-2xl font-semibold mb-2">
-                       Cozzi Roam provides apartments and rooms for rent in major US cities on flexible lease terms.
-                    </h2>
-                    <img src="/assets/notpen.png" alt="Checklist" className="mx-auto lg:mx-0" />
-                </div>
+  return (
+    <footer className="bg-blue-950 text-white py-10 px-6">
+      <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-start gap-10">
+        {/* Left - Brand */}
+        <div className="flex-1">
+          <h2 className="text-2xl font-semibold mb-2">Cozzi Roam</h2>
+          <p className="mb-4">Comfy Rentals, Just Like Home.</p>
+          <div className="flex items-center space-x-4">
+            <FaDiscord className="text-2xl hover:text-gray-400 cursor-pointer" />
+            <FaLinkedin className="text-2xl hover:text-gray-400 cursor-pointer" />
+            <FaXTwitter className="text-2xl hover:text-gray-400 cursor-pointer" />
+          </div>
+        </div>
 
-                {/* Right Section */}
-                <div className="w-full lg:w-6/12 space-y-8 lg:space-y-10">
-                    {/* First Row */}
-                    <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-6">
-                        <div>
-                            <h3 className="text-lg sm:text-xl font-semibold mb-2">New York, NY</h3>
-                            <ul className="space-y-1 text-sm">
-                                <li>Rooms</li>
-                                <li>Furnished Apartments</li>
-                                <li>Studios</li>
-                                <li>Brooklyn</li>
-                            </ul>
-                        </div>
+        {/* Quick Links */}
+        <div className="flex-1">
+          <h3 className="text-lg font-semibold mb-3">Quick Links</h3>
+          <ul className="space-y-2 text-sm">
+                <li><Link to="/about">About Us</Link></li>
+                <li><Link to="/faq">FAQ's</Link></li>
+                <li><Link to="/contact">Contact Us</Link></li>
+          </ul>
+        </div>
 
-                        <div>
-                            <h3 className="text-lg sm:text-xl font-semibold mb-2">Washington, D.C.</h3>
-                            <ul className="space-y-1 text-sm">
-                                <li>Rooms</li>
-                                <li>Apartments</li>
-                                <li>Studios</li>
-                                <li>DC Student Housing</li>
-                            </ul>
-                        </div>
+        {/* Newsletter */}
+        <div className="flex-1">
+          <h3 className="text-lg font-semibold mb-3">Subscribe to Our Newsletter</h3>
+          <p className="text-sm text-gray-400 mb-4">
+            Stay updated with the latest news and features from CollabClan.
+          </p>
+          <div className="flex">
+            <input
+              type="email"
+              placeholder="Enter"
+              className="p-2 rounded-l-md text-black w-full"
+            />
+            <button className="bg-blue-800 hover:bg-blue-700 px-4 py-2 rounded-r-md">
+              Subscribe
+            </button>
+          </div>
+        </div>
 
-                        <div>
-                            <h3 className="text-lg sm:text-xl font-semibold mb-2">Boston, MA</h3>
-                            <ul className="space-y-1 text-sm">
-                                <li>Rooms</li>
-                                <li>Apartments</li>
-                                <li>Studios</li>
-                                <li>Boston Student Housing</li>
-                            </ul>
-                        </div>
+        {/* Contact */}
+        <div className="flex-1">
+          <h3 className="text-lg font-semibold mb-3">Contact</h3>
+          <p className="text-sm">cozziroam@gmail.com</p>
+          <p className="text-sm mt-2">Boston, USA</p>
+        </div>
+      </div>
 
-                        <div>
-                            <h3 className="text-lg sm:text-xl font-semibold mb-2">Chicago, IL</h3>
-                            <ul className="space-y-1 text-sm">
-                                <li>Rooms</li>
-                                <li>Apartments</li>
-                                <li>Studios</li>
-                                <li>Chicago Student Housing</li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    {/* Second Row */}
-                    <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-6">
-                        <div>
-                            <h3 className="text-lg sm:text-xl font-semibold mb-2">Other cities</h3>
-                            <ul className="space-y-1 text-sm">
-                                <li>Austin</li>
-                                <li>Los Angeles</li>
-                                <li>San Francisco</li>
-                                <li>San Diego</li>
-                                <li>Dallas</li>
-                                <li>Jersey City</li>
-                            </ul>
-                        </div>
-
-                        <div>
-                            <h3 className="text-lg sm:text-xl font-semibold mb-2">Housing</h3>
-                            <ul className="space-y-1 text-sm">
-                                <li>Military Housing</li>
-                                <li>Travel Nurse Housing</li>
-                                <li>Student Housing</li>
-                                <li>Refer a Friend</li>
-                                <li>Subletspots</li>
-                                <li>FAQ</li>
-                            </ul>
-                        </div>
-
-                        <div>
-                            <h3 className="text-lg sm:text-xl font-semibold mb-2">Company</h3>
-                            <ul className="space-y-1 text-sm">
-                                <li>About us</li>
-                                <li>How it works</li>
-                                <li>Careers</li>
-                                <li>Blog</li>
-                                <li>Sitemap</li>
-                                <li>Reviews</li>
-                            </ul>
-                        </div>
-
-                        <div>
-                            <h3 className="text-lg sm:text-xl font-semibold mb-2">Other</h3>
-                            <ul className="space-y-1 text-sm">
-                                <li>Terms of Use</li>
-                                <li>Cookie Policy</li>
-                                <li>Privacy Policy</li>
-                                <li>Rent Calculator</li>
-                                <li>Roommate Rent Splitter</li>
-                                <li>Roommate Agreement</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            {/* Contact Info */}
-            <div className="text-center mt-14 text-sm">
-                Get in touch with us: +1 (888) 604-6697 | 7:30am to 8pm CT | email us: welcome@Cozzi Roam.com
-                <br />
-                Cozzi Roam US, Inc. | California DRE # 02161034
-            </div>
-        </footer>
-    );
+      {/* Bottom Bar */}
+      <div className="text-center text-sm text-gray-400 mt-10 border-t border-gray-700 pt-4">
+        © 2025 Cozzi Roam. All rights reserved. |
+        <span className="mx-2 cursor-pointer hover:underline">Privacy Policy</span>|
+        <span className="mx-2 cursor-pointer hover:underline">Terms of Service</span>
+      </div>
+    </footer>
+  );
 };
 
 export default Footer;

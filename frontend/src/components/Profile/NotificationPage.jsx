@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { AnimatePresence } from "framer-motion";
 import {
   Bell,
   Calendar,
@@ -131,7 +131,7 @@ const NotificationPage = () => {
 
         <div className="space-y-4">
           <AnimatePresence>
-            {[...data?.data]
+            {[...(data?.data ?? [])]
               .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
               .map((notification) => (
                 <motion.div

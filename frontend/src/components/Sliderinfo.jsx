@@ -53,7 +53,7 @@ const Sliderinfo = () => {
             </div>
 
             {/* Search CTA Section */}
-            <div
+            {/* <div
                 className="relative -mb-40 bg-cover bg-center text-white py-10 px-4 sm:px-6 w-full max-w-5xl mx-auto rounded-3xl shadow-lg overflow-hidden"
                 style={{
                     backgroundImage: "url('/assets/girlroom.jpg')",
@@ -95,7 +95,7 @@ const Sliderinfo = () => {
                         </button>
                     </div>
                 </div>
-            </div>
+            </div> */}
         </>
     );
 };
