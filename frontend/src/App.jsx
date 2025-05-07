@@ -99,6 +99,7 @@ function App() {
             <Route path="chat" element={<ChatPage />} />
           </Route>
 
+
           <Route path="/filtered-listings" element={<FilterSection />} />
           <Route path="/room/:id" element={<Rooms />} />
           <Route path="/favorites/:id" element={<Favorites />} />
