@@ -15,10 +15,11 @@ jobs:
       uses: actions/setup-node@v3
       with:
         node-version: '18'
-        cache: 'npm'
+        # Remove the cache option until lock file exists
+        # cache: 'npm'
     
-    - name: Install dependencies
-      run: npm install -f
+    - name: Install dependencies and generate lock file
+      run: npm install
     
     - name: Build
       run: npm run build
@@ -41,5 +42,5 @@ jobs:
         script: |
           cd ~/apps/frontend
           pm2 delete frontend || true
-          pm2 serve build 3000 --name frontend--spa
+          pm2 serve build 3000 --name frontend --spa
           pm2 save
